@@ -1,1 +1,1 @@
-from phreeqpy import PhreeqPy
+from phreeqpy import PhreeqPy, Solution

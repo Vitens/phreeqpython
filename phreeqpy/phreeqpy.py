@@ -146,6 +146,9 @@ class Solution(object):
     def sc(self):
         return self.pp.ip.get_sc(self.number)
     @property
+    def temperature(self):
+        return self.pp.ip.get_temperature(self.number)
+    @property
     def pe(self):
         return self.pp.ip.get_pe(self.number)
     @property

@@ -41,7 +41,7 @@ class VIPhreeqc(object):
             if sys.platform == 'win32':
                 dll_name = './lib/VIPhreeqc.dll'
             elif sys.platform == 'linux2':
-                dll_name = './viphreeqc.so'
+                dll_name = './lib/viphreeqc.so'
             elif sys.platform == 'darwin':
                 dll_name = './lib/viphreeqc.dylib'
             else:
@@ -91,6 +91,8 @@ class VIPhreeqc(object):
                           ('_get_pe', phreeqc.GetPe,
                            [c_int, c_int], ctypes.c_double),
                           ('_get_sc', phreeqc.GetSC,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_temperature', phreeqc.GetTemperature,
                            [c_int, c_int], ctypes.c_double),
                           ('_get_total', phreeqc.GetTotal,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
@@ -229,6 +231,8 @@ class VIPhreeqc(object):
         return self._get_pe(self.id_, solution)
     def get_sc(self, solution):
         return self._get_sc(self.id_, solution)
+    def get_temperature(self, solution):
+        return self._get_temperature(self.id_, solution)
     def get_total(self, solution, element):
         return self._get_total(self.id_, solution, bytes(element, 'utf-8'))
     def get_total_element(self, solution, element):
