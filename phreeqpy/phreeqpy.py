@@ -48,6 +48,7 @@ class PhreeqPy(object):
 
         inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
         inputstr += "END"
+
         self.ip.run_string(inputstr)
         return Solution(self, solution_number)
 
@@ -62,6 +63,7 @@ class PhreeqPy(object):
 
         inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
         inputstr += "END"
+
         self.ip.run_string(inputstr)
         return Solution(self, solution_number)
 
@@ -114,12 +116,12 @@ class Solution(object):
         self.pp.change_solution(self.number, {element:mmol})
     def remove_fraction(self, species, fraction):
         current = self.pp.ip.get_moles(self.number, species)
-        to_remove = current * fraction
+        to_remove = 1000 * current * fraction
         self.remove(species, to_remove)
 
     # this function can precipitate and dissolve!
-    def saturate(self, phase, to_si=0):
-        self.pp.equalize_solution(self.number, phase, to_si)
+    def saturate(self, phase, to_si=0, partial_pressure = 10):
+        self.pp.equalize_solution(self.number, phase, to_si, partial_pressure)
 
     # this function can only precipitate
     def desaturate(self, phase, to_si=0):
@@ -162,13 +164,17 @@ class Solution(object):
         return self.pp.ip.get_species_molalities(self.number)
 
     def total(self, element):
-        """ Returns to total of any given species or element """
+        """ Returns to total of any given species or element (SLOW!) """
         total = 0
         regexp = "(^|[^A-Z])"+element
         for species, amount in self.species.iteritems():
             if re.search(regexp, species):
                 total += amount
         return total
+
+    def total_element(self, element):
+        """ Returns to total any given element (FAST!) """
+        return self.pp.ip.get_total_element(self.number, element)
 
     def si(self, phase):
         return self.pp.ip.get_si(self.number, phase)
