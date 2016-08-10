@@ -98,6 +98,12 @@ class PhreeqPy(object):
 
         return Solution(self, self.solution_counter)
 
+    def remove_solutions(self, solution_number_list):
+        """ Remove solutions from VIPhreeqc memory """
+        inputstr = "DELETE \n"
+        inputstr += "-solution " + ' '.join(map(str, solution_number_list))
+        self.ip.run_string(inputstr)
+
 class Solution(object):
     """ PhreeqPy Solution Class """
 
@@ -115,7 +121,7 @@ class Solution(object):
         mmol = -mmol
         self.pp.change_solution(self.number, {element:mmol})
     def remove_fraction(self, species, fraction):
-        current = self.pp.ip.get_moles(self.number, species)
+        current = self.total(species)
         to_remove = 1000 * current * fraction
         self.remove(species, to_remove)
 

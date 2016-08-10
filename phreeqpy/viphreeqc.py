@@ -256,7 +256,8 @@ class VIPhreeqc(object):
             species_moles[species] = self.get_molality(solution, species)
         return species_moles
     def get_solution_list(self):
-        return self._get_solution_list(self.id_).decode('utf-8').split(",")
+        solution_list = self._get_solution_list(self.id_).decode('utf-8').split(",")
+        return map(int, solution_list)
     def get_species(self, solution):
         return self._get_species(self.id_, solution).decode('utf-8').split(",")
     def get_si(self, solution, phase):
@@ -397,7 +398,6 @@ class VAR(ctypes.Structure):
     """
     _fields_ = [('type', ctypes.c_int),
                 ('value', VARUNION)]
-
 
 class PhreeqcException(Exception):
     """Error in Phreeqc call.
