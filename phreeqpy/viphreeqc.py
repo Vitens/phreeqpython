@@ -370,6 +370,7 @@ class VIPhreeqc(object):
     def run_string(self, cmd_string):
         """Run PHREEQC input from string.
         """
+        #print cmd_string
         errors = self._run_string(self.id_,
                                   ctypes.c_char_p(bytes(cmd_string, 'utf-8')))
         if errors != 0:
