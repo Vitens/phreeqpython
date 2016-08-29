@@ -1,10 +1,12 @@
 import re
+import numbers
 
 class Solution(object):
     """ PhreeqPy Solution Class """
 
-    def __init__(self, phreeqpy, number):
-        self.pp = phreeqpy
+    def __init__(self, phreeqpython, number):
+        self.pp = phreeqpython
+        self.factor = 1
         self.number = number
 
     def copy(self):
@@ -45,40 +47,6 @@ class Solution(object):
     def change_temperature(self, to_temperature):
         self.pp.change_solution_temperature(self.number, to_temperature)
 
-    # Accessor methods
-    @property
-    def pH(self):
-        return self.pp.ip.get_ph(self.number)
-    @property
-    def sc(self):
-        return self.pp.ip.get_sc(self.number)
-    @property
-    def temperature(self):
-        return self.pp.ip.get_temperature(self.number)
-    @property
-    def pe(self):
-        return self.pp.ip.get_pe(self.number)
-    @property
-    def phases(self):
-        return self.pp.ip.get_phases_si(self.number)
-    @property
-    def elements(self):
-        return self.pp.ip.get_elements_totals(self.number)
-    @property
-    def species(self):
-        return self.pp.ip.get_species_moles(self.number)
-    @property
-    def species_moles(self):
-        return self.pp.ip.get_species_moles(self.number)
-    @property
-    def species_molalities(self):
-        return self.pp.ip.get_species_moles(self.number)
-
-    # vitens TACC90 calculation
-    @property
-    def tacc90(self):
-        return self.tacc(90)
-
     def total(self, element):
         """ Returns to total of any given species or element (SLOW!) """
         total = 0
@@ -114,3 +82,70 @@ class Solution(object):
     def forget(self):
         """ remove this solution from VIPhreeqc memory """
         self.pp.remove_solutions([self.number])
+
+
+    # Magic functions
+    def __add__(self, other):
+        """ add two solutions """
+        if not isinstance(other,Solution):
+            raise TypeError("Invalid operation, only addition of two solutions is allowed")
+        mixture= {self:self.factor, other:other.factor}
+        #print mixture
+        mixture = self.pp.mix_solutions({self:self.factor,other:other.factor})
+        # reset factors to 1
+        self.factor = 1
+        other.factor = 1
+
+        return mixture
+
+    def __div__(self, other):
+        """ set devision factor """
+        if not isinstance(other,numbers.Real):
+            raise TypeError("Invalid operation, only divisiion by a number is allowed")
+        self.factor = 1/float(other)
+        return self
+
+    def __mul__(self, other):
+        """ set multiplication factor """
+        if not isinstance(other,numbers.Real):
+            raise TypeError("Invalid operation, only divisiion by a number is allowed")
+        self.factor = float(other)
+        return self
+
+    # Accessor methods
+    @property
+    def pH(self):
+        return self.pp.ip.get_ph(self.number)
+    @property
+    def sc(self):
+        return self.pp.ip.get_sc(self.number)
+    @property
+    def temperature(self):
+        return self.pp.ip.get_temperature(self.number)
+    @property
+    def mass(self):
+        return self.pp.ip.get_mass(self.number)
+    @property
+    def pe(self):
+        return self.pp.ip.get_pe(self.number)
+    @property
+    def phases(self):
+        return self.pp.ip.get_phases_si(self.number)
+    @property
+    def elements(self):
+        return self.pp.ip.get_elements_totals(self.number)
+    @property
+    def species(self):
+        return self.pp.ip.get_species_moles(self.number)
+    @property
+    def species_moles(self):
+        return self.pp.ip.get_species_moles(self.number)
+    @property
+    def species_molalities(self):
+        return self.pp.ip.get_species_moles(self.number)
+
+    # vitens TACC90 calculation
+    @property
+    def tacc90(self):
+        return self.tacc(90)
+
