@@ -1,9 +1,9 @@
-from phreeqpy import PhreeqPy, Solution
+from phreeqpython import PhreeqPython, Solution
 from nose.tools import assert_equal
 
-class TestPhreeqPy(object):
+class TestPhreeqPython(object):
 
-    pp = PhreeqPy()
+    pp = PhreeqPython()
 
     def test_basiscs(self):
         sol = self.pp.add_solution({'CaCl2':1, 'Na2CO3':1})
