@@ -3,6 +3,7 @@
 import re
 import os
 from viphreeqc import VIPhreeqc
+from solution import Solution
 
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """

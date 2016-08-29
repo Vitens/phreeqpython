@@ -1,3 +1,5 @@
+import re
+
 class Solution(object):
     """ PhreeqPy Solution Class """
 
@@ -64,7 +66,13 @@ class Solution(object):
         return self.pp.ip.get_elements_totals(self.number)
     @property
     def species(self):
-        return self.pp.ip.get_species_molalities(self.number)
+        return self.pp.ip.get_species_moles(self.number)
+    @property
+    def species_moles(self):
+        return self.pp.ip.get_species_moles(self.number)
+    @property
+    def species_molalities(self):
+        return self.pp.ip.get_species_moles(self.number)
 
     # vitens TACC90 calculation
     @property
@@ -85,7 +93,7 @@ class Solution(object):
         return self.pp.ip.get_total_element(self.number, element)
 
     def tacc(self,temperature=90):
-        """ Calculate the TACC """
+        """ Calculate the Calcium Carbonate Precipitation Potential (CCPP)"""
         # create temporary solution
         tmp = self.copy()
         # raise temperature
@@ -100,4 +108,9 @@ class Solution(object):
         return tacc * 1000 #mmol
 
     def si(self, phase):
+        """ Calculate the TACC """
         return self.pp.ip.get_si(self.number, phase)
+
+    def forget(self):
+        """ remove this solution from VIPhreeqc memory """
+        self.pp.remove_solutions([self.number])
