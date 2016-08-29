@@ -1,2 +1,2 @@
-include phreeqpy/database/*.dat
-include phreeqpy/lib/*
+include phreeqpython/database/*.dat
+include phreeqpython/lib/*
