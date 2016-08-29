@@ -8,4 +8,4 @@
 /*.egg-info
 
 # Jupyter notebook 
-.ipnb_checkpoints/
+.ipynb_checkpoints/
