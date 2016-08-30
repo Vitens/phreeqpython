@@ -7,14 +7,15 @@ PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.g
 
 ## Features
 PhreeqPython greatly simplifies adding solutions and querying their properties:
-```python
-pp = PhreeqPython()
-solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
-print solution.pH               # 8.12
-print solution.sc               # 427.32
-print solution.si('Calcite')    # 0.38
-print solution.species['HCO3-'] # 0.0019
-print solution.elements['Cl]    # 0.002 mol
+
+```Python
+  pp = PhreeqPython()
+  solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
+  print solution.pH               # 8.12
+  print solution.sc               # 427.32
+  print solution.si('Calcite')    # 0.38
+  print solution.species['HCO3-'] # 0.0019
+  print solution.elements['Cl]    # 0.002 mol
 ```
 Allows for simple chemical and precipitation/dissolution reactions:
 ```python
