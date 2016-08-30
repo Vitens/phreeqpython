@@ -1,4 +1,7 @@
-# PhreeqPython
+<p align="center">
+  <img src="https://github.com/VitensTC/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
+</p>
+[![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython)
 
 # About Vitens
 
