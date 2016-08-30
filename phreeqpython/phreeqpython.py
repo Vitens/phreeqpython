@@ -21,8 +21,27 @@ class PhreeqPython(object):
         # set solution counter to 0
         self.solution_counter = 0
 
+    def add_solution_raw(self, composition=None):
+        """ add a solution to the VIPhreeqc Stack, allowing more control over the
+        created solution """
+
+        self.solution_counter += 1
+        inputstr = "SOLUTION "+str(self.solution_counter) + "\n"
+        if len(composition) > 0:
+            for key, value in composition.iteritems():
+                inputstr += "  "+key+" "+str(value) + "\n"
+
+        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "END \n"
+
+        self.ip.run_string(inputstr)
+
+        return Solution(self, self.solution_counter)
+
     def add_solution(self, composition=None, temperature=25):
-        """ add a solution to the VIPhreeqc Stack """
+        """ add a solution to the VIPhreeqc Stack and add all individual components 
+        in a reaction step 
+        """
         self.solution_counter += 1
 
         inputstr = "SOLUTION "+str(self.solution_counter) + "\n"
@@ -97,7 +116,7 @@ class PhreeqPython(object):
         inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "REACTION_TEMPERATURE 1 \n"
         inputstr += str(temperature) + "\n"
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
 
         self.ip.run_string(inputstr)
         return Solution(self, self.solution_counter)
