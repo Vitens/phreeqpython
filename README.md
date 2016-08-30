@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://github.com/VitensTC/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
 </p>
-|| **Status** |
+
+| **Mac/Linux** | **Windows** |
 |---|---|
-| **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) |
-| **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+| [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
 PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/VitensTC/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
 ## Features
