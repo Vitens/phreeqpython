@@ -8,14 +8,14 @@ PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.g
 ## Features
 PhreeqPython greatly simplifies adding solutions and querying their properties:
 
-```C
-  pp = PhreeqPython()
-  solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
-  print solution.pH               # 8.12
-  print solution.sc               # 427.32
-  print solution.si('Calcite')    # 0.38
-  print solution.species['HCO3-'] # 0.0019
-  print solution.elements['Cl]    # 0.002 mol
+```python
+pp = PhreeqPython()
+solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
+print solution.pH               # 8.12
+print solution.sc               # 427.32
+print solution.si('Calcite')    # 0.38
+print solution.species['HCO3-'] # 0.0019
+print solution.elements['Cl]    # 0.002 mol
 ```
 Allows for simple chemical and precipitation/dissolution reactions:
 ```python
@@ -41,10 +41,13 @@ print solution3.total('K')      # 0.0005 mol
 * 64 bit Python 2.7
 * Windows, OSX or Linux
 
-## Tests
+## Unit Tests
 | **Mac/Linux** | **Windows** |
 |---|---|
 | [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+
+## Acknowledgements
+This project makes use of the ([Phreeqc](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the ([PhreeqPy])[http://www.phreeqpy.com]) extension for IPhreeqc (Mike Müller)
 
 ## About Vitens
 
