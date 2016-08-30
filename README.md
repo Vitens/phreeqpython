@@ -5,15 +5,50 @@
 |---|---|
 | **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) |
 | **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/VitensTC/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
+
+## Features
+PhreeqPython greatly simplifies adding solutions and querying their properties:
+```python
+pp = PhreeqPython()
+solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
+print solution.pH               # 8.12
+print solution.sc               # 427.32
+print solution.si('Calcite')    # 0.38
+print solution.species['HCO3-'] # 0.0019
+print solution.elements['Cl]    # 0.002 mol
+```
+Allows for simple chemical and precipitation/dissolution reactions:
+```python
+solution.add('NaOH',0.5)
+print solution.pH               # 9.47
+solution.desaturate('Calcite')
+print solution.total('Ca')      # 0.001 mol
+```
+And even allows for addition, devision and multiplication of solutions to form new mixtures:
+```python
+solution2 = pp.add_solution({'KCl':1.0})
+# create mixture of 50% solution and 50% solution2
+solution3 = solution * 0.5 + solution2 * 0.5
+print solution3.total('K')      # 0.0005 mol
+```
+
+## Installation
+* Clone or download repository
+* ```python setup.py install```
 
 
-# About Vitens
+## Requirements
+* 64 bit Python 2.7
+* Windows, OSX or Linux
+
+## About Vitens
 
 Vitens is the largest drinking water company in The Netherlands. We deliver top quality drinking water to 5.6 million people and companies in the provinces Flevoland, Fryslân, Gelderland, Utrecht and Overijssel and some municipalities in Drenthe and Noord-Holland. Annually we deliver 350 million m³ water with 1,400 employees, 100 water treatment works and 49,000 kilometres of water mains.
 
 One of our main focus points is using advanced water quality, quantity and hydraulics models to further improve and optimize our treatment and distribution processes.
 
-# Licence
+## Licence
 
 Copyright 2016 Vitens
 
