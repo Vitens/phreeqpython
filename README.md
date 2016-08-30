@@ -8,7 +8,7 @@ PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.g
 ## Features
 PhreeqPython greatly simplifies adding solutions and querying their properties:
 
-```Python
+```C
   pp = PhreeqPython()
   solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
   print solution.pH               # 8.12
