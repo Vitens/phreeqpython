@@ -3,6 +3,12 @@
 </p>
 [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython)
 
+|| **Status** |
+|---|---|
+| **Mac/Linux** | [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) |
+| **Windows** | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+
+
 # About Vitens
 
 Vitens is the largest drinking water company in The Netherlands. We deliver top quality drinking water to 5.6 million people and companies in the provinces Flevoland, Fryslân, Gelderland, Utrecht and Overijssel and some municipalities in Drenthe and Noord-Holland. Annually we deliver 350 million m³ water with 1,400 employees, 100 water treatment works and 49,000 kilometres of water mains.
