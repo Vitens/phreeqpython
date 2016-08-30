@@ -1,0 +1,20 @@
+# Continuous Intregration for Appveyor
+
+environment:
+  PYTHON: "C:\\Python27_64"
+  PYTHON_VERSION: "2.7"
+  PYTHON_ARCH: "64"
+  CONDA_PY: "27"
+  
+install:
+  # this installs the appropriate Miniconda (Py2/Py3, 32/64 bit)
+  - powershell .\\continuous-integration\\appveyor\\install.ps1
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - conda install --yes nose coverage
+build: false
+
+test_script:
+  - nosetests -vv
+
+on_success:
+  - echo Build successful!
