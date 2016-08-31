@@ -5,7 +5,7 @@ class TestPhreeqPython(object):
 
     pp = PhreeqPython()
 
-    def test_basiscs(self):
+    def test1_basiscs(self):
         sol = self.pp.add_solution({'CaCl2':1, 'Na2CO3':1})
         # test solution number
         assert_equal(sol.number, 1)
@@ -24,7 +24,7 @@ class TestPhreeqPython(object):
         assert_equal(len(sol.phases), 10)
         assert_equal(len(sol.elements), 5)
 
-    def test_solution_functions(self):
+    def test2_solution_functions(self):
         sol = self.pp.add_solution({'CaCl2':1})
         # add components
         sol.add('NaHCO3', 1)
@@ -47,14 +47,13 @@ class TestPhreeqPython(object):
         sol.saturate('Calcite',1)
         assert_equal(sol.si('Calcite'), 1)
 
-    def test_mixing(self):
+    def test3_mixing(self):
         sol1 = self.pp.add_solution({'NaCl':1})
         sol2 = self.pp.add_solution({})
         sol3 = self.pp.mix_solutions({sol1:0.5, sol2:0.5})
         assert_equal(round(sol3.total('Na'), 4), 0.0005)
 
-    def test_solution_listing(self):
-
+    def test4_solution_listing(self):
         # test solution list
         sol_list = self.pp.ip.get_solution_list()
         assert_equal(len(sol_list), 7)
@@ -62,3 +61,12 @@ class TestPhreeqPython(object):
         self.pp.remove_solutions([1, 2, 3])
         sol_list = self.pp.ip.get_solution_list()
         assert_equal(len(sol_list), 4)
+
+    def test5_addition(self):
+        sol1 = self.pp.add_solution({'NaCl':1})
+        sol2 = self.pp.add_solution({'NaCl':2})
+        sol3 = sol1 + sol2
+        assert_equal(round(sol3.mass),2.0)
+
+        sol4 = sol1/2 + sol2/2
+        assert_equal(round(sol4.total('Na')*1000,1),1.5)
