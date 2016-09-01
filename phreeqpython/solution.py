@@ -14,25 +14,35 @@ class Solution(object):
         return self.pp.copy_solution(self.number)
 
     def add(self, element, mmol):
+        """ Add a chemical to the solution """
         self.pp.change_solution(self.number, {element:mmol})
     def remove(self, element, mmol):
+        """ Remove a chemical from the solution """
         mmol = -mmol
         self.pp.change_solution(self.number, {element:mmol})
     def remove_fraction(self, species, fraction):
+        """ Remove a fraction of a chemical from the solution """
         current = self.total(species)
         to_remove = 1000 * current * fraction
         self.remove(species, to_remove)
 
-    # this function can precipitate and dissolve!
-    def saturate(self, phase, to_si=0, partial_pressure = 10):
-        self.pp.equalize_solution(self.number, phase, to_si, partial_pressure)
+    def saturate(self, phase, to_si=0, in_phase=10):
+        """ Saturate (or desaturate) a phase to the given SI.
+        This function can both desaturate a phase through precipitation, or saturate a phase
+        through dissolution. The maximum amount that can be dissolved is given by in_phase
+        """
+        self.pp.equalize_solution(self.number, phase, to_si, in_phase)
 
     # this function can only precipitate
     def desaturate(self, phase, to_si=0):
+        """ Desaturate a phase to the given SI.
+        This function can only desaturate a phase through precipitation
+        """
         self.pp.equalize_solution(self.number, phase, to_si, 0)
 
     # change the ph
     def change_ph(self, to_pH, with_chemical=None):
+        """ Change the pH of a solution by dosing either HCl and NaOH, or a user supplied acid or base """
         # default to NaOH and HCl
         if not with_chemical:
             if to_pH < self.pH:
@@ -45,6 +55,7 @@ class Solution(object):
             self.pp.equalize_solution(self.number, "Fix_pH", -to_pH, 10, with_chemical)
 
     def change_temperature(self, to_temperature):
+        """ Change the temperature of a solution """
         self.pp.change_solution_temperature(self.number, to_temperature)
 
     def total(self, element):
@@ -115,6 +126,7 @@ class Solution(object):
     # Accessor methods
     @property
     def pH(self):
+        """ Solution pH """
         return self.pp.ip.get_ph(self.number)
     @property
     def sc(self):
