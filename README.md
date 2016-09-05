@@ -15,7 +15,7 @@ print solution.pH               # 8.12
 print solution.sc               # 427.32
 print solution.si('Calcite')    # 0.38
 print solution.species['HCO3-'] # 0.0019
-print solution.elements['Cl']    # 0.002 mol
+print solution.elements['Cl']   # 0.002 mol
 ```
 Allows for simple chemical and precipitation/dissolution reactions:
 ```python
