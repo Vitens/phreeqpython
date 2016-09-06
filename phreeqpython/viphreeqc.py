@@ -92,6 +92,8 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_double),
                           ('_get_sc', phreeqc.GetSC,
                            [c_int, c_int], ctypes.c_double),
+                          ('_get_mu', phreeqc.GetMu,
+                           [c_int, c_int], ctypes.c_double),
                           ('_get_temperature', phreeqc.GetTemperature,
                            [c_int, c_int], ctypes.c_double),
                           ('_get_mass', phreeqc.GetMass,
@@ -101,6 +103,8 @@ class VIPhreeqc(object):
                           ('_get_total_element', phreeqc.GetTotalElement,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_moles', phreeqc.GetMoles,
+                           [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
+                          ('_get_activity', phreeqc.GetActivity,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_molality', phreeqc.GetMolality,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
@@ -233,6 +237,8 @@ class VIPhreeqc(object):
         return self._get_pe(self.id_, solution)
     def get_sc(self, solution):
         return self._get_sc(self.id_, solution)
+    def get_mu(self, solution):
+        return self._get_mu(self.id_, solution)
     def get_temperature(self, solution):
         return self._get_temperature(self.id_, solution)
     def get_mass(self, solution):
@@ -243,6 +249,8 @@ class VIPhreeqc(object):
         return self._get_total_element(self.id_, solution, bytes(element, 'utf-8'))
     def get_moles(self, solution, species):
         return self._get_moles(self.id_, solution, bytes(species, 'utf-8'))
+    def get_activity(self, solution, species):
+        return self._get_activity(self.id_, solution, bytes(species, 'utf-8'))
     def get_molality(self, solution, species):
         return self._get_molality(self.id_, solution, bytes(species, 'utf-8'))
     def get_species_moles(self, solution):

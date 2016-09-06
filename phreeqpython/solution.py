@@ -67,9 +67,22 @@ class Solution(object):
                 total += amount
         return total
 
+
     def total_element(self, element):
         """ Returns to total any given element (FAST!) """
         return self.pp.ip.get_total_element(self.number, element)
+
+    def activity(self, species):
+        """ Returns the activity of a single species """
+        return self.pp.ip.get_activity(self.number, species)
+
+    def moles(self, species):
+        """ Returns the moles of a single species """
+        return self.pp.ip.get_moles(self.number, species)
+
+    def molality(self, species):
+        """ Returns the moles of a single species """
+        return self.pp.ip.get_molarity(self.number, species)
 
     def tacc(self,temperature=90):
         """ Calculate the Calcium Carbonate Precipitation Potential (CCPP)"""
@@ -94,7 +107,6 @@ class Solution(object):
         """ remove this solution from VIPhreeqc memory """
         self.pp.remove_solutions([self.number])
 
-
     # Magic functions
     def __add__(self, other):
         """ add two solutions """
@@ -112,18 +124,25 @@ class Solution(object):
     def __div__(self, other):
         """ set devision factor """
         if not isinstance(other,numbers.Real):
-            raise TypeError("Invalid operation, only divisiion by a number is allowed")
+            raise TypeError("Invalid operation, only division by a number is allowed")
         self.factor = 1/float(other)
         return self
 
     def __mul__(self, other):
         """ set multiplication factor """
         if not isinstance(other,numbers.Real):
-            raise TypeError("Invalid operation, only divisiion by a number is allowed")
+            raise TypeError("Invalid operation, only division by a number is allowed")
         self.factor = float(other)
         return self
 
     # Accessor methods
+    @property
+    def I(self):
+        """ Solution ionic strength """
+        return self.pp.ip.get_mu(self.number)
+    def mu(self):
+        """ Solution ionic strength """
+        return self.I
     @property
     def pH(self):
         """ Solution pH """
