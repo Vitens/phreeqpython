@@ -23,9 +23,9 @@ def fetch_viphreeqc():
     urllib.urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
 
     if dll_name == "viphreeqc.zip":
-        print "Unpacking library"
         with zipfile.ZipFile(dll_path,"r") as archive:
-            extract_path = os.path.dirname(__file__) + "\phreeqpython\lib"
+            extract_path = os.path.dirname(os.path.abspath(__file__)) + "\phreeqpython\lib"
+            print "Unpacking library to:", extract_path
             archive.extractall(extract_path)
         os.remove(dll_path)
 
