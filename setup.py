@@ -1,4 +1,5 @@
 from setuptools import setup
+import os
 import sys
 import zipfile
 import urllib
@@ -15,13 +16,17 @@ def fetch_viphreeqc():
     else:
         dll_name = "viphreeqc.zip"
 
-    urllib.urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, "phreeqpython/lib/"+dll_name)
+    dll_path = os.path.dirname(os.path.abspath(__file__)) + "/phreeqpython/lib/"+dll_name
+    print "Downloading to:", dll_path
+
+    urllib.urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
 
     if dll_name == "viphreeqc.zip":
         print "Unpacking library"
-        with zipfile.ZipFile("phreeqpython/lib/"+dll_name,"r") as archive:
-            archive.extractall("phreeqpython/lib")
-        os.remove("phreeqpython/lib/viphreeqc.zip")
+        with zipfile.ZipFile(dll_path,"r") as archive:
+            extract_path = os.path.dirname(__file__) + "/phreeqpython/lib"
+            archive.extractall(extract_path)
+        os.remove(dll_path)
 
 
     print "Done!"
