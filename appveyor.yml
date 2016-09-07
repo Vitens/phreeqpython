@@ -14,4 +14,9 @@ install:
   - "%PYTHON%/Scripts/pip.exe install coverage"
 
 test_script:
+  - dir
+  - cd phreeqpython
+  - dir
+  - cd lib
+  - dir
   - "%PYTHON%/Scripts/nosetests"
