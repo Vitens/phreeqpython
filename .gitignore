@@ -1,5 +1,9 @@
 # Compiled Python Modules
 *.pyc
+# Binaries
+*.dylib
+*.so
+*.dll
 
 # Setuptools distribution folder.
 /dist/
@@ -10,3 +14,4 @@
 # Jupyter notebook 
 .ipynb_checkpoints/
 .coverage
+
