@@ -267,6 +267,13 @@ class VIPhreeqc(object):
         for species in species_list:
             species_moles[species] = self.get_molality(solution, species)
         return species_moles
+    def get_species_activities(self, solution):
+        """ Returns a list of species and their molality """
+        species_list = self.get_species(solution)
+        species_moles = {}
+        for species in species_list:
+            species_moles[species] = self.get_activity(solution, species)
+        return species_moles
     def get_solution_list(self):
         solution_list = self._get_solution_list(self.id_).decode('utf-8').split(",")
         return map(int, solution_list)

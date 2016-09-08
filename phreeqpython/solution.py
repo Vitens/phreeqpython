@@ -158,4 +158,7 @@ class Solution(object):
         return self.pp.ip.get_species_moles(self.number)
     @property
     def species_molalities(self):
-        return self.pp.ip.get_species_moles(self.number)
+        return self.pp.ip.get_species_molalities(self.number)
+    @property
+    def species_activities(self):
+        return self.pp.ip.get_species_activites(self.number)

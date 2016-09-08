@@ -23,6 +23,16 @@ class TestPhreeqPython(object):
         # test phases
         assert_equal(len(sol.phases), 10)
         assert_equal(len(sol.elements), 5)
+        # test ionic strength
+        assert_equal(round(sol.I,4), 0.0045)
+        # test mass
+        assert_equal(round(sol.mass,2), 1.0)
+        # test activity
+        assert_equal(round(sol.activity('Ca+2'),5),0.00054)
+        # test moles
+        assert_equal(round(sol.moles('Ca+2'),5),0.00071)
+
+        assert_equal(round(sol.molality('Ca+2'),5),0.00071)
 
     def test2_solution_functions(self):
         sol = self.pp.add_solution({'CaCl2':1})
@@ -70,3 +80,14 @@ class TestPhreeqPython(object):
 
         sol4 = sol1/2 + sol2/2
         assert_equal(round(sol4.total('Na')*1000,1),1.5)
+
+        sol5 = sol1*0.5 + sol2*0.5
+        assert_equal(round(sol5.total('Na')*1000,1),1.5)
+
+    def test6_misc(self):
+        sol1 = self.pp.add_solution({'NaCl':1})
+        sol2 = sol1.copy()
+        assert_equal(sol1.sc,sol2.sc)
+
+        sol2.forget()
+        assert_equal(sol2.pH,-999)
