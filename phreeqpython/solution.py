@@ -82,25 +82,10 @@ class Solution(object):
 
     def molality(self, species):
         """ Returns the moles of a single species """
-        return self.pp.ip.get_molarity(self.number, species)
-
-    def tacc(self,temperature=90):
-        """ Calculate the Calcium Carbonate Precipitation Potential (CCPP)"""
-        # create temporary solution
-        tmp = self.copy()
-        # raise temperature
-        tmp.change_temperature(temperature)
-        ca_pre = tmp.total_element('Ca')
-        # use saturate instead of desaturate to allow dissolution in addition to precipitation
-        tmp.saturate('Calcite',0.0)
-        # calculate tacc
-        tacc = ca_pre - tmp.total_element('Ca')
-        # cleanup
-        self.pp.remove_solutions([tmp.number])
-        return tacc * 1000 #mmol
+        return self.pp.ip.get_molality(self.number, species)
 
     def si(self, phase):
-        """ Calculate the TACC """
+        """ return the SI of a certain phase """
         return self.pp.ip.get_si(self.number, phase)
 
     def forget(self):
@@ -174,9 +159,3 @@ class Solution(object):
     @property
     def species_molalities(self):
         return self.pp.ip.get_species_moles(self.number)
-
-    # vitens TACC90 calculation
-    @property
-    def tacc90(self):
-        return self.tacc(90)
-
