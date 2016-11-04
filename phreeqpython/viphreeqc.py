@@ -67,6 +67,10 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_char_p),
                           ('_get_component_count', phreeqc.GetComponentCount,
                            [c_int], c_int),
+                          ('_get_dump_string', phreeqc.GetDumpString,
+                           [c_int], ctypes.c_char_p),
+                          ('_set_dump_string_on', phreeqc.SetDumpStringOn,
+                           [c_int], c_int),
                           ('_get_error_string', phreeqc.GetErrorString,
                            [c_int], ctypes.c_char_p),
                           ('_get_selected_output_column_count',
@@ -301,6 +305,14 @@ class VIPhreeqc(object):
         for element in elements:
             element_total[element] = self.get_total(solution, element)
         return element_total
+
+    def set_dump_string_on(self):
+        return self._set_dump_string_on(self.id_,1)
+    def set_dump_string_off(self):
+        return self._set_dump_string_on(self.id_,0)
+
+    def get_dump_string(self):
+        return self._get_dump_string(self.id_)
     # END Vitens extensions
 
     def get_selected_output_value(self, row, col):

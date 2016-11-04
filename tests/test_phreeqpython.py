@@ -1,5 +1,5 @@
 from phreeqpython import PhreeqPython, Solution
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_almost_equal
 
 class TestPhreeqPython(object):
 
@@ -91,3 +91,12 @@ class TestPhreeqPython(object):
 
         sol2.forget()
         assert_equal(sol2.pH,-999)
+
+    def test7_dump_and_load(self):
+        sol5a = self.pp.get_solution(5)
+        self.pp.dump_solutions()
+        pp2 = PhreeqPython('dump.gz')
+        sol5b = pp2.get_solution(5)
+
+        assert_almost_equal(sol5a.sc, sol5b.sc, 2)
+        assert_equal(self.pp.ip.get_solution_list(), pp2.ip.get_solution_list())

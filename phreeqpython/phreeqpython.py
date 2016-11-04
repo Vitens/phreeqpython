@@ -1,14 +1,14 @@
 """ Phreeqpython module """
 
-import re
 import os
+import gzip
 from viphreeqc import VIPhreeqc
 from solution import Solution
 
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """
 
-    def __init__(self, database=None):
+    def __init__(self, from_file=None, database=None):
         # Create VIPhreeqc Instance
         self.ip = VIPhreeqc()
         # Load Vitens.dat database. The VIPhreeqc module is unable to handle relative paths
@@ -17,9 +17,29 @@ class PhreeqPython(object):
         else:
             database_path = database
 
+
         self.ip.load_database(database_path)
-        # set solution counter to 0
-        self.solution_counter = 0
+
+        if from_file:
+            dump = gzip.open(from_file,"rb")
+            try:
+                inputstr = dump.read() + "END"
+                self.ip.run_string(inputstr)
+
+                solutions = self.ip.get_solution_list()
+                # force IPHREEQC to calculate all the solution properties
+                for solution_number in solutions:
+                    self.change_solution(solution_number,{'Na':0})
+
+                self.solution_counter = solutions[-1]
+                # precalculte all solutions
+            finally:
+                dump.close()
+            
+
+        else:
+            # set solution counter to 0
+            self.solution_counter = 0
 
     def add_solution_raw(self, composition=None):
         """ add a solution to the VIPhreeqc Stack, allowing more control over the
@@ -138,3 +158,29 @@ class PhreeqPython(object):
         inputstr = "DELETE \n"
         inputstr += "-solution " + ' '.join(map(str, solution_number_list))
         self.ip.run_string(inputstr)
+
+    def get_solution(self, number):
+        return Solution(self, number)
+
+    def dump_solutions(self, solution_number_list = None, filename='dump.gz'):
+        """ Dump solutions to raw file for transmission to another VIPhreeqc instance """
+        if not solution_number_list:
+            solution_number_list = []
+
+        inputstr = "DUMP \n"
+        inputstr += "-file "+filename + "\n"
+        inputstr += "-solution " + ' '.join(map(str, solution_number_list)) + "\n"
+        inputstr += "END"
+
+        self.ip.set_dump_string_on()
+        self.ip.run_string(inputstr)
+
+        dump = self.ip.get_dump_string()
+
+        # write to file
+        dumpfile = gzip.open(filename,'w')
+        dumpfile.write(dump)
+        dumpfile.close()
+
+        self.ip.set_dump_string_off()
+
