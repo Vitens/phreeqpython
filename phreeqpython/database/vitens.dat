@@ -105,11 +105,11 @@ SOLUTION_SPECIES
 # begin modification vitens.dat
 Pmod+ = Pmod+
   # same dw as Na+
-	-dw	 1.33e-9										
+#	-dw	 1.33e-9										
 
 Nmod- = Nmod-
   # same dw as Cl-
-	-dw	 2.03e-9										
+#	-dw	 2.03e-9										
   
 # end modification vitens.dat
 

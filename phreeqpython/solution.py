@@ -62,7 +62,7 @@ class Solution(object):
         """ Returns to total of any given species or element (SLOW!) """
         total = 0
         regexp = "(^|[^A-Z])"+element
-        for species, amount in self.species.iteritems():
+        for species, amount in self.species.items():
             if re.search(regexp, species):
                 total += amount
         return total
@@ -105,6 +105,10 @@ class Solution(object):
         other.factor = 1
 
         return mixture
+
+    def __truediv__(self, other):
+        """ Python 3 support """
+        return self.__div__(other)
 
     def __div__(self, other):
         """ set devision factor """
@@ -162,3 +166,7 @@ class Solution(object):
     @property
     def species_activities(self):
         return self.pp.ip.get_species_activites(self.number)
+    @property
+    def species_table(self):
+        """ Returns a Phreeqc output like species table """
+        return self.pp.ip.get_species_table(self.number)

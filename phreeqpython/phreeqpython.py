@@ -2,8 +2,8 @@
 
 import os
 import gzip
-from viphreeqc import VIPhreeqc
-from solution import Solution
+from .viphreeqc import VIPhreeqc
+from .solution import Solution
 
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """
@@ -23,7 +23,7 @@ class PhreeqPython(object):
         if from_file:
             dump = gzip.open(from_file,"rb")
             try:
-                inputstr = dump.read() + "END"
+                inputstr = dump.read().decode('utf-8')  + "END"
                 self.ip.run_string(inputstr)
 
                 solutions = self.ip.get_solution_list()
@@ -48,7 +48,7 @@ class PhreeqPython(object):
         self.solution_counter += 1
         inputstr = "SOLUTION "+str(self.solution_counter) + "\n"
         if len(composition) > 0:
-            for key, value in composition.iteritems():
+            for key, value in composition.items():
                 inputstr += "  "+key+" "+str(value) + "\n"
 
         inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
@@ -68,7 +68,7 @@ class PhreeqPython(object):
         inputstr += "-temp "+str(temperature) + "\n"
         if len(composition) > 0:
             inputstr += "REACTION 1 \n"
-            for species, moles in composition.iteritems():
+            for species, moles in composition.items():
                 inputstr += species + " " + str(moles) + "\n"
             inputstr += "1 mmol \n"
 
@@ -84,7 +84,7 @@ class PhreeqPython(object):
 
         inputstr = "USE SOLUTION "+str(solution_number)+"\n"
         inputstr += "REACTION 1 \n"
-        for element, change in elements.iteritems():
+        for element, change in elements.items():
             inputstr += element + " " + str(change) + "\n"
         inputstr += "1 mmol \n"
         if create_new:
@@ -118,7 +118,7 @@ class PhreeqPython(object):
         self.solution_counter += 1
         # mix two or more solutions to obtain a new solution
         inputstr = "MIX 1 \n"
-        for solution, fraction in solutions.iteritems():
+        for solution, fraction in solutions.items():
             if isinstance(solution, Solution):
                 inputstr += str(solution.number) + " " + str(fraction) + "\n"
             else:

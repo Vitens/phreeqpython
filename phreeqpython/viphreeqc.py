@@ -114,6 +114,8 @@ class VIPhreeqc(object):
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_species', phreeqc.GetSpecies,
                            [c_int, c_int], ctypes.c_char_p),
+                          ('_get_species_masters', phreeqc.GetSpeciesMasters,
+                           [c_int, c_int], ctypes.c_char_p),
                           ('_get_phases', phreeqc.GetPhases,
                            [c_int, c_int], ctypes.c_char_p),
                           ('_get_elements', phreeqc.GetElements,
@@ -278,13 +280,32 @@ class VIPhreeqc(object):
         for species in species_list:
             species_moles[species] = self.get_activity(solution, species)
         return species_moles
+
+    def get_species_masters(self, solution):
+        """ Returns a dict of species and their masters """
+        species_list = self._get_species_masters(self.id_, solution).decode('utf-8').split(";")
+        species_dict = {}
+        for specie in species_list:
+            species_dict[specie.split(":")[0]] = specie.split(":")[1].split(",")[:-1]
+        return species_dict
+
+    def get_masters_species(self, solution):
+        masters_list = {}
+        species_dict = self.get_species_masters(solution)
+
+        for specie, masters in species_dict.items():
+            for master in masters:
+                masters_list.setdefault(master,[]).append(specie)
+            
+        return masters_list
+
     def get_solution_list(self):
         solution_list = self._get_solution_list(self.id_).decode('utf-8').split(",")
-        return map(int, solution_list)
+        return list(map(int, solution_list))
     def get_species(self, solution):
         return self._get_species(self.id_, solution).decode('utf-8').split(",")
     def get_si(self, solution, phase):
-        return self._get_si(self.id_, solution, phase)
+        return self._get_si(self.id_, solution, bytes(phase, 'utf-8'))
     def get_phases(self, solution):
         # no idea why this is necessary.. it won't work otherwise
         return self.dll.GetPhases(self.id_, solution).decode('utf-8').split(",")
