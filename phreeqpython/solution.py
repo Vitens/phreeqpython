@@ -135,7 +135,7 @@ class Solution(object):
     @property
     def pH(self):
         """ Solution pH """
-        return self.pp.ip.get_ph(self.number)+1 # temporary CI test
+        return self.pp.ip.get_ph(self.number)
     @property
     def sc(self):
         return self.pp.ip.get_sc(self.number)
