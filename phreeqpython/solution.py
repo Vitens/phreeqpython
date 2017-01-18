@@ -135,7 +135,7 @@ class Solution(object):
     @property
     def pH(self):
         """ Solution pH """
-        return self.pp.ip.get_ph(self.number)
+        return self.pp.ip.get_ph(self.number)+1 # temporary CI test
     @property
     def sc(self):
         return self.pp.ip.get_sc(self.number)
@@ -167,6 +167,6 @@ class Solution(object):
     def species_activities(self):
         return self.pp.ip.get_species_activites(self.number)
     @property
-    def species_table(self):
+    def masters_species(self):
         """ Returns a Phreeqc output like species table """
-        return self.pp.ip.get_species_table(self.number)
+        return self.pp.ip.get_masters_species(self.number)
