@@ -97,6 +97,7 @@ Ntg		Ntg		0	Ntg		28.014		# 28.0134  N2 gas			28,014
 #element		species		alk	gfw_formula		element_gfw		# phreeqc.dat			
 Pmod Pmod+ 0 Pmod 1.000
 Nmod Nmod- 0 Nmod 1.000
+Toc Toc 0 Toc 1.000
 # end modification vitens.dat
 												
 												
@@ -106,6 +107,7 @@ SOLUTION_SPECIES
 Pmod+ = Pmod+
   # same dw as Na+
 #	-dw	 1.33e-9										
+Toc = Toc # H2												
 
 Nmod- = Nmod-
   # same dw as Cl-

@@ -184,3 +184,6 @@ class PhreeqPython(object):
 
         self.ip.set_dump_string_off()
 
+    def get_solution_list(self):
+        return self.ip.get_solution_list()
+
