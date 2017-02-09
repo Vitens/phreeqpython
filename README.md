@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="https://github.com/VitensTC/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
+  <img src="https://github.com/Vitens/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
 </p>
 
 
-PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/VitensTC/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
+PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
 ## Features
 PhreeqPython greatly simplifies adding solutions and querying their properties:
@@ -45,7 +45,7 @@ print solution3.total('K')      # 0.0005 mol
 ## Unit Tests
 | **Mac/Linux** | **Windows** |
 |---|---|
-| [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/VitensTC/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+| [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
 
 ## Acknowledgements
 This project makes use of the ([Phreeqc](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the ([PhreeqPy]([http://www.phreeqpy.com])) extension for IPhreeqc (Mike Müller)
