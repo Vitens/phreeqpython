@@ -6,6 +6,12 @@ import urllib
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 
+if sys.version_info[0] >= 3:
+    from urllib.request import urlretrieve
+else:
+    from urllib import urlretrieve
+
+
 def fetch_viphreeqc():
     print("Fetching latest VIPhreeqc build from ci...")
     from_zip = False
@@ -20,7 +26,7 @@ def fetch_viphreeqc():
     dll_path = os.path.dirname(os.path.abspath(__file__)) + os.sep + "phreeqpython" + os.sep + "lib" + os.sep +dll_name
     print("Downloading to:", dll_path)
 
-    urllib.urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
+    urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
 
     if dll_name == "viphreeqc.zip":
         with zipfile.ZipFile(dll_path,"r") as archive:
