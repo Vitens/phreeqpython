@@ -12,9 +12,9 @@ init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
 
 install:
-  - "python setup.py install"
-  - "%PYTHON%/Scripts/pip.exe install nose"
-  - "%PYTHON%/Scripts/pip.exe install coverage"
+  - "%PYTHON%/python.exe setup.py install"
+  - "%PYTHON%/python.exe -m pip install nose"
+  - "%PYTHON%/python.exe -m pip install coverage"
 
 test_script:
-  - "%PYTHON%/Scripts/nosetests"
+  - "%PYTHON%/python.exe -m nose -v"
