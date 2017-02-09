@@ -39,7 +39,7 @@ print solution3.total('K')      # 0.0005 mol
 
 
 ## Requirements
-* 64 bit Python 2.7
+* 64 bit Python
 * Windows, OSX or Linux
 
 ## Unit Tests
