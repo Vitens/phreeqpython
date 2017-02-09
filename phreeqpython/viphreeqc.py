@@ -40,7 +40,7 @@ class VIPhreeqc(object):
         if not dll_path:
             if sys.platform == 'win32':
                 dll_name = './lib/VIPhreeqc.dll'
-            elif sys.platform == 'linux2':
+            elif 'linux' in sys.platform:
                 dll_name = './lib/viphreeqc.so'
             elif sys.platform == 'darwin':
                 dll_name = './lib/viphreeqc.dylib'
