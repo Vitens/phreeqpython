@@ -6,31 +6,37 @@ import urllib
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 
+if sys.version_info[0] >= 3:
+    from urllib.request import urlretrieve
+else:
+    from urllib import urlretrieve
+
+
 def fetch_viphreeqc():
-    print "Fetching latest VIPhreeqc build from ci..."
+    print("Fetching latest VIPhreeqc build from ci...")
     from_zip = False
     if sys.platform == "darwin":
         dll_name = "viphreeqc.dylib"
-    elif sys.platform == "linux2":
+    elif "linux" in sys.platform:
         dll_name = "viphreeqc.so"
     else:
         dll_name = "viphreeqc.zip"
 
     
     dll_path = os.path.dirname(os.path.abspath(__file__)) + os.sep + "phreeqpython" + os.sep + "lib" + os.sep +dll_name
-    print "Downloading to:", dll_path
+    print("Downloading to:", dll_path)
 
-    urllib.urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
+    urlretrieve("http://ci.abelheinsbroek.nl/"+dll_name, dll_path)
 
     if dll_name == "viphreeqc.zip":
         with zipfile.ZipFile(dll_path,"r") as archive:
             extract_path = os.path.dirname(os.path.abspath(__file__)) + "\phreeqpython\lib"
-            print "Unpacking library to:", extract_path
+            print("Unpacking library to:", extract_path)
             archive.extractall(extract_path)
         os.remove(dll_path)
 
 
-    print "Done!"
+    print("Done!")
     
 
 class PostDevelopCommand(develop):
