@@ -45,7 +45,7 @@ print solution3.total('K')      # 0.0005 mol
 ## Unit Tests
 | **Mac/Linux** | **Windows** |
 |---|---|
-| [![Build Status](https://travis-ci.org/VitensTC/phreeqpython.svg?branch=master)](https://travis-ci.org/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/AbelHeinsbroek/phreeqpython) |
+| [![Build Status](https://travis-ci.org/Vitens/phreeqpython.svg?branch=master)](https://travis-ci.org/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/Vitens/phreeqpython) |
 
 ## Acknowledgements
 This project makes use of the ([Phreeqc](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the ([PhreeqPy]([http://www.phreeqpy.com])) extension for IPhreeqc (Mike Müller)
