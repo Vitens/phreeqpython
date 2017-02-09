@@ -100,3 +100,16 @@ class TestPhreeqPython(object):
 
         assert_almost_equal(sol5a.sc, sol5b.sc, 2)
         assert_equal(self.pp.ip.get_solution_list(), pp2.ip.get_solution_list())
+
+    def test8_raw_solutions(self):
+        sol8 = self.pp.add_solution_raw({
+            'pH': '8.0',
+            'temp': '20',
+            'units': 'mg/l',
+            'Alkalinity': '200 as HCO3',
+            'Ca':'40.1',
+            'Cl':'71.0'
+            })
+        assert_equal(sol8.pH, 8.0)
+        assert_almost_equal(sol8.total_element('Ca'), 1e-3, 5)
+        assert_almost_equal(sol8.total_element('Cl'), 2e-3, 5)
