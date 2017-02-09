@@ -17,7 +17,7 @@ def fetch_viphreeqc():
     from_zip = False
     if sys.platform == "darwin":
         dll_name = "viphreeqc.dylib"
-    elif sys.platform == "linux2":
+    elif "linux" in sys.platform:
         dll_name = "viphreeqc.so"
     else:
         dll_name = "viphreeqc.zip"
