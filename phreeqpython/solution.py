@@ -165,7 +165,7 @@ class Solution(object):
         return self.pp.ip.get_species_molalities(self.number)
     @property
     def species_activities(self):
-        return self.pp.ip.get_species_activites(self.number)
+        return self.pp.ip.get_species_activities(self.number)
     @property
     def masters_species(self):
         """ Returns a Phreeqc output like species table """

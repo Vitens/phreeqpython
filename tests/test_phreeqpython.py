@@ -1,5 +1,5 @@
 from phreeqpython import PhreeqPython, Solution
-from nose.tools import assert_equal, assert_almost_equal
+from nose.tools import assert_equal, assert_almost_equal, assert_raises
 
 class TestPhreeqPython(object):
 
@@ -34,6 +34,11 @@ class TestPhreeqPython(object):
 
         assert_equal(round(sol.molality('Ca+2'),5),0.00071)
 
+        # test species_moles
+        assert_equal(round(sol.species_moles['Ca+2'],5), 0.00071)
+        assert_equal(round(sol.species_molalities['Ca+2'],5), 0.00071)
+        assert_equal(round(sol.species_activities['Ca+2'],5), 0.00054)
+
     def test2_solution_functions(self):
         sol = self.pp.add_solution({'CaCl2':1})
         # add components
@@ -51,17 +56,28 @@ class TestPhreeqPython(object):
         sol.remove_fraction('Na',0.5)
         assert_equal(round(sol.total('Na'), 5), 0.00025)
 
+        # change ph using base
         sol.change_ph(10)
         assert_equal(round(sol.pH, 2), 10)
+        # change ph using acid
+        sol.change_ph(5)
+        assert_equal(round(sol.pH, 2), 5)
+        # raise ph using custom chemical (NaOH)
+        sol.change_ph(8, 'NaOH')
+        assert_equal(round(sol.pH, 2), 8)
 
         sol.saturate('Calcite',1)
         assert_equal(sol.si('Calcite'), 1)
+
+        sol.change_temperature(10)
+        assert_equal(sol.temperature, 10)
 
     def test3_mixing(self):
         sol1 = self.pp.add_solution({'NaCl':1})
         sol2 = self.pp.add_solution({})
         sol3 = self.pp.mix_solutions({sol1:0.5, sol2:0.5})
         assert_equal(round(sol3.total('Na'), 4), 0.0005)
+
 
     def test4_solution_listing(self):
         # test solution list
@@ -83,6 +99,18 @@ class TestPhreeqPython(object):
 
         sol5 = sol1*0.5 + sol2*0.5
         assert_equal(round(sol5.total('Na')*1000,1),1.5)
+
+        # test invalid mixtures
+        def testadd(sol, other):
+            return sol+other
+        def testdiv(sol, other):
+            return sol/other
+        def testmul(sol, other):
+            return sol*other
+
+        assert_raises(TypeError, testadd, sol1, 1)
+        assert_raises(TypeError, testdiv, sol1, sol2)
+        assert_raises(TypeError, testmul, sol1, sol2)
 
     def test6_misc(self):
         sol1 = self.pp.add_solution({'NaCl':1})
