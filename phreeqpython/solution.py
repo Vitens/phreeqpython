@@ -16,10 +16,12 @@ class Solution(object):
     def add(self, element, mmol):
         """ Add a chemical to the solution """
         self.pp.change_solution(self.number, {element:mmol})
+
     def remove(self, element, mmol):
         """ Remove a chemical from the solution """
         mmol = -mmol
         self.pp.change_solution(self.number, {element:mmol})
+
     def remove_fraction(self, species, fraction):
         """ Remove a fraction of a chemical from the solution """
         current = self.total(species)
@@ -67,6 +69,14 @@ class Solution(object):
                 total += amount
         return total
 
+    def total_activity(self, element):
+        """ Returns to total of any given species or element (SLOW!) """
+        total = 0
+        regexp = "(^|[^A-Z])"+element
+        for species, amount in self.species_activities.items():
+            if re.search(regexp, species):
+                total += amount
+        return total
 
     def total_element(self, element):
         """ Returns to total any given element (FAST!) """
