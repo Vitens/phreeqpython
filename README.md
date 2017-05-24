@@ -41,6 +41,7 @@ print solution3.total('K')      # 0.0005 mol
 ## Requirements
 * 64 bit Python
 * Windows, OSX or Linux
+  * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
 ## Unit Tests
 | **Mac/Linux** | **Windows** | **Coverage** |
