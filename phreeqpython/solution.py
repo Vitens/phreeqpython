@@ -25,7 +25,7 @@ class Solution(object):
     def remove_fraction(self, species, fraction):
         """ Remove a fraction of a chemical from the solution """
         current = self.total(species)
-        to_remove = 100 * current * fraction
+        to_remove = 1000 * current * fraction
         self.remove(species, to_remove)
 
     def saturate(self, phase, to_si=0, in_phase=10):
