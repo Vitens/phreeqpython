@@ -1,7 +1,5 @@
-<p align="center">
-  <img src="https://github.com/Vitens/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
-</p>
 
+![](/logo.png)
 
 PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
