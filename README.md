@@ -1,8 +1,7 @@
-<p align="center">
-  <img src="https://github.com/Vitens/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>
-</p>
-
-
+<p align="center">		
+   <img src="https://github.com/Vitens/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>		
+ </p>
+ 
 PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
 ## Features
@@ -41,6 +40,7 @@ print solution3.total('K')      # 0.0005 mol
 ## Requirements
 * 64 bit Python
 * Windows, OSX or Linux
+  * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
 ## Unit Tests
 | **Mac/Linux** | **Windows** | **Coverage** |
