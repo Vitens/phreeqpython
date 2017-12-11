@@ -4,6 +4,7 @@ python:
   - "3.5"
 install: 
   - "pip install coverage"
+  - "pip install periodictable"
   - "pip install codecov"
   - "python setup.py install"
 script: 

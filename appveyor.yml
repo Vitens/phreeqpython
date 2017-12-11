@@ -14,6 +14,7 @@ init:
 install:
   - "%PYTHON%/python.exe setup.py install"
   - "%PYTHON%/python.exe -m pip install nose"
+  - "%PYTHON%/python.exe -m pip install periodictable"
   - "%PYTHON%/python.exe -m pip install coverage"
 
 test_script:
