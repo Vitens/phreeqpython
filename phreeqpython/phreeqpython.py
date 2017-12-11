@@ -4,26 +4,31 @@ import os
 import gzip
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
+import warnings
 
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """
 
-    def __init__(self, from_file=None, database=None):
+    def __init__(self, database=None, from_file=None, debug=False):
         # Create VIPhreeqc Instance
         self.ip = VIPhreeqc()
+        self.ip.debug = debug
         # Load Vitens.dat database. The VIPhreeqc module is unable to handle relative paths
         if not database:
             database_path = os.path.dirname(__file__) + "/database/vitens.dat"
         else:
-            database_path = database
+            database_path = os.path.dirname(__file__) + "/database/"+database
 
+        if not os.path.isfile(database_path):
+            raise FileNotFoundError("Database file not found")
 
         self.ip.load_database(database_path)
+
 
         if from_file:
             dump = gzip.open(from_file,"rb")
             try:
-                inputstr = dump.read().decode('utf-8')  + "END"
+                inputstr = dump.read().decode('utf-8') + "END"
                 self.ip.run_string(inputstr)
 
                 solutions = self.ip.get_solution_list()
@@ -35,13 +40,16 @@ class PhreeqPython(object):
                 # precalculte all solutions
             finally:
                 dump.close()
-            
 
         else:
-            # set solution counter to 0
             self.solution_counter = 0
 
+
     def add_solution_raw(self, composition=None):
+        warnings.warn("add_solution_raw is deprecated, use add_solution and add_solution_simple instead", DeprecationWarning)
+        return self.add_solution(composition)
+
+    def add_solution(self, composition=None):
         """ add a solution to the VIPhreeqc Stack, allowing more control over the
         created solution """
 
@@ -58,7 +66,7 @@ class PhreeqPython(object):
 
         return Solution(self, self.solution_counter)
 
-    def add_solution(self, composition=None, temperature=25):
+    def add_solution_simple(self, composition=None, temperature=25):
         """ add a solution to the VIPhreeqc Stack and add all individual components 
         in a reaction step 
         """
@@ -86,7 +94,7 @@ class PhreeqPython(object):
         inputstr += "REACTION 1 \n"
         for element, change in elements.items():
             inputstr += element + " " + str(change) + "\n"
-        inputstr += "1 mmol \n"
+        inputstr += "1 mol \n"
         if create_new:
             self.solution_counter += 1
             solution_number = self.solution_counter
@@ -97,14 +105,38 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
         return Solution(self, solution_number)
 
-    def equalize_solution(self, solution_number, phase, to_si, in_phase=10, with_element=None):
-        """ saturate or desaturate a solution """
+    def equalize_solution(self, solution_number, phases, to_si, in_phase=[10], with_element=[None]):
+        """ saturate or desaturate (equalize) a solution with one or more phases """
+
+        if not isinstance(phases, list):
+            phases = [phases]
+        if not isinstance(to_si, list):
+            to_si = [to_si]
+        if not isinstance(in_phase, list):
+            in_phase = [in_phase]
+        if not isinstance(with_element, list):
+            with_element = [with_element]
+
+        else:
+            # fix default inputs
+            if len(to_si) < len(phases):
+                to_si.extend([0 for i in range(len(phases)-len(to_si))])
+
+            if len(in_phase) < len(phases):
+                in_phase.extend([10 for i in range(len(phases)-len(in_phase))])
+
+            if len(with_element) < len(phases):
+                with_element.extend([None for i in range(len(phases)-len(with_element))])
+
         inputstr = "USE SOLUTION "+str(solution_number)+"\n"
         inputstr += "EQUILIBRIUM PHASES 1 \n"
-        if with_element:
-            inputstr += phase + " " + str(to_si) + " " + with_element + " " + str(in_phase) + "\n"
-        else:
-            inputstr += phase + " " + str(to_si) + " " + str(in_phase) + "\n"
+
+        for num in range(len(phases)):
+
+            if with_element[num]:
+                inputstr += phases[num] + " " + str(to_si[num]) + " " + with_element[num] + " " + str(in_phase[num]) + "\n"
+            else:
+                inputstr += phases[num] + " " + str(to_si[num]) + " " + str(in_phase[num]) + "\n"
 
         inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
         inputstr += "END"
@@ -152,6 +184,9 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
 
         return Solution(self, self.solution_counter)
+
+    def empty_solution(self):
+        return self.add_solution({})
 
     def remove_solutions(self, solution_number_list):
         """ Remove solutions from VIPhreeqc memory """

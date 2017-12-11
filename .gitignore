@@ -4,6 +4,7 @@
 *.dylib
 *.so
 *.dll
+*.DS_Store
 
 # Setuptools distribution folder.
 /dist/

@@ -49,6 +49,7 @@ class VIPhreeqc(object):
                 raise NotImplementedError(msg)
             dll_path = os.path.join(os.path.dirname(__file__), dll_name)
         phreeqc = ctypes.cdll.LoadLibrary(dll_path)
+        self.debug = False
         self.dll = phreeqc
         c_int = ctypes.c_int
         method_mapping = [('_accumulate_line', phreeqc.AccumulateLine,
@@ -258,7 +259,7 @@ class VIPhreeqc(object):
     def get_activity(self, solution, species):
         return self._get_activity(self.id_, solution, bytes(species, 'utf-8'))
     def get_molality(self, solution, species):
-        return self._get_molality(self.id_, solution, bytes(species, 'utf-8'))
+        return(self._get_molality(self.id_, solution, bytes(species, 'utf-8')))
     def get_species_moles(self, solution):
         """ Returns a list of species and their molarity """
         species_list = self.get_species(solution)
@@ -422,7 +423,10 @@ class VIPhreeqc(object):
     def run_string(self, cmd_string):
         """Run PHREEQC input from string.
         """
-        #print cmd_string
+        #print(cmd_string)
+        if self.debug:
+            print(cmd_string)
+
         errors = self._run_string(self.id_,
                                   ctypes.c_char_p(bytes(cmd_string, 'utf-8')))
         if errors != 0:
