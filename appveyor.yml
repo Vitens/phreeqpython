@@ -16,6 +16,7 @@ install:
   - "%PYTHON%/python.exe -m pip install nose"
   - "%PYTHON%/python.exe -m pip install periodictable"
   - "%PYTHON%/python.exe -m pip install coverage"
+  - "%PYTHON%/python.exe -m pip install scipy"
 
 test_script:
   - "%PYTHON%/python.exe -m nose -v"
