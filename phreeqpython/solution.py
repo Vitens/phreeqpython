@@ -1,6 +1,8 @@
 import re
 import numbers
 from .utility import convert_units
+from scipy.integrate import odeint
+import numpy as np
 
 class Solution(object):
     """ PhreeqPy Solution Class """
@@ -34,6 +36,9 @@ class Solution(object):
         to_remove = current * fraction
         self.remove(species, to_remove)
         return self
+
+    def equalize_gas(self, gasses={}, fixed_pressure=True, fixed_volume=True, pressure=1.0, volume=1.0, temperature=25):
+        self.pp.equalize_solution_gas(self.number, gasses=gasses, fixed_pressure=fixed_pressure, fixed_volume=fixed_volume, pressure=pressure, volume=volume, temperature=temperature)
 
     def equalize(self, phases, to_si=[0], in_phase=[10], with_chemical=[None]):
         """ equalize one or more phases with the solution """
@@ -125,6 +130,24 @@ class Solution(object):
     def forget(self):
         """ remove this solution from VIPhreeqc memory """
         self.pp.remove_solutions([self.number])
+
+    def kinetics(self, element, rate_function, time, m0=0, args=()):
+
+        def calc_rate(y, t, m0, *args):
+            temp = self.copy()
+            temp.add(element, y[0])
+            rate = rate_function(temp, y[0], m0, *args)
+            temp.forget()
+            return rate
+
+        y = odeint(calc_rate, 0, time, args=(m0,)+args)
+
+        y = np.insert(np.diff(y[:,0]), 0, 0)
+
+        for i in range(len(time)):
+            t = time[i]
+            self.add(element, y[i])
+            yield(t, self)
 
     # Magic functions
     def __add__(self, other):

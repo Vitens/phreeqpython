@@ -42,6 +42,7 @@ class PhreeqPython(object):
                 dump.close()
 
         else:
+            self.buffer = False
             self.solution_counter = 0
 
 
@@ -86,6 +87,20 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
 
         return Solution(self, self.solution_counter)
+
+    def add_master_species(self, element, master_species, alkalinity=0, gfw=1, egfw=""):
+        """ add a master species to the VIPhreeqc Instance """
+        inputstr = "SOLUTION_MASTER_SPECIES; {} {} {} {} {} \n".format(element, master_species, alkalinity, gfw, egfw)
+        self.buffer = inputstr
+
+    def add_species(self, reaction, log_k=0, delta_h=0, egfw=None):
+        """ add a solution species to the VIPhreeqc Instance """
+        inputstr = self.buffer if self.buffer else ""
+        self.buffer = False
+        inputstr +=  "SOLUTION_SPECIES \n {} \n".format(reaction)
+        inputstr += "log_k {}".format(log_k)
+
+        self.ip.run_string(inputstr)
 
     def change_solution(self, solution_number, elements, create_new=False):
         """ change solution composition by adding/removing elements """
@@ -162,6 +177,27 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
 
         return Solution(self, self.solution_counter)
+
+    def equalize_solution_gas(self, solution_number, gasses={}, fixed_pressure=True, fixed_volume=False, pressure=1.0, volume=1.0, temperature=25):
+        inputstr = "USE SOLUTION {}\n".format(solution_number)
+        self.solution_counter+=1
+        inputstr += "GAS_PHASE {}\n".format(self.solution_counter)
+        if fixed_pressure:
+            inputstr += "-fixed_pressure \n"
+        if fixed_volume:
+            inputstr += "-fixed_volume \n"
+
+        inputstr += "-volume {}\n".format(volume)
+        inputstr += "-pressure {}\n".format(pressure)
+
+        for gas, pressure in gasses.items():
+            inputstr += "{} {} \n".format(gas, pressure)
+
+        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+        inputstr += "END \n"
+
+        self.ip.run_string(inputstr)
+
 
     def change_solution_temperature(self, solution_number, temperature):
         """ change temperature """
