@@ -4,6 +4,7 @@ import os
 import gzip
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
+from .gas import Gas
 import warnings
 
 class PhreeqPython(object):
@@ -44,7 +45,45 @@ class PhreeqPython(object):
         else:
             self.buffer = False
             self.solution_counter = 0
+            self.gas_counter = 0
 
+    def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
+        """ add a gas phase to the VIPhreeqc stack """
+
+        if fixed_pressure and fixed_volume:
+            raise ValueError("Cannot create a gas with a fixed pressure and a fixed volume!")
+
+        if equilibrate_with is not False and not fixed_volume:
+            raise ValueError("Only gas phases with a fixed_volume can be created in equilibrium with a solution")
+
+        self.gas_counter += 1
+
+
+        inputstr = "GAS_PHASE {}\n".format(self.gas_counter)
+        if fixed_pressure:
+            inputstr += "-fixed_pressure \n"
+        if fixed_volume:
+            inputstr += "-fixed_volume \n"
+
+        inputstr += "-volume {}\n".format(volume)
+        inputstr += "-pressure {}\n".format(pressure)
+
+        for gas, pressure in components.items():
+            inputstr += "{} {} \n".format(gas, pressure)
+
+        if equilibrate_with:
+            if isinstance(equilibrate_with, Solution):
+                inputstr += "-equilibrate {}\n".format(equilibrate_with.number)
+            else:
+                inputstr += "-equilibrate {}\n".format(equilibrate_with)
+
+
+        inputstr += "SAVE GAS_PHASE "+str(self.gas_counter) + "\n"
+        inputstr += "END \n"
+
+        self.ip.run_string(inputstr)
+
+        return Gas(self, self.gas_counter)
 
     def add_solution_raw(self, composition=None):
         warnings.warn("add_solution_raw is deprecated, use add_solution and add_solution_simple instead", DeprecationWarning)
@@ -178,24 +217,13 @@ class PhreeqPython(object):
 
         return Solution(self, self.solution_counter)
 
-    def equalize_solution_gas(self, solution_number, gasses={}, fixed_pressure=True, fixed_volume=False, pressure=1.0, volume=1.0, temperature=25):
-        inputstr = "USE SOLUTION {}\n".format(solution_number)
-        self.solution_counter+=1
-        inputstr += "GAS_PHASE {}\n".format(self.solution_counter)
-        if fixed_pressure:
-            inputstr += "-fixed_pressure \n"
-        if fixed_volume:
-            inputstr += "-fixed_volume \n"
-
-        inputstr += "-volume {}\n".format(volume)
-        inputstr += "-pressure {}\n".format(pressure)
-
-        for gas, pressure in gasses.items():
-            inputstr += "{} {} \n".format(gas, pressure)
-
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
-        inputstr += "END \n"
-
+    def interact_solution_gas(self, solution_number, gas_number):
+        """ Interact solution with gas phase """
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "USE GAS_PHASE " + str(gas_number) + "\n"
+        inputstr += "SAVE GAS_PHASE " + str(gas_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "END"
         self.ip.run_string(inputstr)
 
 
@@ -221,6 +249,18 @@ class PhreeqPython(object):
 
         return Solution(self, self.solution_counter)
 
+    def copy_gas(self, gas_number):
+        """ Copy a solution to create a new one """
+        # add a solution to the VIPhreeqc Stack
+        self.gas_counter += 1
+        # mix two or more solutions to obtain a new solution
+        inputstr = "COPY GAS_PHASE " + str(gas_number) + " " + str(self.gas_counter) + "\n"
+        inputstr += "END\n"
+
+        self.ip.run_string(inputstr)
+
+        return Gas(self, self.gas_counter)
+
     def empty_solution(self):
         return self.add_solution({})
 
@@ -228,6 +268,12 @@ class PhreeqPython(object):
         """ Remove solutions from VIPhreeqc memory """
         inputstr = "DELETE \n"
         inputstr += "-solution " + ' '.join(map(str, solution_number_list))
+        self.ip.run_string(inputstr)
+
+    def remove_gases(self, gas_number_list):
+        """ Remove solutions from VIPhreeqc memory """
+        inputstr = "DELETE \n"
+        inputstr += "-gas_phase " + ' '.join(map(str, gas_number_list))
         self.ip.run_string(inputstr)
 
     def get_solution(self, number):

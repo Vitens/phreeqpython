@@ -91,6 +91,18 @@ class VIPhreeqc(object):
                            phreeqc.SetSelectedOutputFileOn, [c_int, c_int],
                            c_int),
                           # VIPHREEQC Additions:
+                          # gas
+                          ('_get_gas_volume', phreeqc.GetGasVolume,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_gas_pressure', phreeqc.GetGasPressure,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_gas_total_moles', phreeqc.GetGasTotalMoles,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_gas_components', phreeqc.GetGasComponents,
+                           [c_int, c_int], ctypes.c_char_p),
+                          ('_get_gas_component_moles', phreeqc.GetGasComponentMoles,
+                           [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
+                          # solution
                           ('_get_ph', phreeqc.GetPH,
                            [c_int, c_int], ctypes.c_double),
                           ('_get_pe', phreeqc.GetPe,
@@ -238,6 +250,44 @@ class VIPhreeqc(object):
         return self._get_error_string(self.id_).decode('utf-8')
 
     # Vitens VIPHREEQC Extensions
+
+    # gas
+    def get_gas_volume(self, gas):
+        return self._get_gas_volume(self.id_, gas)
+    # gas
+    def get_gas_pressure(self, gas):
+        return self._get_gas_pressure(self.id_, gas)
+    # gas
+    def get_gas_total_moles(self, gas):
+        return self._get_gas_total_moles(self.id_, gas)
+    def get_gas_components(self, gas):
+        return self._get_gas_components(self.id_, gas).decode('utf-8').split(",")
+    def get_gas_component_moles(self, gas, component):
+        return self._get_gas_component_moles(self.id_, gas, bytes(component, 'utf-8'))
+
+    def get_gas_components_moles(self, gas):
+        component_list = self.get_gas_components(gas)
+        component_moles = {}
+        for component in component_list:
+            component_moles[component] = self.get_gas_component_moles(gas, component)
+
+        return component_moles
+
+    def get_gas_components_fractions(self, gas):
+        total_moles = self.get_gas_total_moles(gas)
+
+        return {name: value/total_moles for (name, value) in self.get_gas_components_moles(gas).items()}
+
+    def get_gas_components_pressures(self, gas):
+        total_moles = self.get_gas_total_moles(gas)
+        total_pressure = self.get_gas_pressure(gas)
+
+        return {name: value/total_moles * total_pressure for (name, value) in self.get_gas_components_moles(gas).items()}
+
+
+
+
+    # solution
     def get_ph(self, solution):
         return self._get_ph(self.id_, solution)
     def get_pe(self, solution):

@@ -142,3 +142,31 @@ class TestPhreeqPython(object):
         assert_almost_equal(sol8.total_element('Ca'), 1, 2)
         assert_almost_equal(sol8.total_element('Cl'), 2, 2)
 
+    def test9_gas_phases(self):
+
+        gas1 = self.pp.add_gas({
+            'CH4(g)': 0.5,
+            'Ntg(g)': 0.5
+            },
+            volume = 1,
+            pressure = 1,
+            fixed_pressure = False,
+            fixed_volume = True
+            )
+
+        assert_equal(gas1.pressure, 1)
+        assert_almost_equal(gas1.volume, 1, 2)
+        assert_almost_equal(gas1.total_moles, 0.041, 2)
+        assert_almost_equal(gas1.pressure, 1, 2)
+        assert_almost_equal(gas1.partial_pressures['CH4(g)'], 0.5, 2)
+        assert_almost_equal(gas1.partial_pressures['Ntg(g)'], 0.5, 2)
+
+        sol9 = self.pp.add_solution({})
+
+        sol9.interact(gas1)
+
+        assert_almost_equal(gas1.pressure, 0.975, 3)
+        assert_almost_equal(gas1.volume, 1, 2)
+        assert_almost_equal(gas1.partial_pressures['CH4(g)'], 0.48, 2)
+        assert_almost_equal(gas1.partial_pressures['Ntg(g)'], 0.49, 2)
+

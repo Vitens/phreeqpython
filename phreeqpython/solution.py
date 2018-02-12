@@ -37,8 +37,10 @@ class Solution(object):
         self.remove(species, to_remove)
         return self
 
-    def equalize_gas(self, gasses={}, fixed_pressure=True, fixed_volume=True, pressure=1.0, volume=1.0, temperature=25):
-        self.pp.equalize_solution_gas(self.number, gasses=gasses, fixed_pressure=fixed_pressure, fixed_volume=fixed_volume, pressure=pressure, volume=volume, temperature=temperature)
+    def interact(self, gas):
+        self.pp.interact_solution_gas(self.number, gas.number)
+        return self
+
 
     def equalize(self, phases, to_si=[0], in_phase=[10], with_chemical=[None]):
         """ equalize one or more phases with the solution """
