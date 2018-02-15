@@ -22,20 +22,18 @@ Allows for simple chemical and precipitation/dissolution reactions:
 solution.add('NaOH',0.5)
 print solution.pH               # 9.47
 solution.desaturate('Calcite')  # desaturate to SI 0
-print solution.total('Ca')      # 0.001 mol
+print solution.total('Ca')      # 1 mmol
 ```
 And even allows for addition, devision and multiplication of solutions to form new mixtures:
 ```python
 solution2 = pp.add_solution({'KCl':1.0})
 # create mixture of 50% solution and 50% solution2
 solution3 = solution * 0.5 + solution2 * 0.5
-print solution3.total('K')      # 0.0005 mol
+print solution3.total('K','mol')      # 0.0005 mol
 ```
 
 ## Installation
-* Clone or download repository
-* ```python setup.py install```
-
+* ```pip install -U phreeqpython```
 
 ## Requirements
 * 64 bit Python
