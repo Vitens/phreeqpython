@@ -204,14 +204,20 @@ class PhreeqPython(object):
         self.solution_counter += 1
         # mix two or more solutions to obtain a new solution
         inputstr = "MIX 1 \n"
+        # set of phreeqpython IDs
+        pp_ids = set()
         for solution, fraction in solutions.items():
             if isinstance(solution, Solution):
+                pp_ids.add(solution.pp.ip.id_)
                 inputstr += str(solution.number) + " " + str(fraction) + "\n"
             else:
                 inputstr += str(solution) + " " + str(fraction) + "\n"
 
         inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
         inputstr += "END \n"
+
+        if len(pp_ids) > 1:
+            raise ValueError('Cannot Mix solutions belonging to seperate PhreeqPython instances!')
 
         self.ip.run_string(inputstr)
 
