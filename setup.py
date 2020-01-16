@@ -63,5 +63,5 @@ setup(name='phreeqpython',
           'develop': PostDevelopCommand,
           'install': PostInstallCommand
           },
-      install_requires=['periodictable']
+      install_requires=['periodictable', 'scipy']
       )
