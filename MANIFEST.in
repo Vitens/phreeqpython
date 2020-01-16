@@ -1,2 +1,7 @@
+include phreeqpython/database/*.dat
+include phreeqpython/lib/viphreeqc.dylib
+include phreeqpython/lib/viphreeqc.dll
+include phreeqpython/lib/viphreeqc.so
+
 graft phreeqpython/database
 graft phreeqpython/lib

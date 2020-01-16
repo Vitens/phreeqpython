@@ -50,13 +50,14 @@ class PostInstallCommand(install):
         install.run(self)
 
 setup(name='phreeqpython',
-      version='0.2',
+      version='1.3.2',
       description='Vitens viphreeqc wrapper and utilities',
-      url='https://github.com/VitensTC/phreeqpython',
+      url='https://github.com/Vitens/phreeqpython',
       author='Abel Heinsbroek',
       author_email='abel.heinsbroek@vitens.nl',
       license='Apache Licence 2.0',
       packages=['phreeqpython'],
+      include_package_data=True,
       zip_safe=False,
       cmdclass={
           'develop': PostDevelopCommand,

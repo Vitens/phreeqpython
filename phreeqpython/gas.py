@@ -37,4 +37,11 @@ class Gas(object):
     def partial_pressures(self):
         return self.pp.ip.get_gas_components_pressures(self.number) 
 
+    @property
+    def dry_fractions(self):
+        try:
+            total = self.total_moles - self.components['H2O(g)']
+        except:
+            total = self.total_moles
 
+        return {name: value/total for (name, value) in self.components.items()}
