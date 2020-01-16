@@ -1,9 +1,9 @@
 # Compiled Python Modules
 *.pyc
 # Binaries
-*.dylib
-*.so
-*.dll
+#*.dylib
+#*.so
+#*.dll
 *.DS_Store
 
 # Setuptools distribution folder.
