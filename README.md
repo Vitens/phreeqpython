@@ -11,32 +11,32 @@ PhreeqPython greatly simplifies adding solutions and querying their properties:
 pp = PhreeqPython()
 # add a solution consisting of 1 mmol CaCl2 and 2 mmol NaHCO3
 solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
-print solution.pH               # 8.12
-print solution.sc               # 427.32
-print solution.si('Calcite')    # 0.38
-print solution.species['HCO3-'] # 0.0019
-print solution.elements['Cl']   # 0.002 mol
+print(solution.pH)               # 8.12
+print(solution.sc)               # 427.32
+print(solution.si('Calcite'))    # 0.38
+print(solution.species['HCO3-']) # 0.0019
+print(solution.elements['Cl'])   # 0.002 mol
 ```
 Allows for simple chemical and precipitation/dissolution reactions:
 ```python
 solution.add('NaOH',0.5)
-print solution.pH               # 9.47
+print(solution.pH)              # 9.47
 solution.desaturate('Calcite')  # desaturate to SI 0
-print solution.total('Ca')      # 1 mmol
+print(solution.total('Ca'))     # 1 mmol
 ```
 And even allows for addition, devision and multiplication of solutions to form new mixtures:
 ```python
 solution2 = pp.add_solution({'KCl':1.0})
 # create mixture of 50% solution and 50% solution2
 solution3 = solution * 0.5 + solution2 * 0.5
-print solution3.total('K','mol')      # 0.0005 mol
+print(solution3.total('K','mol'))     # 0.0005 mol
 ```
 
 ## Installation
 * ```pip install -U phreeqpython```
 
 ## Requirements
-* 64 bit Python
+* 64 bit Python3
 * Windows, OSX or Linux
   * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
@@ -57,7 +57,7 @@ One of our main focus points is using advanced water quality, quantity and hydra
 
 ## Licence
 
-Copyright 2016 Vitens
+Copyright 2020 Vitens
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
