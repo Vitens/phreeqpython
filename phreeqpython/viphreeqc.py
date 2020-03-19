@@ -91,6 +91,9 @@ class VIPhreeqc(object):
                            phreeqc.SetSelectedOutputFileOn, [c_int, c_int],
                            c_int),
                           # VIPHREEQC Additions:
+                          # surface
+                          ('_get_surface_thickness', phreeqc.GetThickness,
+                           [c_int, c_int], ctypes.c_double),
                           # gas
                           ('_get_gas_volume', phreeqc.GetGasVolume,
                            [c_int, c_int], ctypes.c_double),
@@ -250,6 +253,10 @@ class VIPhreeqc(object):
         return self._get_error_string(self.id_).decode('utf-8')
 
     # Vitens VIPHREEQC Extensions
+
+    # surface
+    def get_thickness(self, surface):
+        return self._get_surface_thickness(self.id_, surface)
 
     # gas
     def get_gas_volume(self, gas):
