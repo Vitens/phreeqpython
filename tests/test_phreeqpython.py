@@ -8,7 +8,7 @@ class TestPhreeqPython(object):
     def test1_basiscs(self):
         sol = self.pp.add_solution_simple({'CaCl2':1, 'Na2CO3':1})
         # test solution number
-        assert_equal(sol.number, 1)
+        assert_equal(sol.number, 0)
         # test solution ph, sc, pe and temperature
         assert_equal(round(sol.pH, 2), 10.41)
         assert_equal(round(sol.sc, 2), 435.35)

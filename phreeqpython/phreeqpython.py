@@ -44,8 +44,8 @@ class PhreeqPython(object):
 
         else:
             self.buffer = False
-            self.solution_counter = 0
-            self.gas_counter = 0
+            self.solution_counter = -1
+            self.gas_counter = -1
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
