@@ -91,9 +91,6 @@ class VIPhreeqc(object):
                            phreeqc.SetSelectedOutputFileOn, [c_int, c_int],
                            c_int),
                           # VIPHREEQC Additions:
-                          # surface
-                          ('_get_surface_thickness', phreeqc.GetThickness,
-                           [c_int, c_int], ctypes.c_double),
                           # gas
                           ('_get_gas_volume', phreeqc.GetGasVolume,
                            [c_int, c_int], ctypes.c_double),
