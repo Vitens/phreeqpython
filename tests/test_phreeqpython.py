@@ -5,7 +5,7 @@ class TestPhreeqPython(object):
 
     pp = PhreeqPython()
 
-    def test1_basiscs(self):
+    def test01_basiscs(self):
         sol = self.pp.add_solution_simple({'CaCl2':1, 'Na2CO3':1})
         # test solution number
         assert_equal(sol.number, 1)
@@ -39,7 +39,7 @@ class TestPhreeqPython(object):
         assert_equal(round(sol.species_molalities['Ca+2'],5), 0.00071)
         assert_equal(round(sol.species_activities['Ca+2'],5), 0.00054)
 
-    def test2_solution_functions(self):
+    def test02_solution_functions(self):
         sol = self.pp.add_solution_simple({'CaCl2':1})
         # add components
         sol.add('NaHCO3', 1)
@@ -72,14 +72,14 @@ class TestPhreeqPython(object):
         sol.change_temperature(10)
         assert_equal(sol.temperature, 10)
 
-    def test3_mixing(self):
+    def test03_mixing(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = self.pp.add_solution_simple({})
         sol3 = self.pp.mix_solutions({sol1:0.5, sol2:0.5})
         assert_equal(round(sol3.total('Na'),1), 0.5)
 
 
-    def test4_solution_listing(self):
+    def test04_solution_listing(self):
         # test solution list
         sol_list = self.pp.ip.get_solution_list()
         assert_equal(len(sol_list), 7)
@@ -88,7 +88,7 @@ class TestPhreeqPython(object):
         sol_list = self.pp.ip.get_solution_list()
         assert_equal(len(sol_list), 4)
 
-    def test5_addition(self):
+    def test05_addition(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = self.pp.add_solution_simple({'NaCl':2})
         sol3 = sol1 + sol2
@@ -112,7 +112,7 @@ class TestPhreeqPython(object):
         assert_raises(TypeError, testdiv, sol1, sol2)
         assert_raises(TypeError, testmul, sol1, sol2)
 
-    def test6_misc(self):
+    def test06_misc(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = sol1.copy()
         assert_equal(sol1.sc,sol2.sc)
@@ -120,7 +120,7 @@ class TestPhreeqPython(object):
         sol2.forget()
         assert_equal(sol2.pH,-999)
 
-    def test7_dump_and_load(self):
+    def test07_dump_and_load(self):
         sol5a = self.pp.get_solution(5)
         self.pp.dump_solutions()
         pp2 = PhreeqPython(from_file='dump.gz')
@@ -129,7 +129,7 @@ class TestPhreeqPython(object):
         assert_almost_equal(sol5a.sc, sol5b.sc, 2)
         assert_equal(self.pp.ip.get_solution_list(), pp2.ip.get_solution_list())
 
-    def test8_raw_solutions(self):
+    def test08_raw_solutions(self):
         sol8 = self.pp.add_solution_raw({
             'pH': '8.0',
             'temp': '20',
@@ -142,7 +142,7 @@ class TestPhreeqPython(object):
         assert_almost_equal(sol8.total_element('Ca'), 1, 2)
         assert_almost_equal(sol8.total_element('Cl'), 2, 2)
 
-    def test9_gas_phases(self):
+    def test09_gas_phases(self):
 
         gas1 = self.pp.add_gas({
             'CH4(g)': 0.5,
@@ -169,4 +169,19 @@ class TestPhreeqPython(object):
         assert_almost_equal(gas1.volume, 1, 2)
         assert_almost_equal(gas1.partial_pressures['CH4(g)'], 0.48, 2)
         assert_almost_equal(gas1.partial_pressures['Ntg(g)'], 0.49, 2)
+
+    def test10_surface(self):
+
+        surf1 = self.pp.add_surface(
+                thickness = 123
+                )
+
+        surf2 = surf1.copy()
+        
+        assert_equal(surf1.number, 0)
+        assert_almost_equal(surf1.thickness, 123, 1)
+
+        assert_equal(surf2.number, 1)
+        print(surf2.thickness)
+        assert_almost_equal(surf2.thickness, 124, 1)
 

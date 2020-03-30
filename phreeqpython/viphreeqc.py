@@ -255,7 +255,7 @@ class VIPhreeqc(object):
     # Vitens VIPHREEQC Extensions
 
     # surface
-    def get_thickness(self, surface):
+    def get_surface_thickness(self, surface):
         return self._get_surface_thickness(self.id_, surface)
 
     # gas

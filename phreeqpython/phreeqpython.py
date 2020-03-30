@@ -5,6 +5,7 @@ import gzip
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
 from .gas import Gas
+from .surface import Surface
 import warnings
 
 class PhreeqPython(object):
@@ -44,8 +45,23 @@ class PhreeqPython(object):
 
         else:
             self.buffer = False
-            self.solution_counter = 0
-            self.gas_counter = 0
+            self.solution_counter = -1
+            self.gas_counter = -1
+            self.surface_counter = -1
+
+    def add_surface(self, thickness=1.0):
+        """ add a surface to the VIPhreeqc stack """
+        self.surface_counter += 1
+
+        inputstr = "SURFACE {}\n".format(self.surface_counter)
+        inputstr += "-diffuse_layer {}\n".format(thickness)
+        inputstr += "SAVE GAS_PHASE "+str(self.surface_counter) + "\n"
+        inputstr += "END \n"
+
+        self.ip.run_string(inputstr)
+
+        return Surface(self, self.surface_counter)
+>>>>>>> Stashed changes
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
@@ -256,7 +272,7 @@ class PhreeqPython(object):
         return Solution(self, self.solution_counter)
 
     def copy_gas(self, gas_number):
-        """ Copy a solution to create a new one """
+        """ Copy a gas to create a new one """
         # add a solution to the VIPhreeqc Stack
         self.gas_counter += 1
         # mix two or more solutions to obtain a new solution
@@ -266,6 +282,18 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
 
         return Gas(self, self.gas_counter)
+
+    def copy_surface(self, surface_number):
+        """ Copy a surface to create a new one """
+        # add a solution to the VIPhreeqc Stack
+        self.surface_counter += 1
+        # mix two or more solutions to obtain a new solution
+        inputstr = "COPY SURFACE " + str(surface_number) + " " + str(self.surface_counter) + "\n"
+        inputstr += "END\n"
+
+        self.ip.run_string(inputstr)
+
+        return Surface(self, self.surface_counter)
 
     def empty_solution(self):
         return self.add_solution({})
