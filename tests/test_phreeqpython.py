@@ -8,7 +8,7 @@ class TestPhreeqPython(object):
     def test01_basiscs(self):
         sol = self.pp.add_solution_simple({'CaCl2':1, 'Na2CO3':1})
         # test solution number
-        assert_equal(sol.number, 1)
+        assert_equal(sol.number, 0)
         # test solution ph, sc, pe and temperature
         assert_equal(round(sol.pH, 2), 10.41)
         assert_equal(round(sol.sc, 2), 435.35)
@@ -182,6 +182,5 @@ class TestPhreeqPython(object):
         assert_almost_equal(surf1.thickness, 123, 1)
 
         assert_equal(surf2.number, 1)
-        print(surf2.thickness)
-        assert_almost_equal(surf2.thickness, 124, 1)
+        assert_almost_equal(surf2.thickness, 123, 1)
 
