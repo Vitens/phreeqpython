@@ -170,17 +170,36 @@ class TestPhreeqPython(object):
         assert_almost_equal(gas1.partial_pressures['CH4(g)'], 0.48, 2)
         assert_almost_equal(gas1.partial_pressures['Ntg(g)'], 0.49, 2)
 
+
     def test10_surface(self):
 
-        surf1 = self.pp.add_surface(
-                thickness = 123
+        sol = self.pp.add_solution({
+            'pH': 13,
+            'Na': 150,
+            'N(5)': '100 charge'
+            })
+
+        surf1 = self.pp.add_surface({
+                'Hfo_w': "0.2e-3, 600, 88e-3",
+                'Hfo_s': "0.5e-5"
+                },
+                equilibrate_with = sol
                 )
 
-        surf2 = surf1.copy()
-        
-        assert_equal(surf1.number, 0)
-        assert_almost_equal(surf1.thickness, 123, 1)
+        sol.add('ZnNO3', 1e-6, 'mol')
 
-        assert_equal(surf2.number, 1)
-        assert_almost_equal(surf2.thickness, 123, 1)
+        sol.interact(surf1)
 
+        assert_almost_equal(sol.total_element('Zn', 'mol'), 9.880e-7, 3)
+
+        # huiswerk
+
+        assert_almost_equal(surf1.surface_charge, -2.005e-4, 3)
+        assert_almost_equal(surf1.sigma, -3.664e-1, 3)
+        assert_almost_equal(surf1.psi, -1.431e-1, 3)
+        assert_almost_equal(surf1.specific_area, 600, 0)
+
+        assert_almost_equal(surf1.sites['Hfo_s'], 5e-6, 1)
+        assert_almost_equal(surf1.sites['Hfo_w'], 2e-4, 1)
+
+        assert_almost_equal(surf1.site_species['Hfo_sO-'], 4.880e-6, 3)

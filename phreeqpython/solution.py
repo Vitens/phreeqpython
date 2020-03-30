@@ -37,8 +37,12 @@ class Solution(object):
         self.remove(species, to_remove)
         return self
 
-    def interact(self, gas):
-        self.pp.interact_solution_gas(self.number, gas.number)
+    def interact(self, gas_or_surface):
+        if type(gas_or_surface).__name__ is 'Gas':
+            self.pp.interact_solution_gas(self.number, gas_or_surface.number)
+        else:
+            self.pp.interact_solution_surface(self.number, gas_or_surface.number)
+
         return self
 
 

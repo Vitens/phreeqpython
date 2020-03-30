@@ -49,19 +49,26 @@ class PhreeqPython(object):
             self.gas_counter = -1
             self.surface_counter = -1
 
-    def add_surface(self, thickness=1.0):
+    def add_surface(self, binding_sites=None, equilibrate_with=None, thickness=None):
         """ add a surface to the VIPhreeqc stack """
         self.surface_counter += 1
 
         inputstr = "SURFACE {}\n".format(self.surface_counter)
-        inputstr += "-diffuse_layer {}\n".format(thickness)
-        inputstr += "SAVE GAS_PHASE "+str(self.surface_counter) + "\n"
+
+        if binding_sites:
+            for name, properties in binding_sites.items():
+                inputstr += name + " " + properties + "\n"
+
+        if equilibrate_with:
+            number = equilibrate_with if isinstance(equilibrate_with, int) else equilibrate_with.number
+            inputstr += "-equilibrate {}\n".format(number)
+
+        inputstr += "SAVE SURFACE "+str(self.surface_counter) + "\n"
         inputstr += "END \n"
 
         self.ip.run_string(inputstr)
 
         return Surface(self, self.surface_counter)
->>>>>>> Stashed changes
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
@@ -248,6 +255,15 @@ class PhreeqPython(object):
         inputstr += "END"
         self.ip.run_string(inputstr)
 
+    def interact_solution_surface(self, solution_number, surface_number):
+        """ Interact solution with surface """
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "USE SURFACE " + str(surface_number) + "\n"
+        inputstr += "SAVE SURFACE " + str(surface_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "END"
+        self.ip.run_string(inputstr)
+
 
     def change_solution_temperature(self, solution_number, temperature):
         """ change temperature """
@@ -308,6 +324,12 @@ class PhreeqPython(object):
         """ Remove solutions from VIPhreeqc memory """
         inputstr = "DELETE \n"
         inputstr += "-gas_phase " + ' '.join(map(str, gas_number_list))
+        self.ip.run_string(inputstr)
+
+    def remove_surfaces(self, surface_number_list):
+        """ Remove solutions from VIPhreeqc memory """
+        inputstr = "DELETE \n"
+        inputstr += "-surface " + ' '.join(map(str, surface_number_list))
         self.ip.run_string(inputstr)
 
     def get_solution(self, number):
