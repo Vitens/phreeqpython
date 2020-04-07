@@ -20,3 +20,7 @@ class Surface(object):
     @property
     def thickness(self):
         return self.pp.ip.get_surface_thickness(self.number)
+
+    @property
+    def surface_charge_balance(self):
+        return self.pp.ip.get_surface_charge_balance(self.number)

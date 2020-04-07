@@ -94,6 +94,8 @@ class VIPhreeqc(object):
                           # surface
                           ('_get_surface_thickness', phreeqc.GetThickness,
                            [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_charge_balance', phreeqc.GetSurfaceChargeBalance,
+                           [c_int, c_int], ctypes.c_double),
                           # gas
                           ('_get_gas_volume', phreeqc.GetGasVolume,
                            [c_int, c_int], ctypes.c_double),
@@ -257,6 +259,9 @@ class VIPhreeqc(object):
     # surface
     def get_surface_thickness(self, surface):
         return self._get_surface_thickness(self.id_, surface)
+
+    def get_surface_charge_balance(self, surface):
+        return self._get_surface_charge_balance(self.id_, surface)
 
     # gas
     def get_gas_volume(self, gas):
