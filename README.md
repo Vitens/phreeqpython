@@ -1,5 +1,3 @@
-Hello World :D
-
 <p align="center">		
    <img src="https://github.com/Vitens/phreeqpython/blob/master/logo.png" alt="Phreeqpython Logo"/>		
  </p>
