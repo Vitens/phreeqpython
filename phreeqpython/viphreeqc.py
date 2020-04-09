@@ -96,6 +96,16 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_double),
                           ('_get_surface_charge_balance', phreeqc.GetSurfaceChargeBalance,
                            [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_sigma0', phreeqc.GetSurfaceSigma0,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_sigma1', phreeqc.GetSurfaceSigma1,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_sigma2', phreeqc.GetSurfaceSigma2,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_sigma_ddl', phreeqc.GetSurfaceSigma_ddl,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_surface_specific_area', phreeqc.GetSurfaceSpecificArea,
+                           [c_int, c_int], ctypes.c_double),
                           # gas
                           ('_get_gas_volume', phreeqc.GetGasVolume,
                            [c_int, c_int], ctypes.c_double),
@@ -262,6 +272,21 @@ class VIPhreeqc(object):
 
     def get_surface_charge_balance(self, surface):
         return self._get_surface_charge_balance(self.id_, surface)
+    
+    def get_surface_sigma0(self, surface):
+        return self._get_surface_sigma0(self.id_, surface)
+    
+    def get_surface_sigma1(self, surface):
+        return self._get_surface_sigma1(self.id_, surface)
+    
+    def get_surface_sigma2(self, surface):
+        return self._get_surface_sigma2(self.id_, surface)
+    
+    def get_surface_sigma_ddl(self, surface):
+        return self._get_surface_sigma_ddl(self.id_, surface)
+
+    def get_surface_specific_area(self, surface):
+        return self._get_surface_specific_area(self.id_, surface)
 
     # gas
     def get_gas_volume(self, gas):

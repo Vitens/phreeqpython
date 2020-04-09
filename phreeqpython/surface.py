@@ -24,3 +24,23 @@ class Surface(object):
     @property
     def surface_charge_balance(self):
         return self.pp.ip.get_surface_charge_balance(self.number)
+
+    @property
+    def surface_sigma0(self):
+        return self.pp.ip.get_surface_sigma0(self.number)
+
+    @property
+    def surface_sigma1(self):
+        return self.pp.ip.get_surface_sigma1(self.number)
+
+    @property
+    def surface_sigma2(self):
+        return self.pp.ip.get_surface_sigma2(self.number)
+
+    @property
+    def surface_sigma_ddl(self):
+        return self.pp.ip.get_surface_sigma_ddl(self.number)
+
+    @property
+    def surface_specific_area(self):
+        return self.pp.ip.get_surface_specific_area(self.number)
