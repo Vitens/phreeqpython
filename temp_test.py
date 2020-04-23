@@ -1,53 +1,33 @@
 from phreeqpython import PhreeqPython
-import re
-import json
 import matplotlib.pyplot as plt
 
 pp = PhreeqPython()
 
-sol = pp.add_solution({
-            'pH': 13,
-            'Na': 150,
-            'N(5)': '100 charge'
-            })
+x_axis = [4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13]
 
-surf1 = pp.add_surface({
-        'Hfo_w': "0.2e-3, 600, 88e-3",
-        'Hfo_s': "0.5e-5"
-        },
-        equilibrate_with = sol
-        )
-
-sol.add('ZnNO3', 10e-6, 'mol')
-
-sol.interact(surf1)
-surf1.surface
-
-# total = surf1.totals_Hfo_s + surf1.totals_Hfo_w
-
-# print(surf1.totals_Hfo_s)
-# print(surf1.totals_Hfo_w)
-# print(surf1.charge_balance_Hfo)
-
-# print(surf1.print_surface)
+def percentageSorbed(zn_tot, sorbed_zn):
+    return (zn_tot - sorbed_zn) / zn_tot * 100
 
 
-# x_axis = []
-# y_axis = []
-# start = 4
-# for x in range(10):
-#         x_axis.append(start)
-#         start += 0.5
-#         x_axis.append(start)
-#         start += 0.5
-#         y_axis.append(0)
-#         y_axis.append(0)
-# x_axis.append(14)
-# y_axis.append(0)
+def calcuateSorbtionEdgeZn(zn_tot):
+    sorbed_zn_list = []
 
-# print(x_axis)
+    for pH in x_axis:
+        solution = pp.add_solution({'pH': pH, 'Na': 150, 'N(5)': '100 charge'})
+        surface = pp.add_surface({'Hfo_w': "0.2e-3, 600, 88e-3", 'Hfo_s': "0.5e-5"}, equilibrate_with=solution)
+        solution.add('ZnNO3', zn_tot, 'mol')
+        solution.interact(surface)
+        surface.surface
 
-# plt.plot(x_axis, y_axis)
-# plt.ylabel('% sorbed')
-# plt.xlabel('pH')
-# plt.show()
+        sorbed_zn_list.append(percentageSorbed(zn_tot, solution.elements['Zn']))
+
+    return sorbed_zn_list
+
+
+plt.plot(x_axis, calcuateSorbtionEdgeZn(1e-6), label="Zn_tot=1uM")
+plt.plot(x_axis, calcuateSorbtionEdgeZn(10e-6), label="Zn_tot=10uM")
+plt.xlabel("pH")
+plt.ylabel("% sorbed")
+plt.title("Zn sorbtion on 88mg Ferrhydrite")
+plt.legend()
+plt.show()
