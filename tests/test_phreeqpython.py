@@ -189,6 +189,8 @@ class TestPhreeqPython(object):
         sol.add('ZnNO3', 1e-6, 'mol')
 
         sol.interact(surf1)
+        
+        surf1.surface
 
         assert_almost_equal(sol.total_element('Zn', 'mol'), 9.880e-7, 3)
         

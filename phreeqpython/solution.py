@@ -42,7 +42,7 @@ class Solution(object):
             self.pp.interact_solution_gas(self.number, gas_or_surface.number)
         else:
             self.pp.interact_solution_surface(self.number, gas_or_surface.number)
-
+            gas_or_surface._surface = None            
         return self
 
 
