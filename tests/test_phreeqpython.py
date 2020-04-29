@@ -1,5 +1,6 @@
-from phreeqpython import PhreeqPython, Solution
 from nose.tools import assert_equal, assert_almost_equal, assert_raises
+
+from phreeqpython import PhreeqPython
 
 
 class TestPhreeqPython(object):
@@ -196,4 +197,3 @@ class TestPhreeqPython(object):
         assert_almost_equal(surf1.sigma, -3.664e-1, 3)
         assert_almost_equal(sol.species['Hfo_sO-'], 4.880e-6, 3)
         # assert_almost_equal(surf1.psi, -1.431e-1, 3)
-
