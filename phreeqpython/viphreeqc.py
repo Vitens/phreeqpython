@@ -10,21 +10,24 @@ import os
 import sys
 
 if sys.version_info[0] == 2:
-    #pylint: disable-msg=W0622
-    def bytes(str_, encoding): #pylint: disable-msg=W0613
+    # pylint: disable-msg=W0622
+    def bytes(str_, encoding):  # pylint: disable-msg=W0613
         """Compatibilty function for Python 3.
         """
         return str_
-    range = xrange #pylint: disable-msg=C0103
-    #pylint: enable-msg=W0622
+
+
+    range = xrange  # pylint: disable-msg=C0103
+    # pylint: enable-msg=W0622
 
 
 class VIPhreeqc(object):
     """Wrapper for the VIPhreeqc DLL.
     """
+
     # All methods in `method_mapping` are added dynamically.
     # Therefore, pylint complains.
-    #pylint: disable-msg=E1101
+    # pylint: disable-msg=E1101
     def __init__(self, dll_path=None):
         """Connect to DLL and create IPhreeqc.
 
@@ -94,20 +97,6 @@ class VIPhreeqc(object):
                           # surface
                           ('_get_surface_json', phreeqc.GetSurfaceJSON,
                            [c_int, c_int], ctypes.c_char_p),
-                        #   ('_get_surface_thickness', phreeqc.GetThickness,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_charge_balance', phreeqc.GetSurfaceChargeBalance,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_sigma0', phreeqc.GetSurfaceSigma0,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_sigma1', phreeqc.GetSurfaceSigma1,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_sigma2', phreeqc.GetSurfaceSigma2,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_sigma_ddl', phreeqc.GetSurfaceSigma_ddl,
-                        #    [c_int, c_int], ctypes.c_double),
-                        #   ('_get_surface_specific_area', phreeqc.GetSurfaceSpecificArea,
-                        #    [c_int, c_int], ctypes.c_double),
                           # gas
                           ('_get_gas_volume', phreeqc.GetGasVolume,
                            [c_int, c_int], ctypes.c_double),
@@ -154,7 +143,7 @@ class VIPhreeqc(object):
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_solution_list', phreeqc.GetSolutionList,
                            [c_int], ctypes.c_char_p)
-                         ]
+                          ]
         for name, com_obj, argtypes, restype in method_mapping:
             com_obj.argtypes = argtypes
             com_obj.restype = restype
@@ -275,14 +264,18 @@ class VIPhreeqc(object):
     # gas
     def get_gas_volume(self, gas):
         return self._get_gas_volume(self.id_, gas)
+
     # gas
     def get_gas_pressure(self, gas):
         return self._get_gas_pressure(self.id_, gas)
+
     # gas
     def get_gas_total_moles(self, gas):
         return self._get_gas_total_moles(self.id_, gas)
+
     def get_gas_components(self, gas):
         return self._get_gas_components(self.id_, gas).decode('utf-8').split(",")
+
     def get_gas_component_moles(self, gas, component):
         return self._get_gas_component_moles(self.id_, gas, bytes(component, 'utf-8'))
 
@@ -297,40 +290,49 @@ class VIPhreeqc(object):
     def get_gas_components_fractions(self, gas):
         total_moles = self.get_gas_total_moles(gas)
 
-        return {name: value/total_moles for (name, value) in self.get_gas_components_moles(gas).items()}
+        return {name: value / total_moles for (name, value) in self.get_gas_components_moles(gas).items()}
 
     def get_gas_components_pressures(self, gas):
         total_moles = self.get_gas_total_moles(gas)
         total_pressure = self.get_gas_pressure(gas)
 
-        return {name: value/total_moles * total_pressure for (name, value) in self.get_gas_components_moles(gas).items()}
-
-
-
+        return {name: value / total_moles * total_pressure for (name, value) in
+                self.get_gas_components_moles(gas).items()}
 
     # solution
     def get_ph(self, solution):
         return self._get_ph(self.id_, solution)
+
     def get_pe(self, solution):
         return self._get_pe(self.id_, solution)
+
     def get_sc(self, solution):
         return self._get_sc(self.id_, solution)
+
     def get_mu(self, solution):
         return self._get_mu(self.id_, solution)
+
     def get_temperature(self, solution):
         return self._get_temperature(self.id_, solution)
+
     def get_mass(self, solution):
         return self._get_mass(self.id_, solution)
+
     def get_total(self, solution, element):
         return self._get_total(self.id_, solution, bytes(element, 'utf-8'))
+
     def get_total_element(self, solution, element):
         return self._get_total_element(self.id_, solution, bytes(element, 'utf-8'))
+
     def get_moles(self, solution, species):
         return self._get_moles(self.id_, solution, bytes(species, 'utf-8'))
+
     def get_activity(self, solution, species):
         return self._get_activity(self.id_, solution, bytes(species, 'utf-8'))
+
     def get_molality(self, solution, species):
-        return(self._get_molality(self.id_, solution, bytes(species, 'utf-8')))
+        return (self._get_molality(self.id_, solution, bytes(species, 'utf-8')))
+
     def get_species_moles(self, solution):
         """ Returns a list of species and their molarity """
         species_list = self.get_species(solution)
@@ -338,6 +340,7 @@ class VIPhreeqc(object):
         for species in species_list:
             species_moles[species] = self.get_moles(solution, species)
         return species_moles
+
     def get_species_molalities(self, solution):
         """ Returns a list of species and their molality """
         species_list = self.get_species(solution)
@@ -345,6 +348,7 @@ class VIPhreeqc(object):
         for species in species_list:
             species_moles[species] = self.get_molality(solution, species)
         return species_moles
+
     def get_species_activities(self, solution):
         """ Returns a list of species and their molality """
         species_list = self.get_species(solution)
@@ -367,20 +371,24 @@ class VIPhreeqc(object):
 
         for specie, masters in species_dict.items():
             for master in masters:
-                masters_list.setdefault(master,[]).append(specie)
-            
+                masters_list.setdefault(master, []).append(specie)
+
         return masters_list
 
     def get_solution_list(self):
         solution_list = self._get_solution_list(self.id_).decode('utf-8').split(",")
         return list(map(int, solution_list))
+
     def get_species(self, solution):
         return self._get_species(self.id_, solution).decode('utf-8').split(",")
+
     def get_si(self, solution, phase):
         return self._get_si(self.id_, solution, bytes(phase, 'utf-8'))
+
     def get_phases(self, solution):
         # no idea why this is necessary.. it won't work otherwise
         return self.dll.GetPhases(self.id_, solution).decode('utf-8').split(",")
+
     def get_phases_si(self, solution):
         """ Returns a list of phases and their solubility index """
         phases = self.get_phases(solution)
@@ -388,6 +396,7 @@ class VIPhreeqc(object):
         for phase in phases:
             phases_si[phase] = self.get_si(solution, phase)
         return phases_si
+
     def get_elements(self, solution):
         return self._get_elements(self.id_, solution).decode('utf-8').split(",")
 
@@ -400,12 +409,14 @@ class VIPhreeqc(object):
         return element_total
 
     def set_dump_string_on(self):
-        return self._set_dump_string_on(self.id_,1)
+        return self._set_dump_string_on(self.id_, 1)
+
     def set_dump_string_off(self):
-        return self._set_dump_string_on(self.id_,0)
+        return self._set_dump_string_on(self.id_, 0)
 
     def get_dump_string(self):
         return self._get_dump_string(self.id_)
+
     # END Vitens extensions
 
     def get_selected_output_value(self, row, col):
@@ -494,7 +505,7 @@ class VIPhreeqc(object):
     def run_string(self, cmd_string):
         """Run PHREEQC input from string.
         """
-        #print(cmd_string)
+        # print(cmd_string)
         if self.debug:
             print(cmd_string)
 
@@ -526,6 +537,7 @@ class VAR(ctypes.Structure):
     """
     _fields_ = [('type', ctypes.c_int),
                 ('value', VARUNION)]
+
 
 class PhreeqcException(Exception):
     """Error in Phreeqc call.

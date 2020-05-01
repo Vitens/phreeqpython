@@ -10,11 +10,11 @@ class Surface(object):
         self._surface = json.loads(phreeqpython.ip.get_surface_json(number).decode("utf-8"))
 
     def copy(self):
-        """ Create a new copy, with unique solution number, from this solution """
+        """ Create a new copy, with unique surface number, from this surface """
         return self.pp.copy_surface(self.number)
 
     def forget(self):
-        """ Create a new copy, with unique solution number, from this solution """
+        """ Create a new copy, with unique surface number, from this surface """
         return self.pp.remove_surfaces([self.number])
 
     @property
@@ -114,11 +114,11 @@ class Surface(object):
     #   todo: move this calculation to VIPhreeqc and check with Abel
     @property
     def sigma(self):
-        fcmol = 96493.5
+        FCMOL = 96493.5
         charge = self.charge_balance_Hfo
         area = self.specific_area
         gram = self.grams
-        sigma = charge * fcmol / (area * gram)
+        sigma = charge * FCMOL / (area * gram)
         return sigma
 
     @property
