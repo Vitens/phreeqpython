@@ -16,3 +16,5 @@
 .ipynb_checkpoints/
 .coverage
 
+# Visual Studio Code
+.vscode

@@ -1,12 +1,14 @@
 """ Phreeqpython module """
 
-import os
 import gzip
-from .viphreeqc import VIPhreeqc
-from .solution import Solution
-from .gas import Gas
-from .surface import Surface
+import os
 import warnings
+
+from .gas import Gas
+from .solution import Solution
+from .surface import Surface
+from .viphreeqc import VIPhreeqc
+
 
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """
@@ -19,16 +21,15 @@ class PhreeqPython(object):
         if not database:
             database_path = os.path.dirname(__file__) + "/database/vitens.dat"
         else:
-            database_path = os.path.dirname(__file__) + "/database/"+database
+            database_path = os.path.dirname(__file__) + "/database/" + database
 
         if not os.path.isfile(database_path):
             raise FileNotFoundError("Database file not found")
 
         self.ip.load_database(database_path)
 
-
         if from_file:
-            dump = gzip.open(from_file,"rb")
+            dump = gzip.open(from_file, "rb")
             try:
                 inputstr = dump.read().decode('utf-8') + "END"
                 self.ip.run_string(inputstr)
@@ -36,7 +37,7 @@ class PhreeqPython(object):
                 solutions = self.ip.get_solution_list()
                 # force IPHREEQC to calculate all the solution properties
                 for solution_number in solutions:
-                    self.change_solution(solution_number,{'Na':0})
+                    self.change_solution(solution_number, {'Na': 0})
 
                 self.solution_counter = solutions[-1]
                 # precalculte all solutions
@@ -63,14 +64,15 @@ class PhreeqPython(object):
             number = equilibrate_with if isinstance(equilibrate_with, int) else equilibrate_with.number
             inputstr += "-equilibrate {}\n".format(number)
 
-        inputstr += "SAVE SURFACE "+str(self.surface_counter) + "\n"
+        inputstr += "SAVE SURFACE " + str(self.surface_counter) + "\n"
         inputstr += "END \n"
 
         self.ip.run_string(inputstr)
 
         return Surface(self, self.surface_counter)
 
-    def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
+    def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False,
+                equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
 
         if fixed_pressure and fixed_volume:
@@ -80,7 +82,6 @@ class PhreeqPython(object):
             raise ValueError("Only gas phases with a fixed_volume can be created in equilibrium with a solution")
 
         self.gas_counter += 1
-
 
         inputstr = "GAS_PHASE {}\n".format(self.gas_counter)
         if fixed_pressure:
@@ -100,8 +101,7 @@ class PhreeqPython(object):
             else:
                 inputstr += "-equilibrate {}\n".format(equilibrate_with)
 
-
-        inputstr += "SAVE GAS_PHASE "+str(self.gas_counter) + "\n"
+        inputstr += "SAVE GAS_PHASE " + str(self.gas_counter) + "\n"
         inputstr += "END \n"
 
         self.ip.run_string(inputstr)
@@ -109,7 +109,8 @@ class PhreeqPython(object):
         return Gas(self, self.gas_counter)
 
     def add_solution_raw(self, composition=None):
-        warnings.warn("add_solution_raw is deprecated, use add_solution and add_solution_simple instead", DeprecationWarning)
+        warnings.warn("add_solution_raw is deprecated, use add_solution and add_solution_simple instead",
+                      DeprecationWarning)
         return self.add_solution(composition)
 
     def add_solution(self, composition=None):
@@ -117,12 +118,12 @@ class PhreeqPython(object):
         created solution """
 
         self.solution_counter += 1
-        inputstr = "SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr = "SOLUTION " + str(self.solution_counter) + "\n"
         if len(composition) > 0:
             for key, value in composition.items():
-                inputstr += "  "+key+" "+str(value) + "\n"
+                inputstr += "  " + key + " " + str(value) + "\n"
 
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "SAVE SOLUTION " + str(self.solution_counter) + "\n"
         inputstr += "END \n"
 
         self.ip.run_string(inputstr)
@@ -135,15 +136,15 @@ class PhreeqPython(object):
         """
         self.solution_counter += 1
 
-        inputstr = "SOLUTION "+str(self.solution_counter) + "\n"
-        inputstr += "-temp "+str(temperature) + "\n"
+        inputstr = "SOLUTION " + str(self.solution_counter) + "\n"
+        inputstr += "-temp " + str(temperature) + "\n"
         if len(composition) > 0:
             inputstr += "REACTION 1 \n"
             for species, moles in composition.items():
                 inputstr += species + " " + str(moles) + "\n"
             inputstr += "1 mmol \n"
 
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "SAVE SOLUTION " + str(self.solution_counter) + "\n"
         inputstr += "END \n"
 
         self.ip.run_string(inputstr)
@@ -159,7 +160,7 @@ class PhreeqPython(object):
         """ add a solution species to the VIPhreeqc Instance """
         inputstr = self.buffer if self.buffer else ""
         self.buffer = False
-        inputstr +=  "SOLUTION_SPECIES \n {} \n".format(reaction)
+        inputstr += "SOLUTION_SPECIES \n {} \n".format(reaction)
         inputstr += "log_k {}".format(log_k)
 
         self.ip.run_string(inputstr)
@@ -167,7 +168,7 @@ class PhreeqPython(object):
     def change_solution(self, solution_number, elements, create_new=False):
         """ change solution composition by adding/removing elements """
 
-        inputstr = "USE SOLUTION "+str(solution_number)+"\n"
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "REACTION 1 \n"
         for element, change in elements.items():
             inputstr += element + " " + str(change) + "\n"
@@ -176,7 +177,7 @@ class PhreeqPython(object):
             self.solution_counter += 1
             solution_number = self.solution_counter
 
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
         inputstr += "END"
 
         self.ip.run_string(inputstr)
@@ -197,25 +198,26 @@ class PhreeqPython(object):
         else:
             # fix default inputs
             if len(to_si) < len(phases):
-                to_si.extend([0 for i in range(len(phases)-len(to_si))])
+                to_si.extend([0 for i in range(len(phases) - len(to_si))])
 
             if len(in_phase) < len(phases):
-                in_phase.extend([10 for i in range(len(phases)-len(in_phase))])
+                in_phase.extend([10 for i in range(len(phases) - len(in_phase))])
 
             if len(with_element) < len(phases):
-                with_element.extend([None for i in range(len(phases)-len(with_element))])
+                with_element.extend([None for i in range(len(phases) - len(with_element))])
 
-        inputstr = "USE SOLUTION "+str(solution_number)+"\n"
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "EQUILIBRIUM PHASES 1 \n"
 
         for num in range(len(phases)):
 
             if with_element[num]:
-                inputstr += phases[num] + " " + str(to_si[num]) + " " + with_element[num] + " " + str(in_phase[num]) + "\n"
+                inputstr += phases[num] + " " + str(to_si[num]) + " " + with_element[num] + " " + str(
+                    in_phase[num]) + "\n"
             else:
                 inputstr += phases[num] + " " + str(to_si[num]) + " " + str(in_phase[num]) + "\n"
 
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
         inputstr += "END"
 
         self.ip.run_string(inputstr)
@@ -236,7 +238,7 @@ class PhreeqPython(object):
             else:
                 inputstr += str(solution) + " " + str(fraction) + "\n"
 
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "SAVE SOLUTION " + str(self.solution_counter) + "\n"
         inputstr += "END \n"
 
         if len(pp_ids) > 1:
@@ -264,13 +266,12 @@ class PhreeqPython(object):
         inputstr += "END"
         self.ip.run_string(inputstr)
 
-
     def change_solution_temperature(self, solution_number, temperature):
         """ change temperature """
         inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "REACTION_TEMPERATURE 1 \n"
         inputstr += str(temperature) + "\n"
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
 
         self.ip.run_string(inputstr)
         return Solution(self, self.solution_counter)
@@ -327,7 +328,7 @@ class PhreeqPython(object):
         self.ip.run_string(inputstr)
 
     def remove_surfaces(self, surface_number_list):
-        """ Remove solutions from VIPhreeqc memory """
+        """ Remove surfaces from VIPhreeqc memory """
         inputstr = "DELETE \n"
         inputstr += "-surface " + ' '.join(map(str, surface_number_list))
         self.ip.run_string(inputstr)
@@ -335,13 +336,13 @@ class PhreeqPython(object):
     def get_solution(self, number):
         return Solution(self, number)
 
-    def dump_solutions(self, solution_number_list = None, filename='dump.gz'):
+    def dump_solutions(self, solution_number_list=None, filename='dump.gz'):
         """ Dump solutions to raw file for transmission to another VIPhreeqc instance """
         if not solution_number_list:
             solution_number_list = []
 
         inputstr = "DUMP \n"
-        inputstr += "-file "+filename + "\n"
+        inputstr += "-file " + filename + "\n"
         inputstr += "-solution " + ' '.join(map(str, solution_number_list)) + "\n"
         inputstr += "END"
 
@@ -351,7 +352,7 @@ class PhreeqPython(object):
         dump = self.ip.get_dump_string()
 
         # write to file
-        dumpfile = gzip.open(filename,'w')
+        dumpfile = gzip.open(filename, 'w')
         dumpfile.write(dump)
         dumpfile.close()
 
@@ -359,4 +360,3 @@ class PhreeqPython(object):
 
     def get_solution_list(self):
         return self.ip.get_solution_list()
-
