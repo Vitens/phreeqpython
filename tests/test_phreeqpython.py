@@ -1,4 +1,5 @@
 from phreeqpython import PhreeqPython, Solution
+from pathlib import Path
 from nose.tools import assert_equal, assert_almost_equal, assert_raises
 
 class TestPhreeqPython(object):
@@ -170,3 +171,13 @@ class TestPhreeqPython(object):
         assert_almost_equal(gas1.partial_pressures['CH4(g)'], 0.48, 2)
         assert_almost_equal(gas1.partial_pressures['Ntg(g)'], 0.49, 2)
 
+    def test10_use_non_default_database_directory(self):
+        pp_test10 = PhreeqPython(database_directory=Path(__file__).parent)
+        sol = pp_test10.add_solution_simple({'CaCl2':1, 'Na2CO3':1})
+        # test solution number
+        assert_equal(sol.number, 0)
+        # test solution ph, sc, pe and temperature
+        assert_equal(round(sol.pH, 2), 10.41)
+        assert_equal(round(sol.sc, 2), 435.35)
+        assert_equal(round(sol.pe, 2), 7.4)
+        assert_equal(round(sol.temperature, 2), 25)
