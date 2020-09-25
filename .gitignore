@@ -12,7 +12,9 @@
 # Python egg metadata, regenerated from source files by setuptools
 /*.egg-info
 
-# Jupyter notebook 
+# Jupyter notebook
 .ipynb_checkpoints/
 .coverage
 
+.vscode/*
+dump.gz
