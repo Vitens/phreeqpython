@@ -352,7 +352,7 @@ class VIPhreeqc(object):
 
     def get_solution_list(self):
         solution_list = self._get_solution_list(self.id_).decode('utf-8').split(",")
-        return list(map(int, solution_list))
+        return [int(s) for s in solution_list if isinstance(s, str) and len(s)>0]
     def get_species(self, solution):
         return self._get_species(self.id_, solution).decode('utf-8').split(",")
     def get_si(self, solution, phase):
@@ -473,7 +473,7 @@ class VIPhreeqc(object):
     def run_string(self, cmd_string):
         """Run PHREEQC input from string.
         """
-        #print(cmd_string)
+        # print(cmd_string)
         if self.debug:
             print(cmd_string)
 
