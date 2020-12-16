@@ -251,6 +251,10 @@ class VIPhreeqc(object):
 
     # Vitens VIPHREEQC Extensions
 
+    # surface
+    def get_thickness(self, surface):
+        return self._get_surface_thickness(self.id_, surface)
+
     # gas
     def get_gas_volume(self, gas):
         return self._get_gas_volume(self.id_, gas)
@@ -347,7 +351,7 @@ class VIPhreeqc(object):
         for specie, masters in species_dict.items():
             for master in masters:
                 masters_list.setdefault(master,[]).append(specie)
-            
+
         return masters_list
 
     def get_solution_list(self):
@@ -455,6 +459,8 @@ class VIPhreeqc(object):
     def load_database(self, database_name):
         """Load a database with given file_name.
         """
+        # ensure string
+        database_name = str(database_name)
         self.phc_database_error_count = self._load_database(
             self.id_, bytes(database_name, 'utf-8'))
 

@@ -2,6 +2,7 @@
 
 import os
 import gzip
+from pathlib import Path
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
 from .gas import Gas
@@ -10,17 +11,23 @@ import warnings
 class PhreeqPython(object):
     """ PhreeqPython Class to interact with the VIPHREEQC module """
 
-    def __init__(self, database=None, from_file=None, debug=False):
+    def __init__(self, database=None, database_directory = None, from_file=None,
+        debug=False):
         # Create VIPhreeqc Instance
         self.ip = VIPhreeqc()
         self.ip.debug = debug
         # Load Vitens.dat database. The VIPhreeqc module is unable to handle relative paths
         if not database:
-            database_path = os.path.dirname(__file__) + "/database/vitens.dat"
-        else:
-            database_path = os.path.dirname(__file__) + "/database/"+database
+            database = "vitens.dat"
 
-        if not os.path.isfile(database_path):
+        if not database_directory:
+            database_directory = Path(os.path.dirname(__file__) + "/database")
+
+        database_path = database_directory / database
+        if not database_directory.exists():
+            raise FileNotFoundError("Database directory does not exist.")
+
+        if not database_path.exists():
             raise FileNotFoundError("Database file not found")
 
         self.ip.load_database(database_path)
@@ -44,8 +51,8 @@ class PhreeqPython(object):
 
         else:
             self.buffer = False
-            self.solution_counter = 0
-            self.gas_counter = 0
+            self.solution_counter = -1
+            self.gas_counter = -1
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
@@ -107,8 +114,8 @@ class PhreeqPython(object):
         return Solution(self, self.solution_counter)
 
     def add_solution_simple(self, composition=None, temperature=25):
-        """ add a solution to the VIPhreeqc Stack and add all individual components 
-        in a reaction step 
+        """ add a solution to the VIPhreeqc Stack and add all individual components
+        in a reaction step
         """
         self.solution_counter += 1
 
