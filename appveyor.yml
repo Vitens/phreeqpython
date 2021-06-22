@@ -3,17 +3,17 @@ build: false
 environment:
     matrix:
         - PYTHON: "C:\\Python36-x64"
-          PYTHON_VERSION: "3.6.0"
+          PYTHON_VERSION: "3.9.1"
           PYTHON_ARCH: "64"
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
 
 install:
-  - "%PYTHON%/python.exe setup.py install"
-  - "%PYTHON%/python.exe -m pip install nose"
-  - "%PYTHON%/python.exe -m pip install periodictable"
-  - "%PYTHON%/python.exe -m pip install coverage"
   - "%PYTHON%/python.exe -m pip install scipy"
+  - "%PYTHON%/python.exe -m pip install periodictable"
+  - "%PYTHON%/python.exe -m pip install nose"
+  - "%PYTHON%/python.exe -m pip install coverage"
+  - "%PYTHON%/python.exe setup.py install"
 
 test_script:
   - "%PYTHON%/python.exe -m nose -v"
