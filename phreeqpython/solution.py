@@ -88,13 +88,9 @@ class Solution(object):
         return self
 
     def total(self, element, units='mmol'):
-        """ Returns to total of any given species or element (SLOW!) """
-        total = 0
-        regexp = "(^|[^A-Z])"+element
-        for species, amount in self.species.items():
-            if re.search(regexp, species):
-                total += convert_units(element, amount, to_units=units)
-        return total
+        """ Returns to total of any given species or element """
+        amount = self.pp.ip.get_total_ion(self.number, element)
+        return convert_units(element, amount, to_units=units)
 
     def total_activity(self, element, units='mmol'):
         """ Returns to total of any given species or element (SLOW!) """

@@ -119,6 +119,8 @@ class VIPhreeqc(object):
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_total_element', phreeqc.GetTotalElement,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
+                          ('_get_total_ion', phreeqc.GetTotalIon,
+                           [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_moles', phreeqc.GetMoles,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_activity', phreeqc.GetActivity,
@@ -308,6 +310,8 @@ class VIPhreeqc(object):
         return self._get_total(self.id_, solution, bytes(element, 'utf-8'))
     def get_total_element(self, solution, element):
         return self._get_total_element(self.id_, solution, bytes(element, 'utf-8'))
+    def get_total_ion(self, solution, ion):
+        return self._get_total_ion(self.id_, solution, bytes(ion, 'utf-8'))
     def get_moles(self, solution, species):
         return self._get_moles(self.id_, solution, bytes(species, 'utf-8'))
     def get_activity(self, solution, species):
