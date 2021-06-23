@@ -43,7 +43,7 @@ print(solution3.total('K','mol'))     # 0.0005 mol
 ## Unit Tests
 | **Mac/Linux** | **Windows** | **Coverage** |
 |---|---|---|
-| [![Build Status](https://travis-ci.com/Vitens/phreeqpython.svg?branch=master)](https://travis-ci.com/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/Vitens/phreeqpython) | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
+| [![Build Status](https://travis-ci.com/Vitens/phreeqpython.svg?branch=master)](https://travis-ci.com/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/abelheinsbroek/phreeqpython) | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
 
 
 ## Acknowledgements
