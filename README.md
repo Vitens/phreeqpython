@@ -57,7 +57,7 @@ One of our main focus points is using advanced water quality, quantity and hydra
 
 ## Licence
 
-Copyright 2020 Vitens
+Copyright 2021 Vitens
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
