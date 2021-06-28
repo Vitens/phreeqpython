@@ -45,6 +45,10 @@ class TestPhreeqPython(object):
         # add components
         sol.add('NaHCO3', 1)
         assert_equal(round(sol.total('Na'), 4), 1)
+        # change solution
+        sol.change({'MgCl': 1})        
+        assert_equal(round(sol.total('Cl'), 2), 3)
+        assert_equal(round(sol.total('Mg'), 2), 1)
         # desaturate
         sol.desaturate('Calcite')
         assert_equal(sol.si('Calcite'), 0)
