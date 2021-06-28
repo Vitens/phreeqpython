@@ -15,6 +15,16 @@ class Solution(object):
     def copy(self):
         """ Create a new copy, with unique solution number, from this solution """
         return self.pp.copy_solution(self.number)
+    
+    def change(self, composition, units='mmol'):
+        """ Change solution composition by adding/removing elements in a single step """
+        converted_composition = {}
+        for element, amount in composition.items():
+            amount = convert_units(element, amount, units, 'mol')
+            converted_composition[element] = amount
+        self.pp.change_solution(self.number, converted_composition)
+        return self
+
 
     def add(self, element, amount, units='mmol'):
         """ Add a chemical to the solution """
