@@ -7,7 +7,7 @@ class TestPhreeqPython(object):
     pp = PhreeqPython()
 
     def test1_basiscs(self):
-        sol = self.pp.add_solution_simple({'CaCl2':1, 'Na2CO3':1})
+        sol = self.pp.add_solution_simple({'CaCl2':1, 'Na2CO3':1})        
         # test solution number
         assert_equal(sol.number, 0)
         # test solution ph, sc, pe and temperature
@@ -40,15 +40,30 @@ class TestPhreeqPython(object):
         assert_equal(round(sol.species_molalities['Ca+2'],5), 0.00071)
         assert_equal(round(sol.species_activities['Ca+2'],5), 0.00054)
 
+
+        # test add_solution_simple as milligrams
+        sol2 = self.pp.add_solution_simple({'Ca': 40.078, 'Na': 22.99, 'MgSO4': 120.37}, units='mg')
+        # test conversion from mg to mmol
+        assert_equal(round(sol2.total("Ca", 'mmol'), 4), 1)
+        # test amount in mg
+        assert_equal(round(sol2.total("Na", 'mg'), 4), 22.99)
+        # test amount in mmol from molecule added in mg's
+        assert_equal(round(sol2.total("Mg", 'mmol'), 4), 1)
+
     def test2_solution_functions(self):
         sol = self.pp.add_solution_simple({'CaCl2':1})
         # add components
         sol.add('NaHCO3', 1)
         assert_equal(round(sol.total('Na'), 4), 1)
-        # change solution
-        sol.change({'MgCl': 1})        
-        assert_equal(round(sol.total('Cl'), 2), 3)
+        # change solution in mmols (add and subtract)
+        sol.change({'MgCl2': 1, 'NaCl': -0.5})        
+        assert_equal(round(sol.total('Cl'), 2), 3.5)
         assert_equal(round(sol.total('Mg'), 2), 1)
+        # change solution in mgs (add and subtract)
+        sol.change({'Na': 11.495, 'MgCl2': -95.211}, 'mg')        
+        assert_equal(round(sol.total('Cl'), 2), 1.5)
+        assert_equal(round(sol.total('Mg'), 2), 0)
+
         # desaturate
         sol.desaturate('Calcite')
         assert_equal(sol.si('Calcite'), 0)
@@ -87,11 +102,11 @@ class TestPhreeqPython(object):
     def test4_solution_listing(self):
         # test solution list
         sol_list = self.pp.ip.get_solution_list()
-        assert_equal(len(sol_list), 7)
+        assert_equal(len(sol_list), 8)
         # test forgetting solutions
         self.pp.remove_solutions([1, 2, 3])
         sol_list = self.pp.ip.get_solution_list()
-        assert_equal(len(sol_list), 4)
+        assert_equal(len(sol_list), 5)
 
     def test5_addition(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
