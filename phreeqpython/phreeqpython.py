@@ -6,6 +6,7 @@ from pathlib import Path
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
 from .gas import Gas
+from .utility import convert_units
 import warnings
 
 class PhreeqPython(object):
@@ -113,7 +114,7 @@ class PhreeqPython(object):
 
         return Solution(self, self.solution_counter)
 
-    def add_solution_simple(self, composition=None, temperature=25):
+    def add_solution_simple(self, composition=None, temperature=25, units='mmol'):
         """ add a solution to the VIPhreeqc Stack and add all individual components
         in a reaction step
         """
@@ -123,7 +124,8 @@ class PhreeqPython(object):
         inputstr += "-temp "+str(temperature) + "\n"
         if len(composition) > 0:
             inputstr += "REACTION 1 \n"
-            for species, moles in composition.items():
+            for species, amount in composition.items():
+                moles = convert_units(species, amount, units, 'mmol')
                 inputstr += species + " " + str(moles) + "\n"
             inputstr += "1 mmol \n"
 
