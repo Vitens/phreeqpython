@@ -31,6 +31,7 @@ solution2 = pp.add_solution({'KCl':1.0})
 solution3 = solution * 0.5 + solution2 * 0.5
 print(solution3.total('K','mol'))     # 0.0005 mol
 ```
+For more examples, take a look at the `examples` folder.
 
 ## Installation
 * ```pip install -U phreeqpython```
