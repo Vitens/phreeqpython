@@ -12,7 +12,7 @@ class TestPhreeqPython(object):
         assert_equal(sol.number, 0)
         # test solution ph, sc, pe and temperature
         assert_equal(round(sol.pH, 2), 10.41)
-        assert_equal(round(sol.sc, 2), 435.35)
+        assert_equal(round(sol.sc, 2), 435.81)
         assert_equal(round(sol.pe, 2), 7.4)
         assert_equal(round(sol.temperature, 2), 25)
         # test solution composition
@@ -197,6 +197,6 @@ class TestPhreeqPython(object):
         assert_equal(sol.number, 0)
         # test solution ph, sc, pe and temperature
         assert_equal(round(sol.pH, 2), 10.41)
-        assert_equal(round(sol.sc, 2), 435.35)
+        assert_equal(round(sol.sc, 2), 435.81)
         assert_equal(round(sol.pe, 2), 7.4)
         assert_equal(round(sol.temperature, 2), 25)
