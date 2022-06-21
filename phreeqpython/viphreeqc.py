@@ -137,6 +137,8 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_char_p),
                           ('_get_si', phreeqc.GetSI,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
+                          ('_get_diffusion', phreeqc.GetDiffusion,
+                           [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_solution_list', phreeqc.GetSolutionList,
                            [c_int], ctypes.c_char_p)
                          ]
@@ -365,9 +367,22 @@ class VIPhreeqc(object):
         return self._get_species(self.id_, solution).decode('utf-8').split(",")
     def get_si(self, solution, phase):
         return self._get_si(self.id_, solution, bytes(phase, 'utf-8'))
+    def get_diffusion(self, solution, phase):
+        return self._get_diffusion(self.id_, solution, bytes(phase, 'utf-8'))
+
     def get_phases(self, solution):
         # no idea why this is necessary.. it won't work otherwise
         return self.dll.GetPhases(self.id_, solution).decode('utf-8').split(",")
+
+    def get_species_diffusion(self, solution):
+        """ Returns a list of species and their diffusion """
+        species = self.get_species(solution)
+        species_dif = {}
+        for s in species:
+            species_dif[s] = self.get_diffusion(solution, s)
+        return species_dif
+
+
     def get_phases_si(self, solution):
         """ Returns a list of phases and their solubility index """
         phases = self.get_phases(solution)

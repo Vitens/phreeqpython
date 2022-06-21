@@ -223,6 +223,9 @@ class Solution(object):
     def species(self, units='mmol'):
         return self.pp.ip.get_species_moles(self.number)
     @property
+    def diffusion_coefficients(self):
+        return self.pp.ip.get_species_diffusion(self.number)
+    @property
     def species_moles(self, units='mmol'):
         return self.pp.ip.get_species_moles(self.number)
     @property
