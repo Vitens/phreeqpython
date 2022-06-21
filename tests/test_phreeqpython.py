@@ -200,3 +200,16 @@ class TestPhreeqPython(object):
         assert_equal(round(sol.sc, 2), 435.81)
         assert_equal(round(sol.pe, 2), 7.4)
         assert_equal(round(sol.temperature, 2), 25)
+
+    def test11_pitzer(self):
+        pp_test11 = PhreeqPython(database='pitzer.dat')
+
+        solution = pp_test11.add_solution({'units':'mmol/kgw', #set the units (moles per kg of water)
+                                    'pH': '10 charge',
+                                    'temp': 20, 
+                                    'K':1000,
+                                    'C': 500
+                                   })
+
+        assert_almost_equal(solution.pH, 11.789, 3)
+        assert_almost_equal(solution.sc, 73290.5, 1)
