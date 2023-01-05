@@ -138,8 +138,15 @@ class Solution(object):
     def forget(self):
         """ remove this solution from VIPhreeqc memory """
         self.pp.remove_solutions([self.number])
+    
+    def chain(self):
+        self.pp.start_chain(self.number)
+    
+    def end(self):
+        self.pp.end()
+        
 
-    def kinetics(self, element, rate_function, time, m0=0, args=()):
+    def kinetics(self, element, rate_function, time, m0=0, args=(), units='mmol'):
 
         def calc_rate(y, t, m0, *args):
             temp = self.copy()
@@ -154,7 +161,7 @@ class Solution(object):
 
         for i in range(len(time)):
             t = time[i]
-            self.add(element, y[i])
+            self.add(element, y[i], units)
             yield(t, self)
 
     # Magic functions
