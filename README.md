@@ -10,7 +10,7 @@ PhreeqPython greatly simplifies adding solutions and querying their properties:
 ```python
 pp = PhreeqPython()
 # add a solution consisting of 1 mmol CaCl2 and 2 mmol NaHCO3
-solution = pp.add_solution({'CaCl2':1.0,'NaHCO3':2.0})
+solution = pp.add_solution_simple({'CaCl2':1.0,'NaHCO3':2.0})
 print(solution.pH)               # 8.12
 print(solution.sc)               # 427.32
 print(solution.si('Calcite'))    # 0.38
@@ -26,7 +26,7 @@ print(solution.total('Ca'))     # 1 mmol
 ```
 And even allows for addition, devision and multiplication of solutions to form new mixtures:
 ```python
-solution2 = pp.add_solution({'KCl':1.0})
+solution2 = pp.add_solution_simple({'KCl':1.0})
 # create mixture of 50% solution and 50% solution2
 solution3 = solution * 0.5 + solution2 * 0.5
 print(solution3.total('K','mol'))     # 0.0005 mol
