@@ -22,7 +22,7 @@ Allows for simple chemical and precipitation/dissolution reactions:
 solution.add('NaOH',0.5)
 print(solution.pH)              # 9.47
 solution.desaturate('Calcite')  # desaturate to SI 0
-print(solution.total('Ca'))     # 1 mmol
+print(solution.total('Ca'))     # 0.497 mmol
 ```
 And even allows for addition, devision and multiplication of solutions to form new mixtures:
 ```python
