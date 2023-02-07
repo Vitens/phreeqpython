@@ -209,8 +209,21 @@ class TestPhreeqPython(object):
                 "Mn(2)": 2.6, 
             }, 
         )
-
         assert_equal(round(sol.si('Hausmannite'),2), -10.90)
         assert_equal(round(sol.si('Manganite'),2), -4.96)
         assert_equal(round(sol.si('Pyrochroite'),2), -5.82)
         assert_equal(round(sol.si('Pyrolusite'),2), -10.00)
+
+    def test12_equilibrium_phase(self):
+        sol = self.pp.add_solution({
+            'pH': 7,
+            'temp': 25
+        })
+        eq = self.pp.add_equilibrium_phase(['CO2(g)', 'Calcite'], [-2, 0], [1, 1])
+
+        sol.interact(eq)
+
+        assert_almost_equal((eq.components['CO2(g)']-1)*1e3, -1.991, 3)
+        assert_almost_equal((eq.components['Calcite']-1)*1e3, -1.655, 3)
+
+        assert_almost_equal(sol.total('Ca'), 1.655, 3)

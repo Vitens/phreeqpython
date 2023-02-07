@@ -1,6 +1,10 @@
 import re
 import numbers
 from .utility import convert_units
+
+from .equilibriumphase import EquilibriumPhase
+from .gas import Gas 
+
 from scipy.integrate import odeint
 import numpy as np
 
@@ -47,8 +51,13 @@ class Solution(object):
         self.remove(species, to_remove)
         return self
 
-    def interact(self, gas):
-        self.pp.interact_solution_gas(self.number, gas.number)
+    def interact(self, gas_or_phase):
+
+        if isinstance(gas_or_phase, Gas):
+            self.pp.interact_solution_gas(self.number, gas_or_phase.number)
+        else:
+            self.pp.interact_solution_phase(self.number, gas_or_phase.number)
+
         return self
 
 

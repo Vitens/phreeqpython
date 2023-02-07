@@ -6,6 +6,7 @@ from pathlib import Path
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
 from .gas import Gas
+from .equilibriumphase import EquilibriumPhase
 from .utility import convert_units
 import warnings
 
@@ -56,7 +57,32 @@ class PhreeqPython(object):
             self.buffer = False
             self.solution_counter = -1
             self.gas_counter = -1
+            self.phase_counter = -1
         
+    def add_equilibrium_phase(self, components=[], to_si=[], amount=[]):
+        self.phase_counter += 1
+
+        inputstr = "EQUILIBRIUM_PHASE {}\n".format(self.phase_counter)
+
+        components = [components] if not isinstance(components, list) else components
+        to_si = [to_si] if not isinstance(to_si, list) else to_si
+        amount = [amount] if not isinstance(amount, list) else amount
+
+        if(len(to_si) < len(components)):
+            to_si.extend([0 for i in range(len(components)-len(to_si))])
+        if(len(amount) < len(components)):
+            amount.extend([10 for i in range(len(components)-len(amount))])
+
+
+
+        for num in range(len(components)):
+            inputstr += "{} {} {}\n".format(components[num], to_si[num], amount[num])
+        
+        inputstr += "SAVE EQUILIBRIUM_PHASE {}\n".format(self.phase_counter)
+        self.ip.run_string(inputstr)
+
+        return EquilibriumPhase(self, self.phase_counter)
+
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
@@ -259,6 +285,15 @@ class PhreeqPython(object):
         inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "USE GAS_PHASE " + str(gas_number) + "\n"
         inputstr += "SAVE GAS_PHASE " + str(gas_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "END"
+        self.ip.run_string(inputstr)
+
+    def interact_solution_phase(self, solution_number, phase_number):
+        """ Interact solution with equilibrium phase """
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "USE EQUILIBRIUM_PHASE " + str(phase_number) + "\n"
+        inputstr += "SAVE EQUILIBRIUM_PHASE " + str(phase_number) + "\n"
         inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
         inputstr += "END"
         self.ip.run_string(inputstr)
