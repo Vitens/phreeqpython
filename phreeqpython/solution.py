@@ -232,4 +232,4 @@ class Solution(object):
 
     # pretty printing
     def __str__(self):
-        return "<PhreeqPython.Solution."+self.__class__.__name__ + " with number '" + self.number + "'>"
+        return f"<PhreeqPython.{self.__class__.__name__} number {self.number}>"
