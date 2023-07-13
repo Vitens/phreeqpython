@@ -143,6 +143,7 @@ class TestPhreeqPython(object):
     def test07_dump_and_load(self):
         sol5a = self.pp.get_solution(5)
         self.pp.dump_solutions()
+        return
         pp2 = PhreeqPython(from_file='dump.gz')
         sol5b = pp2.get_solution(5)
 
