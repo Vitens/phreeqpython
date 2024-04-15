@@ -102,6 +102,11 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_char_p),
                           ('_get_gas_component_moles', phreeqc.GetGasComponentMoles,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
+                          # equilbrium phase
+                          ('_get_equilibrium_phase_components', phreeqc.GetEquilibriumPhaseComponents,
+                           [c_int, c_int], ctypes.c_char_p),
+                          ('_get_equilibrium_phase_component_moles', phreeqc.GetEquilibriumPhaseComponentMoles,
+                           [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           # solution
                           ('_get_ph', phreeqc.GetPH,
                            [c_int, c_int], ctypes.c_double),
@@ -290,7 +295,20 @@ class VIPhreeqc(object):
 
         return {name: value/total_moles * total_pressure for (name, value) in self.get_gas_components_moles(gas).items()}
 
+    # equilibrium phase
+    def get_equilibrium_phase_components(self, phase):
+        return self._get_equilibrium_phase_components(self.id_, phase).decode('utf-8').split(",")
 
+    def get_equilibrium_phase_component_moles(self, phase, component):
+        return self._get_equilibrium_phase_component_moles(self.id_, phase, bytes(component, 'utf-8'))
+
+    def get_equilibrium_phase_components_moles(self, phase):
+        component_list = self.get_equilibrium_phase_components(phase)
+        component_moles = {}
+        for component in component_list:
+            component_moles[component] = self.get_equilibrium_phase_component_moles(phase, component)
+
+        return component_moles
 
 
     # solution

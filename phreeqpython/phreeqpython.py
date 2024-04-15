@@ -6,6 +6,7 @@ from pathlib import Path
 from .viphreeqc import VIPhreeqc
 from .solution import Solution
 from .gas import Gas
+from .equilibriumphase import EquilibriumPhase
 from .utility import convert_units
 import warnings
 
@@ -17,6 +18,8 @@ class PhreeqPython(object):
         # Create VIPhreeqc Instance
         self.ip = VIPhreeqc()
         self.ip.debug = debug
+        self.chain = False
+        self.chain_buffer = ""
         # Load Vitens.dat database. The VIPhreeqc module is unable to handle relative paths
         if not database:
             database = "vitens.dat"
@@ -38,6 +41,7 @@ class PhreeqPython(object):
             dump = gzip.open(from_file,"rb")
             try:
                 inputstr = dump.read().decode('utf-8') + "END"
+                print(inputstr)
                 self.ip.run_string(inputstr)
 
                 solutions = self.ip.get_solution_list()
@@ -54,6 +58,32 @@ class PhreeqPython(object):
             self.buffer = False
             self.solution_counter = -1
             self.gas_counter = -1
+            self.phase_counter = -1
+        
+    def add_equilibrium_phase(self, components=[], to_si=[], amount=[]):
+        self.phase_counter += 1
+
+        inputstr = "EQUILIBRIUM_PHASE {}\n".format(self.phase_counter)
+
+        components = [components] if not isinstance(components, list) else components
+        to_si = [to_si] if not isinstance(to_si, list) else to_si
+        amount = [amount] if not isinstance(amount, list) else amount
+
+        if(len(to_si) < len(components)):
+            to_si.extend([0 for i in range(len(components)-len(to_si))])
+        if(len(amount) < len(components)):
+            amount.extend([10 for i in range(len(components)-len(amount))])
+
+
+
+        for num in range(len(components)):
+            inputstr += "{} {} {}\n".format(components[num], to_si[num], amount[num])
+        
+        inputstr += "SAVE EQUILIBRIUM_PHASE {}\n".format(self.phase_counter)
+        self.ip.run_string(inputstr)
+
+        return EquilibriumPhase(self, self.phase_counter)
+
 
     def add_gas(self, components=None, pressure=1.0, volume=1.0, fixed_pressure=True, fixed_volume=False, equilibrate_with=False):
         """ add a gas phase to the VIPhreeqc stack """
@@ -107,10 +137,12 @@ class PhreeqPython(object):
             for key, value in composition.items():
                 inputstr += "  "+key+" "+str(value) + "\n"
 
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
-        inputstr += "END \n"
-
-        self.ip.run_string(inputstr)
+        if not self.chain:
+            inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+            inputstr += "END \n"
+            self.ip.run_string(inputstr)
+        else:
+            self.chain_buffer += inputstr
 
         return Solution(self, self.solution_counter)
 
@@ -129,10 +161,13 @@ class PhreeqPython(object):
                 inputstr += species + " " + str(moles) + "\n"
             inputstr += "1 mmol \n"
 
-        inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
-        inputstr += "END \n"
+        if not self.chain:
+            inputstr += "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+            inputstr += "END \n"
+            self.ip.run_string(inputstr)
+        else:
+            self.chain_buffer += inputstr
 
-        self.ip.run_string(inputstr)
 
         return Solution(self, self.solution_counter)
 
@@ -153,7 +188,11 @@ class PhreeqPython(object):
     def change_solution(self, solution_number, elements, create_new=False):
         """ change solution composition by adding/removing elements """
 
-        inputstr = "USE SOLUTION "+str(solution_number)+"\n"
+        inputstr = ""
+
+        if not self.chain:
+            inputstr += "USE SOLUTION "+str(solution_number)+"\n"
+
         inputstr += "REACTION 1 \n"
         for element, change in elements.items():
             inputstr += element + " " + str(change) + "\n"
@@ -162,10 +201,13 @@ class PhreeqPython(object):
             self.solution_counter += 1
             solution_number = self.solution_counter
 
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
-        inputstr += "END"
+        if not self.chain:
+            inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+            inputstr += "END"
+            self.ip.run_string(inputstr)
+        else:
+            self.chain_buffer += inputstr
 
-        self.ip.run_string(inputstr)
         return Solution(self, solution_number)
 
     def equalize_solution(self, solution_number, phases, to_si, in_phase=[10], with_element=[None]):
@@ -191,7 +233,11 @@ class PhreeqPython(object):
             if len(with_element) < len(phases):
                 with_element.extend([None for i in range(len(phases)-len(with_element))])
 
-        inputstr = "USE SOLUTION "+str(solution_number)+"\n"
+        inputstr = ""
+
+        if not self.chain:
+            inputstr += "USE SOLUTION "+str(solution_number)+"\n"
+
         inputstr += "EQUILIBRIUM PHASES 1 \n"
 
         for num in range(len(phases)):
@@ -201,10 +247,13 @@ class PhreeqPython(object):
             else:
                 inputstr += phases[num] + " " + str(to_si[num]) + " " + str(in_phase[num]) + "\n"
 
-        inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
-        inputstr += "END"
+        if not self.chain:
+            inputstr += "SAVE SOLUTION "+str(solution_number) + "\n"
+            inputstr += "END"
+            self.ip.run_string(inputstr)
+        else:
+            self.chain_buffer += inputstr
 
-        self.ip.run_string(inputstr)
         return Solution(self, solution_number)
 
     def mix_solutions(self, solutions):
@@ -237,6 +286,15 @@ class PhreeqPython(object):
         inputstr = "USE SOLUTION " + str(solution_number) + "\n"
         inputstr += "USE GAS_PHASE " + str(gas_number) + "\n"
         inputstr += "SAVE GAS_PHASE " + str(gas_number) + "\n"
+        inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "END"
+        self.ip.run_string(inputstr)
+
+    def interact_solution_phase(self, solution_number, phase_number):
+        """ Interact solution with equilibrium phase """
+        inputstr = "USE SOLUTION " + str(solution_number) + "\n"
+        inputstr += "USE EQUILIBRIUM_PHASE " + str(phase_number) + "\n"
+        inputstr += "SAVE EQUILIBRIUM_PHASE " + str(phase_number) + "\n"
         inputstr += "SAVE SOLUTION " + str(solution_number) + "\n"
         inputstr += "END"
         self.ip.run_string(inputstr)
@@ -315,6 +373,17 @@ class PhreeqPython(object):
         dumpfile.close()
 
         self.ip.set_dump_string_off()
+    
+    def start_chain(self, number):
+        self.chain = True
+        self.chain_buffer = "USE SOLUTION "+str(number) + "\n" 
+
+    def end(self):
+        self.chain = False
+        inputstr = "SAVE SOLUTION "+str(self.solution_counter) + "\n"
+        inputstr += "END \n"
+        self.ip.run_string(self.chain_buffer + inputstr)
+
 
     def get_solution_list(self):
         return self.ip.get_solution_list()
