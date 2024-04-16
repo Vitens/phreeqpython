@@ -228,3 +228,40 @@ class TestPhreeqPython(object):
         assert_almost_equal((eq.components['Calcite']-1)*1e3, -1.655, 3)
 
         assert_almost_equal(sol.total('Ca'), 1.655, 3)
+
+    def test13_extraneous_properties(self):
+        sol = self.pp.add_solution({
+            'pH': 7,
+            'temp': 25
+        }, {
+            'A': 1,
+            'B': 10,
+            'C': 20,
+            'D': {
+                'E': 1,
+                'F': 2
+            }
+        })
+        
+        assert_equal(sol.extraneous['A'], 1)
+        assert_equal(sol.extraneous['B'], 10)
+        assert_equal(sol.extraneous['C'], 20)
+
+        sol2 = self.pp.add_solution({
+            'pH': 7,
+            'temp': 25
+        }, {'B': 5, 'D': {'E': 2}})
+
+        assert_equal(sol2.extraneous, {'B': 5, 'D': {'E': 2}})
+
+        # test mixing
+        sol3 = sol * 0.5 + sol2 * 0.5
+        assert_equal(sol3.extraneous['A'], 0.5)
+        assert_equal(sol3.extraneous['B'], 7.5)
+        assert_equal(sol3.extraneous['D']['E'], 1.5)
+        assert_equal(sol3.extraneous['D']['F'], 1)
+
+        # test copying
+        sol4 = sol3.copy()
+        assert_equal(sol4.extraneous['A'], 0.5)
+        assert_equal(sol4.extraneous['D']['E'], 1.5)

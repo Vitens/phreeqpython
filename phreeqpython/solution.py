@@ -1,4 +1,5 @@
 import re
+import copy
 import numbers
 from .utility import convert_units
 
@@ -11,14 +12,17 @@ import numpy as np
 class Solution(object):
     """ PhreeqPy Solution Class """
 
-    def __init__(self, phreeqpython, number):
+    def __init__(self, phreeqpython, number, extraneous=None):
         self.pp = phreeqpython
         self.factor = 1
         self.number = number
+        self.extraneous = {} if extraneous is None else extraneous
 
     def copy(self):
         """ Create a new copy, with unique solution number, from this solution """
-        return self.pp.copy_solution(self.number)
+        copied_solution = self.pp.copy_solution(self.number)
+        copied_solution.extraneous = copy.copy(self.extraneous)
+        return copied_solution
     
     def change(self, composition, units='mmol'):
         """ Change solution composition by adding/removing elements in a single step """
