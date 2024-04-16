@@ -127,7 +127,7 @@ class PhreeqPython(object):
         warnings.warn("add_solution_raw is deprecated, use add_solution and add_solution_simple instead", DeprecationWarning)
         return self.add_solution(composition)
 
-    def add_solution(self, composition=None):
+    def add_solution(self, composition=None, extraneous=None):
         """ add a solution to the VIPhreeqc Stack, allowing more control over the
         created solution """
 
@@ -144,7 +144,7 @@ class PhreeqPython(object):
         else:
             self.chain_buffer += inputstr
 
-        return Solution(self, self.solution_counter)
+        return Solution(self, self.solution_counter, extraneous=extraneous)
 
     def add_solution_simple(self, composition=None, temperature=25, units='mmol'):
         """ add a solution to the VIPhreeqc Stack and add all individual components
@@ -264,7 +264,21 @@ class PhreeqPython(object):
         inputstr = "MIX 1 \n"
         # set of phreeqpython IDs
         pp_ids = set()
+
+        extraneous = {}
+
+        def merge_extraneous(n, extraneous, fraction):
+            for k, v in n.items():
+                if isinstance(v, dict):
+                    extraneous[k] = {} if k not in extraneous else extraneous[k]
+                    merge_extraneous(v, extraneous[k], fraction)
+                else:
+                    extraneous[k] = extraneous.get(k, 0) + v * fraction
+
         for solution, fraction in solutions.items():
+
+            merge_extraneous(solution.extraneous, extraneous, fraction)
+
             if isinstance(solution, Solution):
                 pp_ids.add(solution.pp.ip.id_)
                 inputstr += str(solution.number) + " " + str(fraction) + "\n"
@@ -279,7 +293,8 @@ class PhreeqPython(object):
 
         self.ip.run_string(inputstr)
 
-        return Solution(self, self.solution_counter)
+
+        return Solution(self, self.solution_counter, extraneous=extraneous)
 
     def interact_solution_gas(self, solution_number, gas_number):
         """ Interact solution with gas phase """
