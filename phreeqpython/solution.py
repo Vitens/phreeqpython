@@ -231,6 +231,12 @@ class Solution(object):
     def mass(self):
         return self.pp.ip.get_mass(self.number)
     @property
+    def volume(self):
+        return self.pp.ip.get_volume(self.number)
+    @property
+    def density(self):
+        return self.pp.ip.get_density(self.number)
+    @property
     def pe(self):
         return self.pp.ip.get_pe(self.number)
     @property

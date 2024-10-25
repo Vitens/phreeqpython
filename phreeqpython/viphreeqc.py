@@ -120,6 +120,10 @@ class VIPhreeqc(object):
                            [c_int, c_int], ctypes.c_double),
                           ('_get_mass', phreeqc.GetMass,
                            [c_int, c_int], ctypes.c_double),
+                          ('_get_volume', phreeqc.GetVolume,
+                           [c_int, c_int], ctypes.c_double),
+                          ('_get_density', phreeqc.GetDensity,
+                           [c_int, c_int], ctypes.c_double),
                           ('_get_total', phreeqc.GetTotal,
                            [c_int, c_int, ctypes.c_char_p], ctypes.c_double),
                           ('_get_total_element', phreeqc.GetTotalElement,
@@ -324,6 +328,10 @@ class VIPhreeqc(object):
         return self._get_temperature(self.id_, solution)
     def get_mass(self, solution):
         return self._get_mass(self.id_, solution)
+    def get_volume(self, solution):
+        return self._get_volume(self.id_, solution)
+    def get_density(self, solution):
+        return self._get_density(self.id_, solution)
     def get_total(self, solution, element):
         return self._get_total(self.id_, solution, bytes(element, 'utf-8'))
     def get_total_element(self, solution, element):

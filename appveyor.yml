@@ -16,4 +16,4 @@ install:
   - "%PYTHON%/python.exe setup.py install"
 
 test_script:
-  - "%PYTHON%/python.exe -m nose -v"
+  - "%PYTHON%/python.exe -m pytest -v"
