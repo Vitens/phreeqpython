@@ -45,7 +45,7 @@ class VIPhreeqc(object):
             elif sys.platform == 'darwin':
                 dll_name = './lib/viphreeqc.dylib'
             elif 'emscripten' in sys.platform:
-                dll_name = './lib/viphreeqc.so'
+                dll_name = './lib/viphreeqcwasm.so'
             else:
                 msg = 'Platform %s is not supported.' % sys.platform
                 raise NotImplementedError(msg)
