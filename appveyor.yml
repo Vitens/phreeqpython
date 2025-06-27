@@ -9,6 +9,8 @@ init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
 
 install:
+  - "%PYTHON%/python.exe -m pip install pytest"
+  - "%PYTHON%/python.exe -m pip install numpy"
   - "%PYTHON%/python.exe -m pip install scipy"
   - "%PYTHON%/python.exe -m pip install periodictable"
   - "%PYTHON%/python.exe -m pip install nose"
