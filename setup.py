@@ -13,6 +13,7 @@ setup(name='phreeqpython',
       license='Apache Licence 2.0',
       packages=['phreeqpython'],
       include_package_data=True,
+      package_data={'phreeqpython': ['phreeqpython/lib/*.so','phreeqpython/lib/*.dll','phreeqpython/lib/*.dylib', 'phreeqpython/database/*.dat'] },
       zip_safe=False,
-      install_requires=['periodictable']
+      install_requires=['periodictable','numpy','scipy']
       )
