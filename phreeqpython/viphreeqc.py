@@ -15,7 +15,7 @@ if sys.version_info[0] == 2:
         """Compatibilty function for Python 3.
         """
         return str_
-    range = xrange #pylint: disable-msg=C0103
+    range = xrange #pylint: disable-msg=C0103 # noqa: F821
     #pylint: enable-msg=W0622
 
 
