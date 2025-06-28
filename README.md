@@ -42,9 +42,9 @@ For more examples, take a look at the `examples` folder.
   * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
 ## Unit Tests
-| **Mac/Linux** | **Windows** | **Coverage** |
-|---|---|---|
-| [![Build Status](https://travis-ci.com/Vitens/phreeqpython.svg?branch=master)](https://travis-ci.com/Vitens/phreeqpython) | [![Build status](https://ci.appveyor.com/api/projects/status/lr1jwspxdkgo85bv?svg=true)](https://ci.appveyor.com/project/abelheinsbroek/phreeqpython) | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
+| **Mac/Linux** and **Windows** | **Coverage** |
+|---|---|
+| [![Build Status](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg) | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
 
 
 ## Acknowledgements
