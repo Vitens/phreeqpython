@@ -1,4 +1,4 @@
-from phreeqpython import PhreeqPython, Solution
+from phreeqpython import PhreeqPython, Solution, utility
 from pathlib import Path
 import pytest
 
@@ -39,7 +39,7 @@ class TestPhreeqPython:
         assert round(sol.species_activities['Ca+2'], 5) == 0.00054
 
         # test add_solution_simple as milligrams
-        sol2 = self.pp.add_solution_simple({'Ca': 40.078, 'Na': 22.99, 'MgSO4': 120.37}, units='mg')
+        sol2 = self.pp.add_solution_simple({'Ca': 40.078, 'Na': 22.99, 'MgSO4': utility.convert_units('MgSO4', 1, 'mmol', 'mg')}, units='mg')
         # test conversion from mg to mmol
         assert round(sol2.total("Ca", 'mmol'), 4) == 1
         # test amount in mg
@@ -57,7 +57,7 @@ class TestPhreeqPython:
         assert round(sol.total('Cl'), 2) == 3.5
         assert round(sol.total('Mg'), 2) == 1
         # change solution in mgs (add and subtract)
-        sol.change({'Na': 11.495, 'MgCl2': -95.211}, 'mg')        
+        sol.change({'Na': 11.495, 'MgCl2': -utility.convert_units('MgCl2', 1, 'mmol', 'mg')}, 'mg')        
         assert round(sol.total('Cl'), 2) == 1.5
         assert round(sol.total('Mg'), 2) == 0
 
