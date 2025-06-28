@@ -44,7 +44,7 @@ For more examples, take a look at the `examples` folder.
 ## Unit Tests
 | **Mac/Linux** and **Windows** | **Coverage** |
 |---|---|
-| [![Build Status](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg) | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
+| [![Build Status](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg)] | [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
 
 
 ## Acknowledgements
