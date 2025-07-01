@@ -10,14 +10,14 @@ init:
   - "ECHO %PYTHON%
 
 install:
-  - "%PYTHON%/python.exe -m pip install --upgrade pip"
-  - "%PYTHON%/python.exe -m pip install pytest"
-  - "%PYTHON%/python.exe -m pip install numpy"
-  - "%PYTHON%/python.exe -m pip install scipy"
-  - "%PYTHON%/python.exe -m pip install periodictable"
-  - "%PYTHON%/python.exe -m pip install nose"
-  - "%PYTHON%/python.exe -m pip install coverage"
-  - "%PYTHON%/python.exe setup.py install"
+  - "%PYTHON%/python.exe" -m pip install --upgrade pip
+  - "%PYTHON%/python.exe" -m pip install pytest
+  - "%PYTHON%/python.exe" -m pip install numpy
+  - "%PYTHON%/python.exe" -m pip install scipy
+  - "%PYTHON%/python.exe" -m pip install periodictable
+  - "%PYTHON%/python.exe" -m pip install nose
+  - "%PYTHON%/python.exe" -m pip install coverage
+  - "%PYTHON%/python.exe" setup.py install
 
 test_script:
-  - "%PYTHON%/python.exe -m pytest -v"
+  - "%PYTHON%/python.exe" -m pytest -v
