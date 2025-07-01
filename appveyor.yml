@@ -7,7 +7,7 @@ environment:
     - PYTHON: "C:\Python39-x64"
     - PYTHON: "C:\Python310-x64"
 init:
-  - "ECHO %PYTHON%
+  - "ECHO %PYTHON%"
 
 install:
   - "%PYTHON%/python.exe" -m pip install --upgrade pip
