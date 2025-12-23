@@ -71,7 +71,7 @@ class VIPhreeqc(object):
                           ('_get_dump_string', phreeqc.GetDumpString,
                            [c_int], ctypes.c_char_p),
                           ('_set_dump_string_on', phreeqc.SetDumpStringOn,
-                           [c_int], c_int),
+                           [c_int, c_int], c_int),
                           ('_get_error_string', phreeqc.GetErrorString,
                            [c_int], ctypes.c_char_p),
                           ('_get_selected_output_column_count',
