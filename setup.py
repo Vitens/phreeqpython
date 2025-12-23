@@ -5,7 +5,7 @@ import zipfile
 import urllib
 
 setup(name='phreeqpython',
-      version='1.5.5',
+      version='1.5.6',
       description='Vitens viphreeqc wrapper and utilities',
       url='https://github.com/Vitens/phreeqpython',
       author='Abel Heinsbroek',
