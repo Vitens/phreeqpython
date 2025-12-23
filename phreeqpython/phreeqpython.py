@@ -41,7 +41,6 @@ class PhreeqPython(object):
             dump = gzip.open(from_file,"rb")
             try:
                 inputstr = dump.read().decode('utf-8') + "END"
-                print(inputstr)
                 self.ip.run_string(inputstr)
 
                 solutions = self.ip.get_solution_list()
