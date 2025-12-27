@@ -118,7 +118,7 @@ class Solution(object):
     def total_activity(self, element, units='mmol'):
         """ Returns to total of any given species or element (SLOW!) """
         total = 0
-        regexp = "(^|[^A-Z])"+element
+        regexp = element+"([^a-z])"
         for species, amount in self.species_activities.items():
             if re.search(regexp, species):
                 total += convert_units(element, amount, to_units=units)
