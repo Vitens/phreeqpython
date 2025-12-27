@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import sys
 import zipfile
@@ -11,8 +11,8 @@ setup(name='phreeqpython',
       author='Abel Heinsbroek',
       author_email='abel.heinsbroek@vitens.nl',
       license='Apache Licence 2.0',
-      packages=['phreeqpython'],
+      packages=['phreeqpython', 'phreeqpython.lib', 'phreeqpython.database'],
       include_package_data=True,
       zip_safe=False,
-      install_requires=['periodictable']
+      install_requires=['periodictable','numpy','scipy']
       )
