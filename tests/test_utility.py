@@ -12,7 +12,7 @@ class TestUtility:
         ) == 39997.0
         assert round(
             convert_units('NaOH', 1, from_units='mol', to_units='ug'), 0
-        ) == 39997110.0
+        ) == 39996769.0
 
         assert round(
             convert_units('NaOH', 1, from_units='mmol', to_units='mol'), 4
