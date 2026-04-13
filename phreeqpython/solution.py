@@ -23,6 +23,12 @@ class Solution(object):
         copied_solution = self.pp.copy_solution(self.number)
         copied_solution.extraneous = copy.copy(self.extraneous)
         return copied_solution
+
+    def deepcopy(self):
+        """ Create a new deep copy for extraneous properties, with unique solution number, from this solution """
+        copied_solution = self.pp.copy_solution(self.number)
+        copied_solution.extraneous = copy.deepcopy(self.extraneous)
+        return copied_solution
     
     def change(self, composition, units='mmol'):
         """ Change solution composition by adding/removing elements in a single step """
