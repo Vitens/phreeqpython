@@ -14,5 +14,8 @@ setup(name='phreeqpython',
       packages=['phreeqpython', 'phreeqpython.lib', 'phreeqpython.database'],
       include_package_data=True,
       zip_safe=False,
-      install_requires=['periodictable','numpy']
+      install_requires=['periodictable','numpy'],
+      extras_require={
+          'kinetics': ['scipy'],
+      }
       )

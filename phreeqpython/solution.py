@@ -6,7 +6,6 @@ from .utility import convert_units
 from .equilibriumphase import EquilibriumPhase
 from .gas import Gas 
 
-#from scipy.integrate import odeint
 import numpy as np
 
 class Solution(object):
@@ -160,6 +159,13 @@ class Solution(object):
         
 
     def kinetics(self, element, rate_function, time, m0=0, args=(), units='mmol'):
+        try:
+            from scipy.integrate import odeint
+        except ImportError as exc:
+            raise ImportError(
+                "kinetics requires scipy. Install with "
+                "'pip install phreeqpython[kinetics]' or install scipy manually."
+            ) from exc
 
         def calc_rate(y, t, m0, *args):
             temp = self.copy()
