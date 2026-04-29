@@ -43,7 +43,7 @@ jobs:
     name: WASM wheel (Pyodide)
     runs-on: ubuntu-latest
     env:
-      PYODIDE_EMSCRIPTEN_TAG: emscripten_3_1_58_wasm32
+      PYODIDE_EMSCRIPTEN_TAG: emscripten_4_0_9_wasm32
 
     steps:
       - uses: actions/checkout@v4
