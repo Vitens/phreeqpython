@@ -97,3 +97,4 @@ setup(
     cmdclass=cmdclass,
     distclass=BinaryDistribution,
 )
+
