@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 from setuptools import find_packages, setup
+from setuptools.dist import Distribution
 
 cmdclass = {}
 try:
@@ -67,6 +68,16 @@ NATIVE_LIBRARY = _select_native_library(TARGET)
 PACKAGE_DATA = ["database/*.dat", NATIVE_LIBRARY]
 
 
+class BinaryDistribution(Distribution):
+    """Force wheel contents into platlib for bundled shared libs."""
+
+    def is_pure(self):
+        return False
+
+    def has_ext_modules(self):
+        return True
+
+
 setup(
     name="phreeqpython",
     version="1.6.1",
@@ -75,7 +86,7 @@ setup(
     author="Abel Heinsbroek",
     author_email="abel.heinsbroek@vitens.nl",
     license="Apache Licence 2.0",
-    packages=find_packages(),
+    packages=find_packages(exclude=("tests", "tests.*")),
     package_data={"phreeqpython": PACKAGE_DATA},
     include_package_data=False,
     zip_safe=False,
@@ -84,4 +95,5 @@ setup(
         "kinetics": ["scipy"],
     },
     cmdclass=cmdclass,
+    distclass=BinaryDistribution,
 )
