@@ -68,6 +68,15 @@ NATIVE_LIBRARY = _select_native_library(TARGET)
 PACKAGE_DATA = ["database/*.dat", NATIVE_LIBRARY]
 
 
+def _resolve_version():
+    base_version = "1.6.2"
+    local_version = os.environ.get("PHREEQPYTHON_LOCAL_VERSION", "").strip()
+    if local_version:
+        normalized = local_version.replace("-", ".").replace("_", ".").lower()
+        return f"{base_version}+{normalized}"
+    return base_version
+
+
 class BinaryDistribution(Distribution):
     """Force wheel contents into platlib for bundled shared libs."""
 
@@ -80,7 +89,7 @@ class BinaryDistribution(Distribution):
 
 setup(
     name="phreeqpython",
-    version="1.6.2",
+    version=_resolve_version(),
     description="Vitens viphreeqc wrapper and utilities",
     url="https://github.com/Vitens/phreeqpython",
     author="Abel Heinsbroek",
