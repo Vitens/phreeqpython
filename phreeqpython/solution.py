@@ -6,7 +6,7 @@ from .utility import convert_units
 from .equilibriumphase import EquilibriumPhase
 from .gas import Gas 
 
-from scipy.integrate import odeint
+#from scipy.integrate import odeint
 import numpy as np
 
 class Solution(object):
