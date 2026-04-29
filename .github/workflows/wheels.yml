@@ -43,7 +43,7 @@ jobs:
     name: WASM wheel (Pyodide)
     runs-on: ubuntu-latest
     env:
-      PYODIDE_EMSCRIPTEN_TAG: emscripten_4_0_9_wasm32
+      PYODIDE_EMSCRIPTEN_TAG: wasm32_emscripten
 
     steps:
       - uses: actions/checkout@v4
@@ -65,9 +65,11 @@ jobs:
         run: |
           set -euo pipefail
           WHEEL_PATH=$(ls dist/*.whl)
+          # This wheel bundles a ctypes-loaded side module, not a CPython extension module.
+          # Use a broad Python/ABI tag and keep the strict emscripten platform tag.
           python -m wheel tags \
-            --python-tag cp312 \
-            --abi-tag cp312 \
+            --python-tag py3 \
+            --abi-tag none \
             --platform-tag "${PYODIDE_EMSCRIPTEN_TAG}" \
             "${WHEEL_PATH}"
           rm -f "${WHEEL_PATH}"
