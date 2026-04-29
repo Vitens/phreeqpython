@@ -39,17 +39,27 @@ class VIPhreeqc(object):
         """
         if not dll_path:
             if sys.platform == 'win32':
-                dll_name = './lib/VIPhreeqc.dll'
+                dll_names = ['./lib/viphreeqc.dll', './lib/VIPhreeqc.dll']
             elif 'linux' in sys.platform:
-                dll_name = './lib/viphreeqc.so'
+                dll_names = ['./lib/viphreeqc.so']
             elif sys.platform == 'darwin':
-                dll_name = './lib/viphreeqc.dylib'
+                dll_names = ['./lib/viphreeqc.dylib']
             elif 'emscripten' in sys.platform:
-                dll_name = './lib/viphreeqcwasm.so'
+                dll_names = ['./.libs/viphreeqc.so', './lib/viphreeqcwasm.so']
             else:
                 msg = 'Platform %s is not supported.' % sys.platform
                 raise NotImplementedError(msg)
-            dll_path = os.path.join(os.path.dirname(__file__), dll_name)
+
+            module_dir = os.path.dirname(__file__)
+            dll_path = None
+            for dll_name in dll_names:
+                candidate = os.path.join(module_dir, dll_name)
+                if os.path.exists(candidate):
+                    dll_path = candidate
+                    break
+
+            if dll_path is None:
+                dll_path = os.path.join(module_dir, dll_names[0])
         phreeqc = ctypes.cdll.LoadLibrary(dll_path)
         self.debug = False
         self.dll = phreeqc
