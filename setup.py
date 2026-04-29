@@ -80,7 +80,7 @@ class BinaryDistribution(Distribution):
 
 setup(
     name="phreeqpython",
-    version="1.6.1",
+    version="1.6.2",
     description="Vitens viphreeqc wrapper and utilities",
     url="https://github.com/Vitens/phreeqpython",
     author="Abel Heinsbroek",

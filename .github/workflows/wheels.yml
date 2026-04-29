@@ -102,16 +102,30 @@ jobs:
 
   pypi-publish:
     name: Publish to PyPI
-    needs: [native-wheels, wasm-wheel, sdist]
+    needs: [native-wheels, sdist]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
       id-token: write
     steps:
-      - name: Download wheel artifacts
+      - name: Download Linux wheel artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: wheels-*
+          name: wheels-ubuntu-latest
+          path: dist
+          merge-multiple: true
+
+      - name: Download Windows wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels-windows-latest
+          path: dist
+          merge-multiple: true
+
+      - name: Download macOS wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels-macos-14
           path: dist
           merge-multiple: true
 
@@ -129,3 +143,23 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist
+
+  github-release-wasm:
+    name: Attach WASM wheel to GitHub release
+    needs: [wasm-wheel]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Download wasm wheel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels-wasm
+          path: dist
+
+      - name: Upload wasm wheel as release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.whl
+          generate_release_notes: true
