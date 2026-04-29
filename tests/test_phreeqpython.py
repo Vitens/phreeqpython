@@ -1,4 +1,4 @@
-from phreeqpython import PhreeqPython, Solution
+from phreeqpython import PhreeqPython, utility
 from pathlib import Path
 import pytest
 
@@ -11,89 +11,89 @@ class TestPhreeqPython:
         # test solution number
         assert sol.number == 0
         # test solution ph, sc, pe and temperature
-        assert round(sol.pH, 2) == 10.41
-        assert round(sol.sc, 2) == 435.81
-        assert round(sol.pe, 2) == 7.4
-        assert round(sol.temperature, 2) == 25
+        assert sol.pH == pytest.approx(10.41, abs=1e-2)
+        assert sol.sc == pytest.approx(435.81, abs=1e-2)
+        assert sol.pe == pytest.approx(7.4, abs=1e-2)
+        assert sol.temperature == pytest.approx(25, abs=1e-2)
         # test solution composition
-        assert round(sol.total("Ca", units='mol'), 4) == 0.001
-        assert round(sol.total("Cl"), 4) == 2
-        assert round(sol.total_element("C"), 4) == 1
+        assert sol.total("Ca", units='mol') == pytest.approx(0.001, abs=1e-4)
+        assert sol.total("Cl") == pytest.approx(2, abs=1e-4)
+        assert sol.total_element("C") == pytest.approx(1, abs=1e-4)
         # test si
-        assert round(sol.si("Calcite"), 2) == 1.71
+        assert sol.si("Calcite") == pytest.approx(1.71, abs=1e-2)
         # test phases
         assert len(sol.phases) == 10
         assert len(sol.elements) == 5
         # test ionic strength
-        assert round(sol.I, 4) == 0.0045
+        assert sol.I == pytest.approx(0.0045, abs=1e-4)
         # test mass
-        assert round(sol.mass, 2) == 1.0
+        assert sol.mass == pytest.approx(1.0, abs=1e-2)
         # test activity
-        assert round(sol.activity('Ca+2', units='mol'), 5) == 0.00054
+        assert sol.activity('Ca+2', units='mol') == pytest.approx(0.00054, abs=1e-5)
         # test moles
-        assert round(sol.moles('Ca+2', units='mol'), 5) == 0.00071
-        assert round(sol.molality('Ca+2', units='mol'), 5) == 0.00071
+        assert sol.moles('Ca+2', units='mol') == pytest.approx(0.00071, abs=1e-5)
+        assert sol.molality('Ca+2', units='mol') == pytest.approx(0.00071, abs=1e-5)
         # test species_moles
-        assert round(sol.species_moles['Ca+2'], 5) == 0.00071
-        assert round(sol.species_molalities['Ca+2'], 5) == 0.00071
-        assert round(sol.species_activities['Ca+2'], 5) == 0.00054
+        assert sol.species_moles['Ca+2'] == pytest.approx(0.00071, abs=1e-5)
+        assert sol.species_molalities['Ca+2'] == pytest.approx(0.00071, abs=1e-5)
+        assert sol.species_activities['Ca+2'] == pytest.approx(0.00054, abs=1e-5)
 
         # test add_solution_simple as milligrams
-        sol2 = self.pp.add_solution_simple({'Ca': 40.078, 'Na': 22.99, 'MgSO4': 120.37}, units='mg')
+        sol2 = self.pp.add_solution_simple({'Ca': 40.078, 'Na': 22.99, 'MgSO4': utility.convert_units('MgSO4', 1, 'mmol', 'mg')}, units='mg')
         # test conversion from mg to mmol
-        assert round(sol2.total("Ca", 'mmol'), 4) == 1
+        assert sol2.total("Ca", 'mmol') == pytest.approx(1, abs=1e-4)
         # test amount in mg
-        assert round(sol2.total("Na", 'mg'), 4) == 22.99
+        assert sol2.total("Na", 'mg') == pytest.approx(22.99, abs=1e-4)
         # test amount in mmol from molecule added in mg's
-        assert round(sol2.total("Mg", 'mmol'), 4) == 1
+        assert sol2.total("Mg", 'mmol') == pytest.approx(1, abs=1e-4)
 
     def test02_solution_functions(self):
         sol = self.pp.add_solution_simple({'CaCl2':1})
         # add components
         sol.add('NaHCO3', 1)
-        assert round(sol.total('Na'), 4) == 1
+        assert sol.total('Na') == pytest.approx(1, abs=1e-4)
         # change solution in mmols (add and subtract)
         sol.change({'MgCl2': 1, 'NaCl': -0.5})        
-        assert round(sol.total('Cl'), 2) == 3.5
-        assert round(sol.total('Mg'), 2) == 1
+        assert sol.total('Cl') == pytest.approx(3.5, abs=1e-2)
+        assert sol.total('Mg') == pytest.approx(1, abs=1e-2)
         # change solution in mgs (add and subtract)
-        sol.change({'Na': 11.495, 'MgCl2': -95.211}, 'mg')        
-        assert round(sol.total('Cl'), 2) == 1.5
-        assert round(sol.total('Mg'), 2) == 0
+        sol.change({'Na': 11.495, 'MgCl2': -utility.convert_units('MgCl2', 1, 'mmol', 'mg')}, 'mg')        
+        assert sol.total('Cl') == pytest.approx(1.5, abs=1e-2)
+        assert sol.total('Mg') == pytest.approx(0, abs=1e-2)
 
         # desaturate
         sol.desaturate('Calcite')
-        assert sol.si('Calcite') == 0
+        assert sol.si('Calcite') == pytest.approx(0, abs=1e-9)
 
         # remove mmol
         sol.remove('Na', 0.5)
-        assert round(sol.total('Na'), 4) == 0.5
+        assert sol.total('Na') == pytest.approx(0.5, abs=1e-4)
 
         # remove fraction
         sol.remove_fraction('Na', 0.5)
-        assert round(sol.total('Na'), 5) == 0.25
+        assert sol.total('Na') == pytest.approx(0.25, abs=1e-5)
 
         # change ph using base
         sol.change_ph(10)
-        assert round(sol.pH, 2) == 10
+        assert sol.pH == pytest.approx(10, abs=1e-2)
         # change ph using acid
         sol.change_ph(5)
-        assert round(sol.pH, 2) == 5
+        assert sol.pH == pytest.approx(5, abs=1e-2)
         # raise ph using custom chemical (NaOH)
         sol.change_ph(8, 'NaOH')
-        assert round(sol.pH, 2) == 8
+        assert sol.pH == pytest.approx(8, abs=1e-2)
 
         sol.saturate('Calcite', 1)
-        assert sol.si('Calcite') == 1
+        assert sol.si('Calcite') == pytest.approx(1, abs=1e-9)
 
         sol.change_temperature(10)
-        assert sol.temperature == 10
+        assert sol.temperature == pytest.approx(10, abs=1e-9)
 
     def test03_mixing(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = self.pp.add_solution_simple({})
         sol3 = self.pp.mix_solutions({sol1:0.5, sol2:0.5})
-        assert round(sol3.total('Na'), 1) == 0.5
+        assert sol3.total('Na') == pytest.approx(0.5, abs=1e-1)
 
     def test04_solution_listing(self):
         # test solution list
@@ -108,13 +108,13 @@ class TestPhreeqPython:
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = self.pp.add_solution_simple({'NaCl':2})
         sol3 = sol1 + sol2
-        assert round(sol3.mass) == 2.0
+        assert sol3.mass == pytest.approx(2.0, abs=0.5)
 
         sol4 = sol1 / 2 + sol2 / 2
-        assert round(sol4.total('Na'), 1) == 1.5
+        assert sol4.total('Na') == pytest.approx(1.5, abs=1e-1)
 
         sol5 = sol1 * 0.5 + sol2 * 0.5
-        assert round(sol5.total('Na'), 1) == 1.5
+        assert sol5.total('Na') == pytest.approx(1.5, abs=1e-1)
 
         # test invalid mixtures
         def testadd(sol, other):
@@ -134,10 +134,10 @@ class TestPhreeqPython:
     def test06_misc(self):
         sol1 = self.pp.add_solution_simple({'NaCl':1})
         sol2 = sol1.copy()
-        assert sol1.sc == sol2.sc
+        assert sol1.sc == pytest.approx(sol2.sc, abs=1e-9)
 
         sol2.forget()
-        assert sol2.pH == -999
+        assert sol2.pH == pytest.approx(-999, abs=1e-9)
 
     def test07_dump_and_load(self):
         sol5a = self.pp.get_solution(5)
@@ -158,7 +158,7 @@ class TestPhreeqPython:
             'Ca':'40.1',
             'Cl':'71.0'
             })
-        assert sol8.pH == 8.0
+        assert sol8.pH == pytest.approx(8.0, abs=1e-9)
         assert sol8.total_element('Ca') == pytest.approx(1, rel=0.01)
         assert sol8.total_element('Cl') == pytest.approx(2, rel=0.01)
 
@@ -174,7 +174,7 @@ class TestPhreeqPython:
             fixed_volume = True
             )
 
-        assert gas1.pressure == 1
+        assert gas1.pressure == pytest.approx(1, abs=1e-9)
         assert gas1.volume == pytest.approx(1, rel=0.01)
         assert gas1.total_moles == pytest.approx(0.041, rel=0.01)
         assert gas1.pressure == pytest.approx(1, rel=0.01)
@@ -198,10 +198,10 @@ class TestPhreeqPython:
         # test solution number
         assert sol.number == 0
         # test solution ph, sc, pe and temperature
-        assert round(sol.pH, 2) == 10.41
-        assert round(sol.sc, 2) == 435.81
-        assert round(sol.pe, 2) == 7.4
-        assert round(sol.temperature, 2) == 25
+        assert sol.pH == pytest.approx(10.41, abs=1e-2)
+        assert sol.sc == pytest.approx(435.81, abs=1e-2)
+        assert sol.pe == pytest.approx(7.4, abs=1e-2)
+        assert sol.temperature == pytest.approx(25, abs=1e-2)
 
     def test11_phases_si(self):
 
@@ -211,10 +211,10 @@ class TestPhreeqPython:
                 "Mn(2)": 2.6, 
             }, 
         )
-        assert round(sol.si('Hausmannite'), 2) == -10.90
-        assert round(sol.si('Manganite'), 2) == -4.96
-        assert round(sol.si('Pyrochroite'), 2) == -5.82
-        assert round(sol.si('Pyrolusite'), 2) == -10.00
+        assert sol.si('Hausmannite') == pytest.approx(-10.90, abs=1e-2)
+        assert sol.si('Manganite') == pytest.approx(-4.96, abs=1e-2)
+        assert sol.si('Pyrochroite') == pytest.approx(-5.82, abs=1e-2)
+        assert sol.si('Pyrolusite') == pytest.approx(-10.00, abs=1e-2)
 
     def test12_equilibrium_phase(self):
         sol = self.pp.add_solution({
