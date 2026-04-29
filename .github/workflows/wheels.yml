@@ -31,6 +31,7 @@ jobs:
           CIBW_BUILD: cp312-*
           CIBW_SKIP: pp* *-musllinux_*
           CIBW_ARCHS_MACOS: arm64
+          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=26.0
 
       - name: Upload native wheel artifacts
         uses: actions/upload-artifact@v4
