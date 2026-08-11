@@ -13,8 +13,8 @@
 /*.egg-info
 
 # Jupyter notebook
+testing.ipynb
 .ipynb_checkpoints/
 .coverage
-
 .vscode/*
 dump.gz

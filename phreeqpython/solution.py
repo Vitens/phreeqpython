@@ -2,14 +2,23 @@ import re
 import copy
 import numbers
 from .utility import convert_units
-
 from .equilibriumphase import EquilibriumPhase
 from .gas import Gas 
 
 import numpy as np
 
 class Solution(object):
-    """ PhreeqPy Solution Class """
+    """An aqueous solution.
+    
+    A solution of zero or more chemical species in water.
+    Defined by general solution properties like temperature, density, pH, ...
+    and its composition of elements.
+    
+    An element is an atomic element, optionally further specified by a valence state: Na, Fe, Fe(3), S(-2), ...
+    A species consists of one or more elements and can be ionic (Na+, HCO3-, Ca+2), molecular (H2CO3, CO2, O2) or atomic (Na, C, ...).
+    
+    For details, see [PhreeQC/Solution](https://water.usgs.gov/water-resources/software/PHREEQC/documentation/phreeqc3-html/phreeqc3-48.htm#50593793_30253).    
+    """
 
     def __init__(self, phreeqpython, number, extraneous=None):
         self.pp = phreeqpython
@@ -18,13 +27,30 @@ class Solution(object):
         self.extraneous = {} if extraneous is None else extraneous
 
     def copy(self):
-        """ Create a new copy, with unique solution number, from this solution """
+        """Returns an independent copy of the solution.
+        
+        Examples:
+            >>> sol2 = sol.copy()        
+        """        
         copied_solution = self.pp.copy_solution(self.number)
         copied_solution.extraneous = copy.deepcopy(self.extraneous)
         return copied_solution
 
     def change(self, composition, units='mmol'):
-        """ Change solution composition by adding/removing elements in a single step """
+        """Change the solution by adding or removing species.
+        
+        Args:
+            composition (dict): A dictionary of (species, amount) pairs.
+            units (str): Optional, unit of the amounts.
+            
+        Returns:
+            Solution: The altered solution.
+            
+        Examples:
+            >>> sol.change({'K': 20.0, 'Na': -10.0})
+            >>> sol.change({'CaSO4': 5.0}, units='mg')
+            >>> sol.change({'NaCl': -10.0, 'Fe+2': -5.0})
+        """
         converted_composition = {}
         for element, amount in composition.items():
             amount = convert_units(element, amount, units, 'mol')
@@ -32,90 +58,206 @@ class Solution(object):
         self.pp.change_solution(self.number, converted_composition)
         return self
 
-
     def add(self, element, amount, units='mmol'):
-        """ Add a chemical to the solution """
-        # convert to mol
+        """Add a species to the solution.
+        
+        Args:
+            element (str): An element or species.
+            amount (float): Amount of the species added.
+            units (str): Optional, unit of the amount.
+            
+        Returns:
+            Solution: The altered solution.
+        
+        Examples:
+            >>> sol.add('Fe', 5.0)
+            >>> sol.add('CaCO3', 10.0, 'mg')
+        """
         amount = convert_units(element, amount, units, 'mol')
         self.pp.change_solution(self.number, {element:amount})
         return self
 
     def remove(self, element, amount, units='mmol'):
-        """ Remove a chemical from the solution """
+        """Remove a species from the solution.
+                
+        Args:
+            element (str): An element or species.
+            amount (float): Amount of the species removed.
+            units (str): Optional, unit of the amount.
+            
+        Returns:
+            Solution: The altered solution.
+        
+        Examples:
+            >>> sol.remove('Fe', 5.0)
+            >>> sol.remove('CaCO3', 10.0, 'mg')
+        """
         amount = -convert_units(element, amount, units, 'mol')
         self.pp.change_solution(self.number, {element:amount})
         return self
 
-
     def remove_fraction(self, species, fraction):
-        """ Remove a fraction of a chemical from the solution """
+        """Remove a fraction of the species from the solution.
+                
+        Args:
+            species (str): An element or species.
+            fraction (float): Fraction of amount to remove.
+            
+        Returns:
+            Solution: The altered solution.
+        
+        Examples:
+            >>> sol.remove('K', 0.3)
+            >>> sol.remove('H2O', 0.9)
+        """
         current = self.total(species)
         to_remove = current * fraction
         self.remove(species, to_remove)
         return self
 
     def interact(self, gas_or_phase):
-
+        """Equilibrate the solution with a multicomponent gas or solid phase.
+        
+        Args:
+            gas_or_phase (Gas | Equilibriumphase): Previously defined multicomponent gas or solid phase.
+        
+        Returns:
+            Solution: The solution after equilibrium with the gas or solid phase.
+            
+        Examples:
+            >>> air = pp.add_gas({'O2(g)': 0.2, 'N2(g)': 0.78, 'CO2(g)': 0.000420})
+            >>> sol.interact(air)
+        """
         if isinstance(gas_or_phase, Gas):
             self.pp.interact_solution_gas(self.number, gas_or_phase.number)
         else:
             self.pp.interact_solution_phase(self.number, gas_or_phase.number)
-
         return self
 
-
     def equalize(self, phases, to_si=[0], in_phase=[10], with_chemical=[None]):
-        """ equalize one or more phases with the solution """
+        """Equalize the solution with one or more pure phases.
+        
+        Args:
+            phases (list): List of one or more pure gas or solid phases.
+            to_si (list): Optional, list of target saturation indices for each phase.
+            in_phase (list): Optional, list of maximum amounts available for each phase, in moles.
+            with_chemical (list): Optional, list of alternative chemical added for each phase to reach the specified saturation index.
+            
+        Returns:
+            Solution: The solution after equilibration.
+            
+        Notes:
+            to_si: The saturation index (SI) for solid phases is SI = log10(IAP / Ksp).
+                The SI for gases is SI = log10(p_gas), with p_gas the partial pressure.
+            
+        Examples:
+            >>> sol.equalize(phases=['Calcite'])
+            >>> sol.equalize(phases=['CO2(g)', 'CH4(g)'], to_si=[-0.4, -0.2])
+            >>> sol.equalize(phases=['Calcite'], with_chemical='HCl')
+        """
         self.pp.equalize_solution(self.number, phases, to_si, in_phase, with_chemical)
-
         return self
 
     def saturate(self, phase, to_si=0, in_phase=10):
-        """ Saturate a single phase to the given SI.
-        This function can saturate one or multiple phases
-        through dissolution. The maximum amount that can be dissolved is given by in_phase
+        """Saturate the solution with a pure phase.
+        
+        Args:
+            phase (str): A pure gas or solid phase.
+            to_si (float): Optional, target saturation index for the phase.
+            in_phase (float): Optional, maximum amount available of the phase.
+        
+        Returns:
+            Solution: The solution after equilibration.
+            
+        Examples:
+            >>> sol.saturate('Calcite')
+            >>> sol.saturate('CO2(g)', to_si=-3.5) 
         """
         if(self.si(phase) < 0):
             self.pp.equalize_solution(self.number, phase, to_si, in_phase)
-
         return self
 
     # this function can only precipitate
     def desaturate(self, phase, to_si=0):
-        """ Desaturate a phase to the given SI.
-        This function can only desaturate a phase through precipitation
+        """Desaturate a solution from a pure phase via precipitation or vaporization.
+        
+        Args:
+            phase (str): A pure gas or solid phase.
+            to_si (float): Optional, target saturation index for the phase.
+            
+        Returns:
+            Solution: The solution after equilibration.
+        
+        Examples:
+            >>> sol.desaturate('Gypsum')
+            >>> sol.desaturate('CO2(g)', to_si=-3.5) 
         """
         self.pp.equalize_solution(self.number, phase, to_si, 0)
-
         return self
 
-    # change the ph
     def change_ph(self, to_pH, with_chemical=None):
-        """ Change the pH of a solution by dosing either HCl and NaOH, or a user supplied acid or base """
-        # default to NaOH and HCl
+        """Change the pH of the solution.
+        
+        Args:
+            to_pH (float): target pH.
+            with_chemical (str): Optional, acid of base to add, default is 'HCl' or 'NaOH'.
+        
+        Returns:
+            Solution: The altered solution.
+        
+        Examples:
+            >>> sol.change_ph(4.5)
+            >>> sol.change_ph(4.5, 'H2SO4')
+        """
         if not with_chemical:
             if to_pH < self.pH:
-                # dose HCl to lower pH
                 self.pp.equalize_solution(self.number, "Fix_pH", -to_pH, 10, "HCl")
             else:
-                # dose NaOH to raise pH
                 self.pp.equalize_solution(self.number, "Fix_pH", -to_pH, 10, "NaOH")
         else:
             self.pp.equalize_solution(self.number, "Fix_pH", -to_pH, 10, with_chemical)
         return self
 
     def change_temperature(self, to_temperature):
-        """ Change the temperature of a solution """
+        """Change the temperature of the solution.
+        
+        Args:
+            to_temperature (float): Target temperature.
+            
+        Returns:
+            Solution: The altered solution.        
+        """
         self.pp.change_solution_temperature(self.number, to_temperature)
         return self
 
     def total(self, element, units='mmol'):
-        """ Returns to total of any given species or element """
+        """Returns the amount of an element or species in the solution.
+        
+        Args:
+            element (str): Element or species.
+            units (str): Optional, unit of the amount.
+        
+        Examples:
+            >>> sol.total('Na')
+            >>> sol.total('CO2')
+            >>> sol.total('HCO3', 'mg')        
+        """
         amount = self.pp.ip.get_total_ion(self.number, element)
         return convert_units(element, amount, to_units=units)
 
     def total_activity(self, element, units='mmol'):
-        """ Returns to total of any given species or element (SLOW!) """
+        """Returns the activity of an element or species in the solution.
+        
+        Args:
+            element (str): Element or species.
+            units (str): Optional, unit of the activity.
+        
+        Notes:
+            Slow function !
+            
+        Examples:
+            >>> sol.activity('Ca')        
+        """
         total = 0
         regexp = "(^|[^A-Z])"+element
         for species, amount in self.species_activities.items():
