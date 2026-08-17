@@ -10,10 +10,21 @@ import numpy as np
 class Solution(object):
     """An aqueous solution.
     
-    See phreeqpython.add_solution() for details on creating a solution.    
+    Notes:
+        See phreeqpython.add_solution() for details on creating a solution.    
     """
 
     def __init__(self, phreeqpython, number, extraneous=None):
+        """Returns an empty solution.
+        
+        Notes:
+            Use phreeqpython.add_solution() to create a solution.
+            
+        Warning:
+            the fields: pp, factor, number and extraneous are accessible by the user.  
+            probably not the intention?  
+            Better to make them private?
+        """
         self.pp = phreeqpython
         self.factor = 1
         self.number = number
@@ -127,26 +138,27 @@ class Solution(object):
             self.pp.interact_solution_phase(self.number, gas_or_phase.number)
         return self
 
-    def equalize(self, phases, to_si=[0], in_phase=[10], with_chemical=[None]):
+    def equalize(self, phases, to_si=[0.0], in_phase=[10.0], with_chemical=[None]):
         """Equalize the solution with one or more pure phases.
         
         Args:
-            phases (list): List of one or more pure gas or solid phases.
-            to_si (list): Optional, list of target saturation indices for each phase.
-            in_phase (list): Optional, list of maximum amounts available for each phase, in moles.
-            with_chemical (list): Optional, list of alternative chemical added for each phase to reach the specified saturation index.
+            phases (lst[str]): List of one or more pure gas or solid phases.
+            to_si (lst[float]): Optional, list of target saturation indices for each phase.
+            in_phase (lst[float]): Optional, list of maximum amounts available for each phase, in moles.
+            with_chemical (lst[str]): Optional, list of alternative chemical added for each phase to reach the specified saturation index.
             
         Returns:
-            Solution: The solution after equilibration.
-            
-        Notes:
-            to_si: for solid phases, SI = log10(IAP / Ksp),
-                for gases, SI = log10(p_gas), with p_gas the partial pressure.
+            (Solution): The solution after equilibration.
             
         Examples:
             >>> sol.equalize(phases=['Calcite'])
             >>> sol.equalize(phases=['CO2(g)', 'CH4(g)'], to_si=[-0.4, -0.2])
             >>> sol.equalize(phases=['Calcite'], with_chemical='HCl')
+            
+        Notes:
+            saturation index (SI):   
+            for solid phases: SI = log10(IAP / Ksp)  
+            for gases: SI = log10(p_gas), with p_gas the partial pressure.
         """
         self.pp.equalize_solution(self.number, phases, to_si, in_phase, with_chemical)
         return self
@@ -160,7 +172,7 @@ class Solution(object):
             in_phase (float): Optional, maximum amount available of the phase.
         
         Returns:
-            Solution: The solution after equilibration.
+            (Solution): The solution after equilibration.
             
         Examples:
             >>> sol.saturate('Calcite')
@@ -170,7 +182,6 @@ class Solution(object):
             self.pp.equalize_solution(self.number, phase, to_si, in_phase)
         return self
 
-    # this function can only precipitate
     def desaturate(self, phase, to_si=0):
         """Desaturate a solution from a pure phase via precipitation or vaporization.
         
@@ -179,11 +190,14 @@ class Solution(object):
             to_si (float): Optional, target saturation index for the phase.
             
         Returns:
-            Solution: The solution after equilibration.
+            (Solution): The solution after equilibration.
         
         Examples:
             >>> sol.desaturate('Gypsum')
-            >>> sol.desaturate('CO2(g)', to_si=-3.5) 
+            >>> sol.desaturate('CO2(g)', to_si=-3.5)
+        
+        Notes:
+            This method will only desaturate, not saturate.
         """
         self.pp.equalize_solution(self.number, phase, to_si, 0)
         return self
@@ -196,7 +210,7 @@ class Solution(object):
             with_chemical (str): Optional, acid of base to add, default is 'HCl' or 'NaOH'.
         
         Returns:
-            Solution: The altered solution.
+            (Solution): The altered solution.
         
         Examples:
             >>> sol.change_ph(4.5)
@@ -218,7 +232,10 @@ class Solution(object):
             to_temperature (float): Target temperature.
             
         Returns:
-            Solution: The altered solution.        
+            (Solution): The altered solution.
+        
+        Examples:
+            >>> sol.change_temperature(50.0)      
         """
         self.pp.change_solution_temperature(self.number, to_temperature)
         return self
@@ -236,7 +253,7 @@ class Solution(object):
         Examples:
             >>> sol.total('Na+')
             >>> sol.total('CO2')
-            >>> sol.total('HCO3-', 'mg')        
+            >>> sol.total('HCO3-', 'mg')
         """
         amount = self.pp.ip.get_total_ion(self.number, element)
         return convert_units(element, amount, to_units=units)
@@ -249,7 +266,7 @@ class Solution(object):
             units (str): Optional, unit of the amount.
             
         Returns:
-            float: Total amount of the element (mmol).
+            (float): Total amount of the element (mmol).
         
         Examples:
             >>> sol.total_element('C')
@@ -265,15 +282,15 @@ class Solution(object):
             units (str): Optional, unit of the activity.
         
         Returns:
-            float: Activity of the species (mmol/kgw).
-            
-        CHECK:
-        this returns a concentration (/kgw), not a total amount.
-        Confusing with the units shown.
+            (float): Activity of the species (mmol/kgw).
         
         Examples:
             >>> sol.activity('Ca+2')
             >>> sol.activity('NaSO4-', 'mg')        
+            
+        Warning:
+            this returns a concentration (/kgw), not a total amount.  
+            Confusing with the units shown.
         """
         return convert_units(species, self.pp.ip.get_activity(self.number, species), 'mol', units)
     
@@ -285,14 +302,14 @@ class Solution(object):
             units (str): Optional, unit of the activity.
             
         Returns:
-            float: Total activity of the element (mmol/kgw).
-        
-        Notes:
-            Slow function !
+            (float): Total activity of the element (mmol/kgw).
             
         Examples:
             >>> sol.activity('Ca')
             >>> sol.activity('C', 'mg')        
+        
+        Warning:
+            Slow function!
         """
         total = 0
         regexp = "(^|[^A-Z])"+element
@@ -304,38 +321,43 @@ class Solution(object):
     def moles(self, species, units='mmol'):
         """Returns the amount of a species in the solution.
         
-        CHECK: confusing, says moles, but can also return in 'mg'.
-        Also, seems to always return the same value as sol.total().
-        Better to remove this method?
-        
         Args:
             element (str): Chemical species.
             units (str): Optional, unit of the amount.
         
+        Returns:
+            (float): Amount of the species (mmol).
+        
         Examples:
             >>> sol.moles('Na+')
             >>> sol.moles('HCO3-', 'mg')        
+        
+        Warning:
+            Confusing, says moles, but can also return in 'mg'.  
+            Also, seems to always return the same value as sol.total().  
+            Better to remove this method?
         """
         return convert_units(species, self.pp.ip.get_moles(self.number, species), 'mol', units)
 
     def molality(self, species, units='mmol'):
         """Returns the molality of a species in the solution.
         
-        CHECK: confusing, units given in 'mmol'... , but returns 'mmol/kgw'?
-        Checked with {'-water': 2.0, ...} as solution: sol.total() and sol.moles() return 'mmol', 
-        but sol.molality() returns ~half the value, so takes count of the total mass.
-        Should we show different units?
-        
         Args:
             element (str): Chemical species.
             units (str): Optional, unit of the amount.
         
         Returns:
-            float: Molality of the species (mmol/kgw).
+            (float): Molality of the species (mmol/kgw).
         
         Examples:
             >>> sol.molality('Na+')
             >>> sol.molality('HCO3-', 'mg')        
+        
+        Warning:
+            Confusing, units given in 'mmol'... , but returns 'mmol/kgw'?  
+            Checked with {'-water': 2.0, ...} as solution: sol.total() and sol.moles() return 'mmol',   
+            but sol.molality() returns ~half the value, so takes count of the total mass.  
+            Should we show different units?
         """
         return convert_units(species, self.pp.ip.get_molality(self.number, species), 'mol', units)
 
@@ -346,15 +368,15 @@ class Solution(object):
             phase (str): Gas or solid phase.
         
         Returns:
-            float: The SI of the phase (-).
-            
-        Notes:
-            For solid phases, SI = log10(IAP / Ksp), with IAP the ion activity product and Ksp the solubility product constant.
-            For gases, SI = log10(p_gas), with p_gas the partial pressure.
+            (float): The SI of the phase (-).
         
         Examples:
             >>> sol.si('Calcite')
             >>> sol.si('CO2(g)')
+            
+        Notes:
+            Solid phases: SI = log10(IAP / Ksp), with IAP the ion activity product and Ksp the solubility product constant.  
+            Gases: SI = log10(p_gas), with p_gas the partial pressure.
         """
         return self.pp.ip.get_si(self.number, phase)
 
@@ -365,52 +387,56 @@ class Solution(object):
             phase (str): Gas or solid phase.
         
         Returns:
-            float: The SR of the phase (-).
-            
-        Notes:
-            For solid phases, SR = IAP / Ksp, with IAP the ion activity product and Ksp the solubility product constant.
-            For gases, SR = p_gas, with p_gas the partial pressure.
+            (float): The SR of the phase (-).
         
         Examples:
             >>> sol.sr('Calcite')
             >>> sol.sr('CO2(g)')
+            
+        Notes:
+            Solid phases: SR = IAP / Ksp, with IAP the ion activity product and Ksp the solubility product constant.  
+            Gases: SR = p_gas, with p_gas the partial pressure.
         """
         return 10**self.pp.ip.get_si(self.number, phase)
 
     def forget(self):
         """Remove this solution from the PhreeQC simulation.
         
-        See also phreeqpython.add_solution() to add solutions to a PhreeQC simulation.        
+        Notes:
+            See also phreeqpython.add_solution() to add solutions to a PhreeQC simulation.        
         """
         self.pp.remove_solutions([self.number])
     
     def chain(self):
-        """
-        CHECK: this calls the PhreeQC 'USE SOLUTION' keyword, but not clear
-        when you would need to use this, not intuitive.
-        What are the use cases?
+        """CHECK
         
+        Warning:
+            This calls the PhreeQC 'USE SOLUTION' keyword, but not clear
+            when you would need to use this, not intuitive.  
+            What are the use cases?
         """
         self.pp.start_chain(self.number)
     
     def end(self):
-        """
-        CHECK: calls the keyword 'END' on the PhreeQC simulation?
-        Not better to only define that at the simulation side (pp)?
-        Its use for a solution is not clear.
+        """CHECK
+        
+        Warning:
+            Calls the keyword 'END' on the PhreeQC simulation?  
+            Not better to only define that at the simulation side (pp)?  
+            Its use for a solution is not clear.
         """
         self.pp.end()
-        
 
     def kinetics(self, element, rate_function, time, m0=0, args=(), units='mmol'):
-        """CHECK:
-            the kinetics examples show different ways of setting up kinetics (with and without this function).
-            Still experimental?
-            
-            PhreeQC has the kinetics keyword, but would require to parse the rate function(s) into BASIC, hard...
-            but PhreeQC allows kinetics over the whole simulation (e.g. solution, gas, other phases)
-            Not better to move kinetics functionality to the simulation level (phreeqpython = pp)?
+        """CHECK
         
+        Warning:
+            the kinetics examples show different ways of setting up kinetics (with and without this function).
+            Still experimental?  
+            PhreeQC has the kinetics keyword, but would require to parse the rate function(s) into BASIC, hard...
+            but PhreeQC allows kinetics over the whole simulation (e.g. solution, gas, other phases)  
+            
+            Not better to move kinetics functionality to the simulation level (phreeqpython = pp)?
         """
         try:
             from scipy.integrate import odeint
@@ -437,34 +463,42 @@ class Solution(object):
             yield(t, self)
 
     # Magic functions
+    def __str__(self):
+        """Returns solution and number.
+
+        Returns:
+            (str): A string like: <PhreeqPython.Solution number xx>
+        """
+        return f"<PhreeqPython.{self.__class__.__name__} number {self.number}>"
+        
     def __add__(self, other):
         """Add two solutions.
        
-        CHECK: 
-        Remark for creating these:
-            >>> sol3 = sol1*0.2 + sol2*0.8
-            >>> sol3 = sol1*0.2
-            >>> sol3 = sol1/4.0
+        Warning: 
+            Remark for creating these:  
+                >>> sol3 = sol1 * 0.2 + sol2 * 0.8  
+                >>> sol3 = sol1 * 0.2  
+                >>> sol3 = sol1 / 4.0  
+                
+            currently, sol.factor is used to track the coefficient in making these mixtures.
             
-        currently, sol.factor is used to track the coefficient in making these mixtures.
-        
-        But doing this:
-        sol3 = sol1*2
-        does not increase sol3.mass, it only sets sol3.factor, which is not what the user wants.
-        
-        Also:
-        sol3 = sol1*1 + sol1*2
-        gives: sol3.mass = 2, not 3, because the second term sets sol1.factor = 2, and then the addition is evaluated
-        
-        Wouldn't it be easier and more intuitive to do as follows?:
-        sol1*2 calls:
-        def __mul__(self, factor):
-            mixture = self.pp.mix_solutions({self: factor})
-            return mixture
-        
-        No need anymore to track the factors, and the resulting solutions always reflect the proper amount.
-        sol3 = sol1*0.2 + sol2*0.8
-        will then call mix_solutions 3 times, small price to pay?            
+            But doing this:
+            sol3 = sol1*2
+            does not increase sol3.mass, it only sets sol3.factor, which is not what the user wants.
+            
+            Also:
+            sol3 = sol1*1 + sol1*2
+            gives: sol3.mass = 2, not 3, because the second term sets sol1.factor = 2, and then the addition is evaluated
+            
+            Wouldn't it be easier and more intuitive to do as follows?:
+            sol1*2 calls:  
+            def __mul__(self, factor):  
+                mixture = self.pp.mix_solutions({self: factor})  
+                return mixture  
+            
+            No need anymore to track the factors, and the resulting solutions always reflect the proper amount.
+            sol3 = sol1 * 0.2 + sol2 * 0.8
+            will then call mix_solutions 3 times, small price to pay?            
         """
         if not isinstance(other, Solution):
             raise TypeError("Invalid operation, only addition of two solutions is allowed")
@@ -474,7 +508,7 @@ class Solution(object):
         return mixture
 
     def __truediv__(self, other):
-        """ Python 3 support """
+        """Python 3 support."""
         return self.__div__(other)
 
     def __div__(self, other):
@@ -494,68 +528,110 @@ class Solution(object):
     # Accessor methods
     @property
     def I(self):
-        """float: The ionic strength of the solution, (mol/L)."""
+        """Returns the ionic strength of the solution.
+        
+        Returns:
+            (float): The ionic strength (mol/L).
+        """
         return self.pp.ip.get_mu(self.number)
     
     @property
     def mu(self):
-        """float: The ionic strength of the solution (mol/L)."""
+        """Returns the ionic strength of the solution.
+        
+        Returns:
+            (float): The ionic strength (mol/L).
+        
+        """
         return self.I
     
     @property
     def pH(self):
-        """float: The pH of the solution (-)."""
+        """Returns the pH of the solution.
+        
+        Returns:
+            (float): The pH (-).
+        """
         return self.pp.ip.get_ph(self.number)
     
     @property
     def sc(self):
-        """float: The specific conductance of the solution (µS/cm)."""
+        """Returns the specific conductance of the solution.
+        
+        Returns:
+            (float): The specific conductance (µS/cm).
+            
+        Notes:
+            Specific conductance calculated at temperature of the solution.
+        """
         return self.pp.ip.get_sc(self.number)
     
     @property
     def temperature(self):
-        """float: The temperature of the solution (°C)."""
+        """Returns the temperature of the solution.
+        
+        Returns:
+            (float): The temperature (°C).
+        """
         return self.pp.ip.get_temperature(self.number)
     
     @property
     def mass(self):
-        """float: The mass of water in the solution (kg).
+        """Returns the mass of water in the solution.
         
-        CHECK:
-        not very intuitive, one would expect this to return the solution mass, not the water part.
-        I did a few checks with high salt concentrations:
-        sol.volume * sol.density always accurately returns the solution mass.
+        Returns:
+            (float): The mass of water (kg).
         
-        Proposal:
-        sol.mass = sol.volume * sol.density
-        sol.mass_water = the water mass      
+        Warning:
+            not very intuitive, one would expect this to return the solution mass, not the water part.  
+            I did a few checks with high salt concentrations:  
+            sol.volume * sol.density always accurately returns the solution mass.  
+        
+            Proposal:  
+            sol.mass = sol.volume * sol.density  
+            sol.mass_water = the water mass  
         """
         return self.pp.ip.get_mass(self.number)
     
     @property
     def volume(self):
-        """float: The volume of the solution (L)."""
+        """Returns the volume of the solution.
+        
+        Returns:
+            (float): The volume (L).
+        """
         return self.pp.ip.get_volume(self.number)
     
     @property
     def density(self):
-        """float: The density of the solution (kg/L)."""
+        """Returns the density of the solution.
+        
+        Returns:
+            (float): The density (kg/L).
+        
+        (kg/L)."""
         return self.pp.ip.get_density(self.number)
     
     @property
     def pe(self):
-        """float: The electron activity of the solution (-).
+        """REturns the electron activity of the solution.
         
+        Returns:
+            (float): The electron activity (-).
+
         Notes:
-            pe = -log({e-}), with {e-} the electron activity.
-            pe < 0: high electron activity, reducing environment.
+            pe = -log({e-}), with {e-} the electron activity.  
+            pe < 0: high electron activity, reducing environment.  
             pe > 0: low electron activity, oxidizing environment.        
         """
         return self.pp.ip.get_pe(self.number)
     
     @property
     def phases(self):
-        """dict: All phases in the solution and their saturation index (-).
+        """Returns all phases in the solution and their saturation index (SI).
+        
+        Returns:
+            (dict): With phase (str) and SI (float) pairs.
         
         Example:
             >>> sol.phases
@@ -565,15 +641,18 @@ class Solution(object):
             }
         
         Notes: 
-            saturation index: SI = log10(AIP / Ksp)
+            SI = log10(AIP / Ksp)
         """
         return self.pp.ip.get_phases_si(self.number)
     
     @property
     def elements(self):
-        """dict: All elements in the solution and their amount (mol).
+        """Returns all elements in the solution and their amount.
         
-        Example:
+        Returns:
+            (dict): With phase (str) and amount (float) pairs, amount in mol.
+        
+        Examples:
             >>> sol.elements
             {   'C(4)': 0.50,
                 'Ca': 0.20,
@@ -584,59 +663,69 @@ class Solution(object):
     
     @property
     def species(self, units='mmol'):
-        """dict: All species in the solution and their amount (mol).
+        """Returns all species in the solution and their amount.
         
-        Example:
+        Returns:
+            (dict): With species (str) and amount (float) pairs, amount in mmol.
+        
+        Examples:
             >>> sol.species
             {   'Ca+2': 0.0036,
                 'CO3-2': 2.18e-05,
                 ...
             }
         
-        CHECK:
-        units not used, and probably not accessible via a property?
-        amount is in mol, not mol/L or mol/kgw, can be confusing when sol.mass <> 1.0 kg,
-        better return a concentration (mol/kgw or mol/kgs)?
+        Warning:
+            units not used, and probably not accessible via a property?  
+            amount is in mol, not mol/L or mol/kgw, can be confusing when sol.mass <> 1.0 kg,  
+            better return a concentration (mol/kgw or mol/kgs)?
         """
         return self.pp.ip.get_species_moles(self.number)
     
     @property
     def species_moles(self, units='mmol'):
-        """dict: All species in the solution and their amount (mol).
+        """Returns all species in the solution and their amount.
         
-        CHECK:
-        calls same function, no difference with property above?
-        better drop this one?
+        Returns:
+            (dict): With species (str) and amount (float) pairs, amount in mol.
         
+        Warning:
+            calls same function, no difference with property species?  
+            better drop this one?
         """
         return self.pp.ip.get_species_moles(self.number)
     
     @property
     def species_molalities(self, units='mmol'):
-        """dict: All species in the solution and their concentration (mol/kgw).
+        """Returns all species in the solution and their concentration.
         
-        CHECK:
-        units not used.
-        this property returns a concentration (mol/kgw), while sol.species returns 
-        absolute amount (mol). Not very intuitive.
-        Maybe we could define the default units on the simulation level (phreeqpython = pp)?
-        And have an accessible function to convert if needed (pp.units(...))?
-        
-        Example:
+        Returns:
+            (dict): With species (str) and concentration (float) pairs, concentration in mol/kgw.
+            
+        Examples:
             >>> sol.species_molalities
             {   'Ca+2': 0.045,
                 'CO3-2': 3.18e-05,
                 ...
             }
-
+        
+        Warning:
+            units not used.  
+            this property returns a concentration (mol/kgw), while sol.species returns   
+            absolute amount (mol). Not very intuitive.  
+            Maybe we could define the default units on the simulation level (phreeqpython = pp)?  
+            And have an accessible function to convert if needed (pp.units(...))?
         """
         return self.pp.ip.get_species_molalities(self.number)
     
     @property
     def species_activities(self, units='mmol'):
-        """dict: All species in the solution and their activities (mol/kgw).
+        """Returns all species in the solution and their activities.
         
-        Example:
+        Returns:
+            (dict): With species (str) and activity (float) pairs, activity in mol/kgw.
+        
+        Examples:
             >>> sol.species_activities
             {   'Ca+2': 0.045,
                 'CO3-2': 3.18e-05,
@@ -647,21 +736,20 @@ class Solution(object):
     
     @property
     def masters_species(self):
-        """dict: All master species in the solution and their species.
+        """Returns all master species in the solution and their species.
         
-        CHECK:
-        shouldn't this be: master_species ?
+        Returns:
+            (dict): with master_species (str) and species (lst[str]) pairs.
 
-        Example:
+        Examples:
             >>> sol.masters_species        
             {   'C(4)': ['CO2', 'CO3-2', 'CaCO3', 'HCO3-'],
                 'Ca': ['Ca+2', 'CaCO3', 'CaHCO3+', 'CaOH+'],
                 'Cl': ['Cl-'],
                 ...
             }
+        
+        Warning:
+            shouldn't this be: master_species ?
         """
         return self.pp.ip.get_masters_species(self.number)
-
-    # pretty printing
-    def __str__(self):
-        return f"<PhreeqPython.{self.__class__.__name__} number {self.number}>"

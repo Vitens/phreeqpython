@@ -1,18 +1,20 @@
 [project]
-site_url = "https://www.example.com/"
-site_name = "Documentation"
-# site_description = "Your project description"
-# site_author = "Your name"
+site_url = "https://geertd.github.io/phreeqpython/"
+site_name = "PhreeqPython Docs"
+site_description = "Documentation for PhreeqPython"
+site_author = "Vitens"
 
-# copyright = "Copyright &copy; 2026 Your name"
-
-# repo_url = "https://github.com/user/repo"
+copyright = "Copyright 2021 Vitens"
+repo_url = "https://github.com/Vitens/phreeqpython"
 # repo_name = "user/repo"
 # edit_uri = "edit/main/docs/"
 
 nav = [
-  { "Get started" = "index.md" },
-  { "Markdown in 5min" = "markdown.md" },
+  { "PhreeqPython" = "index.md" },
+  { "Tutorials" = "tutorials.md" },
+  { "How-To Guides" = "how-to-guides.md" },
+  { "API Reference" = "reference.md" },
+  { "Explanation" = "explanation.md" },
 ]
 
 # extra_css = ["stylesheets/extra.css"]
@@ -47,12 +49,12 @@ features = [
   # "navigation.tabs.sticky",
   "navigation.top",
   "navigation.tracking",
-  "search.highlight",
-  # "toc.follow",
+  # "search.highlight",
+  "toc.follow",
   # "toc.integrate",
 ]
 
-# logo = "assets/logo.png"
+# logo = "resources/logo.png"
 
 # [project.theme.icon]
 # logo = "lucide/smile"
@@ -61,10 +63,10 @@ features = [
 # text = "Inter"
 # code = "Jetbrains Mono"
 
-[[project.theme.palette]]
-media = "(prefers-color-scheme)"
-toggle.icon = "lucide/sun-moon"
-toggle.name = "Switch to light mode"
+# [[project.theme.palette]]
+# media = "(prefers-color-scheme)"
+# toggle.icon = "lucide/sun-moon"
+# toggle.name = "Switch to light mode"
 
 [[project.theme.palette]]
 media = "(prefers-color-scheme: light)"
@@ -76,7 +78,7 @@ toggle.name = "Switch to dark mode"
 media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 toggle.icon = "lucide/moon"
-toggle.name = "Switch to system preference"
+toggle.name = "Switch to light mode"
 
 # [[project.extra.social]]
 # icon = "fontawesome/brands/github"
@@ -94,6 +96,7 @@ def_list = {}
 footnotes = {}
 md_in_html = {}
 toc.permalink = true
+# toc.toc_depth = 6
 pymdownx.arithmatex.generic = true
 pymdownx.betterem = {}
 pymdownx.caret = {}
@@ -116,3 +119,19 @@ pymdownx.tabbed.alternate_style = true
 pymdownx.tabbed.combine_header_slug = true
 pymdownx.tasklist.custom_checkbox = true
 pymdownx.tilde = {}
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["phreeqpython"]
+options.docstring_style = "google"		# or numpy 
+options.docstring_section_style = "list"	# table, list or spacy
+options.show_source = false			
+options.show_if_no_docstring = true		# show member anyway
+options.show_docstring_functions = true	# show module/class Functions:  or Methods: section in docstring
+options.members_order = "alphabetical"		# __all__/alphabetical/source
+options.filters = "public"				# public or other filters
+options.group_by_category = true			# categories: attributes, methods, ...
+options.show_category_heading = true
+options.summary = true					# summary of classes, ...
+options.show_root_heading = true			# show full path of root object
+options.heading_level = 1				# start level for headings <h1>
+options.show_symbol_type_heading = true   # show attribute, method, ... before member

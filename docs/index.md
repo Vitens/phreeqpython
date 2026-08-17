@@ -1,173 +1,66 @@
----
-icon: lucide/rocket
----
+#
+![Phreeqpython Logo](resources/logo.png)
+ 
+PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
-# Get started now
+## Features
+PhreeqPython greatly simplifies adding solutions and querying their properties:
 
-For full documentation visit [zensical.org](https://zensical.org/docs/).
-
-## Commands
-
-* [`zensical new`][new] - Create a new project
-* [`zensical serve`][serve] - Start local web server
-* [`zensical build`][build] - Build your site
-
-  [new]: https://zensical.org/docs/usage/new/
-  [serve]: https://zensical.org/docs/usage/preview/
-  [build]: https://zensical.org/docs/usage/build/
-
-## Examples
-
-### Admonitions
-
-> Go to [documentation](https://zensical.org/docs/authoring/admonitions/)
-
-!!! note
-
-    This is a **note** admonition. Use it to provide helpful information.
-
-!!! warning
-
-    This is a **warning** admonition. Be careful!
-
-### Details
-
-> Go to [documentation](https://zensical.org/docs/authoring/admonitions/#collapsible-blocks)
-
-??? info "Click to expand for more info"
-
-    This content is hidden until you click to expand it.
-    Great for FAQs or long explanations.
-
-## Code Blocks
-
-> Go to [documentation](https://zensical.org/docs/authoring/code-blocks/)
-
-``` python hl_lines="2" title="Code blocks"
-def greet(name):
-    print(f"Hello, {name}!") # (1)!
-
-greet("Python")
+```python
+pp = PhreeqPython()
+# add a solution consisting of 1 mmol CaCl2 and 2 mmol NaHCO3
+solution = pp.add_solution_simple({'CaCl2':1.0,'NaHCO3':2.0})
+print(solution.pH)               # 8.12
+print(solution.sc)               # 427.32
+print(solution.si('Calcite'))    # 0.38
+print(solution.species['HCO3-']) # 0.0019
+print(solution.elements['Cl'])   # 0.002 mol
 ```
-
-1.  > Go to [documentation](https://zensical.org/docs/authoring/code-blocks/#code-annotations)
-
-    Code annotations allow to attach notes to lines of code.
-
-Code can also be highlighted inline: `#!python print("Hello, Python!")`.
-
-## Content tabs
-
-> Go to [documentation](https://zensical.org/docs/authoring/content-tabs/)
-
-=== "Python"
-
-    ``` python
-    print("Hello from Python!")
-    ```
-
-=== "Rust"
-
-    ``` rs
-    println!("Hello from Rust!");
-    ```
-
-## Diagrams
-
-> Go to [documentation](https://zensical.org/docs/authoring/diagrams/)
-
-``` mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
+Allows for simple chemical and precipitation/dissolution reactions:
+```python
+solution.add('NaOH',0.5)
+print(solution.pH)              # 9.47
+solution.desaturate('Calcite')  # desaturate to SI 0
+print(solution.total('Ca'))     # 0.497 mmol
 ```
+And even allows for addition, devision and multiplication of solutions to form new mixtures:
+```python
+solution2 = pp.add_solution_simple({'KCl':1.0})
+# create mixture of 50% solution and 50% solution2
+solution3 = solution * 0.5 + solution2 * 0.5
+print(solution3.total('K','mol'))     # 0.0005 mol
+```
+For more examples, take a look at the `examples` folder.
 
-## Footnotes
+## Installation
+* ```pip install -U phreeqpython```
 
-> Go to [documentation](https://zensical.org/docs/authoring/footnotes/)
+## Requirements
+* 64 bit Python3
+* Windows, OSX or Linux
+  * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
-Here's a sentence with a footnote.[^1]
+## Unit Tests
+| **Mac/Linux** and **Windows** | **Coverage** |
+|---|---|
+| [![Python package](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg)](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml)| [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
 
-Hover it, to see a tooltip.
 
-[^1]: This is the footnote.
+## Acknowledgements
+This project makes use of the ([Phreeqc](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the ([PhreeqPy]([http://www.phreeqpy.com])) extension for IPhreeqc (Mike Müller)
 
+## About Vitens
 
-## Formatting
+Vitens is the largest drinking water company in The Netherlands. We deliver top quality drinking water to 5.6 million people and companies in the provinces Flevoland, Fryslân, Gelderland, Utrecht and Overijssel and some municipalities in Drenthe and Noord-Holland. Annually we deliver 350 million m³ water with 1,400 employees, 100 water treatment works and 49,000 kilometres of water mains.
 
-> Go to [documentation](https://zensical.org/docs/authoring/formatting/)
+One of our main focus points is using advanced water quality, quantity and hydraulics models to further improve and optimize our treatment and distribution processes.
 
-- ==This was marked (highlight)==
-- ^^This was inserted (underline)^^
-- ~~This was deleted (strikethrough)~~
-- H~2~O
-- A^T^A
-- ++ctrl+alt+del++
+## Licence
 
-## Icons, Emojis
+Copyright 2021 Vitens
 
-> Go to [documentation](https://zensical.org/docs/authoring/icons-emojis/)
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
-* :sparkles: `:sparkles:`
-* :rocket: `:rocket:`
-* :tada: `:tada:`
-* :memo: `:memo:`
-* :eyes: `:eyes:`
+http://www.apache.org/licenses/LICENSE-2.0
 
-## Maths
-
-> Go to [documentation](https://zensical.org/docs/authoring/math/)
-
-$$
-\cos x=\sum_{k=0}^{\infty}\frac{(-1)^k}{(2k)!}x^{2k}
-$$
-
-!!! warning "Needs configuration"
-    Note that MathJax is included via a `script` tag on this page and is not
-    configured in the generated default configuration to avoid including it
-    in a pages that do not need it. See the documentation for details on how
-    to configure it on all your pages if they are more Maths-heavy than these
-    simple starter pages.
-
-<script id="MathJax-script" src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script>
-  window.MathJax = {
-    tex: {
-      inlineMath: [["\\(", "\\)"]],
-      displayMath: [["\\[", "\\]"]],
-      processEscapes: true,
-      processEnvironments: true
-    },
-    options: {
-      ignoreHtmlClass: ".*|",
-      processHtmlClass: "arithmatex"
-    }
-  };
-
-  document$.subscribe(() => {
-    MathJax.startup.output.clearCache()
-    MathJax.typesetClear()
-    MathJax.texReset()
-    MathJax.typesetPromise()
-  })
-</script>
-
-## Task Lists
-
-> Go to [documentation](https://zensical.org/docs/authoring/lists/#using-task-lists)
-
-* [x] Install Zensical
-* [x] Configure `zensical.toml`
-* [x] Write amazing documentation
-* [ ] Deploy anywhere
-
-## Tooltips
-
-> Go to [documentation](https://zensical.org/docs/authoring/tooltips/)
-
-[Hover me][example]
-
-  [example]: https://example.com "I'm a tooltip!"
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
