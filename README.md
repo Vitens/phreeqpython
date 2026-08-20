@@ -4,6 +4,8 @@
  
 PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
 
+[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://vitens.github.io/phreeqpython/)
+
 ## Features
 PhreeqPython greatly simplifies adding solutions and querying their properties:
 
@@ -31,7 +33,7 @@ solution2 = pp.add_solution_simple({'KCl':1.0})
 solution3 = solution * 0.5 + solution2 * 0.5
 print(solution3.total('K','mol'))     # 0.0005 mol
 ```
-For more examples, take a look at the `examples` folder.
+For more examples, see the [documentation](https://vitens.github.io/phreeqpython/) or the `examples` folder.
 
 ## Installation
 * ```pip install -U phreeqpython```
@@ -42,9 +44,9 @@ For more examples, take a look at the `examples` folder.
   * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
 ## Unit Tests
-| **Mac/Linux** and **Windows** | **Coverage** |
-|---|---|
-| [![Python package](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg)](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml)| [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
+| **Mac/Linux** and **Windows** | **Coverage** | **Docs** |
+|---|---|---|
+| [![Python package](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg)](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml)| [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) | [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://vitens.github.io/phreeqpython/) |
 
 
 ## Acknowledgements
@@ -58,7 +60,7 @@ One of our main focus points is using advanced water quality, quantity and hydra
 
 ## Licence
 
-Copyright 2021 Vitens
+Copyright 2026 Vitens
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
