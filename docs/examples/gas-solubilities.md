@@ -10,7 +10,7 @@ The browser version uses fewer pressure steps than the original notebook so it f
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order. Each gas is a separate cell; CO₂ is the slowest.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. Each gas is a separate cell; CO₂ is the slowest.
 
 ```pyodide session="solubility" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
 from phreeqpython import PhreeqPython

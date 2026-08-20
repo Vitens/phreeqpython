@@ -8,7 +8,7 @@ Fixed-pressure vs fixed-volume gas after reaction of organic matter, after [PHRE
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order. The reaction loop can take a few seconds.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. The reaction loop can take a few seconds.
 
 ```pyodide session="gasphase" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
 from phreeqpython import PhreeqPython

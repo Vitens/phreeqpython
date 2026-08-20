@@ -8,7 +8,7 @@ Calcite dissolution as a function of CO₂ pressure, after [Appelo's calcite exa
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**.
 
 !!! warning "Changes are additive"
 

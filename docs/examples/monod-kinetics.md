@@ -8,7 +8,7 @@ Methanogenic biodegradation of phenol, after [Appelo's phenol example](http://hy
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**.
 
 ```pyodide session="monod" height="10-16" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
 from phreeqpython import PhreeqPython

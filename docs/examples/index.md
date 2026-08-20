@@ -4,7 +4,7 @@ icon: lucide/beaker
 
 # Examples
 
-Worked examples from the PhreeqPython notebooks, as live editors in the browser. Click **Run** (or Ctrl+Enter) on each cell. Editors on a page **share a session**, so run them in order.
+Working examples from the PhreeqPython notebooks, as live editors in the browser. Click **Run** (or Ctrl+Enter) on each cell, or **Run all** to execute every editor on the page in order. Editors on a page **share a session**.
 
 The original Jupyter notebooks remain in [`examples/`](https://github.com/Vitens/phreeqpython/tree/master/examples) if you prefer to run them locally.
 

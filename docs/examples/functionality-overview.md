@@ -8,7 +8,7 @@ A tour of the main `Solution` methods: create, query, change, mix, copy, and for
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). The first run loads Pyodide and can take a few seconds. Editors on this page **share a session**: run them in order.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. The first run loads Pyodide and can take a few seconds. Editors on this page **share a session**.
 
 ## Adding solutions
 

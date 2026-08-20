@@ -8,7 +8,7 @@ PhreeqPython wraps a subset of PHREEQC as Python objects. Those objects stay in 
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter) to execute an editor in the browser. The first run loads Pyodide and can take a few seconds. Editors on this page **share a session**: run them in order so later cells can reuse `pp` and `solution`.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. The first run loads Pyodide and can take a few seconds. Editors on this page **share a session**, so later cells can reuse `pp` and `solution`.
 
 ## Object-oriented PHREEQC
 

@@ -8,7 +8,7 @@ Quartz dissolution over five years, after [Appelo's quartz kinetics example](htt
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order. SciPy is installed with the first cell; the loops can take a few seconds.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. SciPy is installed with the first cell; the loops can take a few seconds.
 
 ```pyodide session="quartz" height="18-26" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
 from phreeqpython import PhreeqPython

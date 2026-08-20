@@ -22,3 +22,11 @@
   margin-block: 0.75rem;
   max-width: 100%;
 }
+
+.md-typeset .ppdocs-run-all {
+  margin-block: 0.75rem 0;
+}
+
+.md-typeset .ppdocs-run-all .md-button {
+  margin: 0;
+}

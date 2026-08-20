@@ -8,7 +8,7 @@ The relation between fluoride and calcium in water, after [Appelo's fluorite exa
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order.
+    Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**.
 
 ```pyodide session="caf" height="18-28" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
 from phreeqpython import PhreeqPython

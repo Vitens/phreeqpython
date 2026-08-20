@@ -8,7 +8,7 @@ Gypsum precipitation as water is evaporated, after [Appelo's evaporation example
 
 ???+ info "You can run these examples"
 
-    Click **Run** (or Ctrl+Enter). Editors on this page **share a session**: run them in order.
+    Click **Run** (or Ctrl+Enter).
 
 !!! warning "Changes are additive"
 
