@@ -45,7 +45,7 @@ print('number', solution.number)
 print('solutions in the engine', pp.get_solution_list())
 ```
 
-Copies and mixtures also get a new number. `add_solution_simple` is for a known chemical composition (for example 1 mmol NaOH); see [Solutions](../guide/solutions.md).
+Copies and mixtures also get a new number. `add_solution_simple` is for a known chemical composition (for example 1 mmol NaOH); see [Adding solutions](../guide/adding-solutions.md).
 
 ## Query a solution
 

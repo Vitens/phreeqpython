@@ -21,7 +21,10 @@ nav = [
       { "Running an analysis" = "getting-started/running-an-analysis.md" },
     ] },
     { "Guide" = [
-      { "Solutions" = "guide/solutions.md" },
+      { "Adding solutions" = "guide/adding-solutions.md" },
+      { "Querying solutions" = "guide/querying-solutions.md" },
+      { "Changing solutions" = "guide/changing-solutions.md" },
+      { "Gases" = "guide/gases.md" },
     ] },
   ] },
   { "Examples" = [
