@@ -1,8 +1,7 @@
 from periodictable import formula as chemform
 
 def convert_units(formula, amount, from_units='mol', to_units='mmol'):
-    if formula == 'F' :
-        formula = 'Ni'
+
     if from_units == to_units:
         return amount
 

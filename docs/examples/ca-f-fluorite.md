@@ -4,7 +4,7 @@ icon: lucide/beaker
 
 # Ca–F equilibrium with fluorite
 
-The relation between fluoride and calcium in water, after [Appelo's fluorite example](http://hydrochemistry.eu/exmpls/ca_f.html). Calcite and fluorite stay at equilibrium while albite dissolves.
+The relation between fluoride and calcium in water, after [Appelo's fluorite example](http://hydrochemistry.eu/exmpls/ca_f.html). 
 
 ???+ info "You can run these examples"
 
