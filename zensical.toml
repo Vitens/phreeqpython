@@ -1,0 +1,178 @@
+[project]
+site_url = "https://geertd.github.io/phreeqpython/"
+site_name = "PhreeqPython Docs"
+site_description = "Documentation for PhreeqPython"
+site_author = "Vitens"
+
+copyright = "Copyright 2026 Vitens"
+repo_url = "https://github.com/Vitens/phreeqpython"
+# repo_name = "user/repo"
+# edit_uri = "edit/main/docs/"
+
+nav = [
+  { "Documentation" = [
+    { "Introduction" = [
+      { "About PhreeqPython" = "index.md" },
+      { "How it works" = "introduction/how-it-works.md" },
+      { "Supported features" = "introduction/supported-features.md" },
+    ] },
+    { "Getting started" = [
+      { "Installation" = "getting-started/installation.md" },
+      { "Running an analysis" = "getting-started/running-an-analysis.md" },
+    ] },
+    { "Guide" = [
+      { "Solutions" = "guide/solutions.md" },
+    ] },
+  ] },
+  { "Examples" = [
+    { "Overview" = "examples/index.md" },
+    { "General" = [
+      { "Functionality overview" = "examples/functionality-overview.md" },
+      { "Carbonic acid equilibrium" = "examples/carbonic-acid.md" },
+    ] },
+    { "Equilibrium" = [
+      { "Ca–F and fluorite" = "examples/ca-f-fluorite.md" },
+      { "Calcite dissolution" = "examples/calcite-dissolution.md" },
+      { "Gibbsite solubility" = "examples/gibbsite-solubility.md" },
+      { "Aluminium drinking-water limit" = "examples/aluminium-limit.md" },
+      { "Gypsum on evaporation" = "examples/gypsum-evaporation.md" },
+    ] },
+    { "Kinetics" = [
+      { "Quartz dissolution" = "examples/quartz-kinetics.md" },
+      { "Monod kinetics" = "examples/monod-kinetics.md" },
+    ] },
+    { "Gas" = [
+      { "Solubilities" = "examples/gas-solubilities.md" },
+      { "Gas-phase calculations" = "examples/gas-phase.md" },
+    ] },
+  ] },
+  { "API Reference" = [
+    { "Overview" = "reference/index.md" },
+    { "PhreeqPython" = "reference/phreeqpython.md" },
+    { "Solution" = "reference/solution.md" },
+    { "Gas" = "reference/gas.md" },
+    { "EquilibriumPhase" = "reference/equilibriumphase.md" },
+    { "VIPhreeqc" = "reference/viphreeqc.md" },
+  ] },
+]
+
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = ["javascripts/pyodide-helpers.js"]
+
+[project.theme]
+# variant = "classic"
+# custom_dir = "overrides"
+# favicon = "images/favicon.png"
+language = "en"
+features = [
+  "announce.dismiss",
+  # "content.action.edit",
+  # "content.action.view",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "content.tooltips",
+  # "header.autohide",
+  # "navigation.expand",
+  "navigation.footer",
+  # "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  # "navigation.instant.progress",
+  "navigation.path",
+  # "navigation.prune",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "navigation.top",
+  "navigation.tracking",
+  # "search.highlight",
+  "toc.follow",
+  # "toc.integrate",
+]
+
+# logo = "resources/logo.png"
+
+# [project.theme.icon]
+# logo = "lucide/smile"
+
+# [project.theme.font]
+# text = "Inter"
+# code = "Jetbrains Mono"
+
+# [[project.theme.palette]]
+# media = "(prefers-color-scheme)"
+# toggle.icon = "lucide/sun-moon"
+# toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+# [[project.extra.social]]
+# icon = "fontawesome/brands/github"
+# link = "https://github.com/user/repo"
+
+# [[project.extra.social]]
+# icon = "fontawesome/brands/mastodon"
+# link = "https://fosstodon.org/@user"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+# toc.toc_depth = 6
+pymdownx.arithmatex.generic = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.magiclink = {}
+pymdownx.mark = {}
+pymdownx.smartsymbols = {}
+# pymdownx.snippets.base_path = "includes"
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+pymdownx.tabbed.alternate_style = true
+pymdownx.tabbed.combine_header_slug = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tilde = {}
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["phreeqpython"]
+options.docstring_style = "google"		# or numpy 
+options.docstring_section_style = "list"	# table, list or spacy
+options.show_source = false			
+options.show_if_no_docstring = true		# show member anyway
+options.show_docstring_functions = true	# show module/class Functions:  or Methods: section in docstring
+options.members_order = "alphabetical"		# __all__/alphabetical/source
+options.filters = "public"				# public or other filters
+options.group_by_category = true			# categories: attributes, methods, ...
+options.show_category_heading = true
+options.summary = true					# summary of classes, ...
+options.show_root_heading = true			# show full path of root object
+options.heading_level = 1				# start level for headings <h1>
+options.show_symbol_type_heading = true   # show attribute, method, ... before member
+
+[project.plugins.markdown-exec]

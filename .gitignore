@@ -6,15 +6,19 @@
 #*.dll
 *.DS_Store
 
-# Setuptools distribution folder.
+# Setuptools build and distribution folders.
 /dist/
+/build/
 
 # Python egg metadata, regenerated from source files by setuptools
 /*.egg-info
 
 # Jupyter notebook
+testing.ipynb
 .ipynb_checkpoints/
 .coverage
-
 .vscode/*
 dump.gz
+
+.venv
+/site/
