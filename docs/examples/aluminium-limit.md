@@ -10,7 +10,7 @@ Al concentration exceeds a 0.2 mg/kgw drinking-water limit at low and high pH, a
 
     Click **Run** (or Ctrl+Enter).
 
-```pyodide session="al" height="8-12" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="al" height="8-12" install="../../wheels/phreeqpython-pyodide.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython('phreeqc.dat')

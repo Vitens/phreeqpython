@@ -14,7 +14,7 @@ A `Solution` is an aqueous composition that stays in the PHREEQC engine. You cre
 
 `add_solution_simple` takes salts as a reaction. `add_solution` uses PHREEQC `SOLUTION` keywords (pH, units, element totals, charge balance, …).
 
-```pyodide session="solutions" height="14-22" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="solutions" height="14-22" install="../../wheels/phreeqpython-pyodide.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython()
@@ -42,7 +42,7 @@ Pass `database='phreeqc.dat'` (or another bundled `.dat`) to `PhreeqPython(...)`
 
 After each calculation you can read bulk properties, totals, speciation, and saturation indices — no `SELECTED_OUTPUT` block.
 
-```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-pyodide.whl"
 print('pH', round(solution.pH, 2))
 print('SC', round(solution.sc, 2), 'uS/cm')
 print('T', solution.temperature, 'C')
@@ -67,7 +67,7 @@ Useful accessors:
 
     These methods change `solution` **in place**. If you run this cell again, another 1 mmol of NaOH is added. To start over, rerun **Creating a solution**.
 
-```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-pyodide.whl"
 solution.add('NaOH', 1, 'mmol')
 print('pH after NaOH', round(solution.pH, 2))
 
@@ -83,7 +83,7 @@ print('T', solution.temperature)
 
 Scale and add solutions with `*` and `+`. `copy()` makes an independent duplicate; `forget()` removes a solution from the engine.
 
-```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="solutions" height="10-16" install="../../wheels/phreeqpython-pyodide.whl"
 a = pp.add_solution_simple({'NaCl': 1})
 b = pp.add_solution_simple({'NaCl': 3})
 mix = a * 0.5 + b * 0.5

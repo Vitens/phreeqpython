@@ -10,7 +10,7 @@ Quartz dissolution over five years, after [Appelo's quartz kinetics example](htt
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. SciPy is installed with the first cell; the loops can take a few seconds.
 
-```pyodide session="quartz" height="18-26" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="quartz" height="18-26" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-pyodide.whl"
 from phreeqpython import PhreeqPython
 import numpy as np
 import matplotlib.pyplot as plt
@@ -49,7 +49,7 @@ show_plot(fig)
 
 ## Same rate with odeint
 
-```pyodide session="quartz" height="18-26" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="quartz" height="18-26" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-pyodide.whl"
 from scipy.integrate import odeint
 
 def rate_quartz(quartz_dissolved, time, sol, A0, V, m0):

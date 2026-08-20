@@ -16,7 +16,7 @@ The distribution depends on pH. This example titrates 1 mmol NaHCO₃ from pH 0 
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. The loop has many pH steps and can take a short while in the browser.
 
-```pyodide session="carbonic" height="8-14" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="carbonic" height="8-14" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
 from phreeqpython import PhreeqPython
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +30,7 @@ print('pH {:.2f}, SC {:.2f} uS/cm'.format(solution.pH, solution.sc))
 
     `change_ph` doses acid or base **into the same solution**. Run the loop once. To start over, rerun the first editor.
 
-```pyodide session="carbonic" height="14-22" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="carbonic" height="14-22" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
 phs, co2, hco3, co3 = [], [], [], []
 
 for pH in np.arange(0, 14.1, 0.2):

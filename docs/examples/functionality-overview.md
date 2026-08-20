@@ -12,7 +12,7 @@ A tour of the main `Solution` methods: create, query, change, mix, copy, and for
 
 ## Adding solutions
 
-```pyodide session="overview" height="14-24" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="14-24" install="../../wheels/phreeqpython-pyodide.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython()
@@ -41,7 +41,7 @@ print('pH', round(solution.pH, 2), 'SC', round(solution.sc, 2))
 
 ## Basic properties
 
-```pyodide session="overview" height="8-14" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="8-14" install="../../wheels/phreeqpython-pyodide.whl"
 print('Solution pH: {:.3}'.format(solution.pH))
 print('Solution sc: {:3.2f}'.format(solution.sc))
 print('Solution pe: {:.3}'.format(solution.pe))
@@ -51,7 +51,7 @@ print('Mass:        {:.3}'.format(solution.mass))
 
 ## Speciation, elements, phases
 
-```pyodide session="overview" height="8-16" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="8-16" install="../../wheels/phreeqpython-pyodide.whl"
 print('Species (mmol):')
 for name, amount in list(solution.species.items())[:8]:
     print(f'  {name:12} {amount:.4g}')
@@ -67,7 +67,7 @@ print('SI Calcite', round(solution.si('Calcite'), 2))
 
     These calls change `solution` **in place**. Run this cell once. To start over, rerun **Adding solutions**.
 
-```pyodide session="overview" height="10-16" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="10-16" install="../../wheels/phreeqpython-pyodide.whl"
 solution.add('NaOH', 1, 'mmol')
 solution.remove('NaCl', 1, 'mmol')
 solution.remove_fraction('CO3', 0.5)
@@ -84,7 +84,7 @@ print('T', solution.temperature)
 
 ## Mixing
 
-```pyodide session="overview" height="12-18" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="12-18" install="../../wheels/phreeqpython-pyodide.whl"
 solution1 = pp.add_solution_simple({'NaCl': 1})
 solution2 = pp.add_solution_simple({'NaCl': 3})
 solution3 = solution1 * 0.5 + solution2 * 0.5
@@ -96,7 +96,7 @@ print('Solution 4  Cl mmol', round(solution4.total('Cl'), 3), 'mass', solution4.
 
 ## Copy and forget
 
-```pyodide session="overview" height="6-10" install="../../wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+```pyodide session="overview" height="6-10" install="../../wheels/phreeqpython-pyodide.whl"
 solution5 = solution4.copy()
 print(solution5.sc)
 solution5.forget()

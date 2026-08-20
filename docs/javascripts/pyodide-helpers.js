@@ -12,14 +12,6 @@
     return null;
   }
 
-  function helperUrl() {
-    const script = helpersScript();
-    if (script) {
-      return new URL("../pyodide/ppdocs.py", script.src).href;
-    }
-    return new URL("pyodide/ppdocs.py", document.baseURI).href;
-  }
-
   function rewriteInstallPaths() {
     const script = helpersScript();
     const wheelsBase = script
@@ -33,7 +25,7 @@
           if (!name.endsWith(".whl")) {
             return name;
           }
-          return new URL(name.split("/").pop(), wheelsBase).href;
+          return new URL(encodeURIComponent(name.split("/").pop()), wheelsBase).href;
         })
         .join(",");
     });
@@ -159,9 +151,64 @@
     });
   }
 
+  const PPDOCS_PY = String.raw`
+import base64
+import builtins
+import io
+
+
+def show_plot(fig):
+    from js import document, window
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+    fig.clf()
+
+    root = getattr(window, "__ppdocsPyodideRoot", None) or document.querySelector(".pyodide")
+    plots = root.querySelectorAll("img.pyodide-plot")
+    for i in range(plots.length):
+        plots.item(i).remove()
+
+    img = document.createElement("img")
+    img.className = "pyodide-plot"
+    img.src = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    img.style.maxWidth = "100%"
+    root.appendChild(img)
+
+
+def load_tsv(name):
+    import pandas as pd
+    from js import window
+    from pyodide.http import open_url
+
+    path = window.location.pathname.rstrip("/")
+    if path.endswith(".html"):
+        path = path.rsplit("/", 1)[0]
+    examples_root = path.rsplit("/", 1)[0]
+    url = window.location.origin + examples_root + "/gas_data/" + name
+    return pd.read_csv(open_url(url), sep="\t", index_col=0)
+
+
+def prepare():
+    from phreeqpython import PhreeqPython
+
+    builtins.show_plot = show_plot
+    builtins.load_tsv = load_tsv
+    builtins.PhreeqPython = PhreeqPython
+    try:
+        import numpy as np
+        builtins.np = np
+    except ImportError:
+        pass
+    try:
+        import matplotlib.pyplot as plt
+        builtins.plt = plt
+    except ImportError:
+        pass
+`;
+
   async function injectShowPlot(pyodide) {
-    const source = await (await fetch(helperUrl())).text();
-    await pyodide.runPythonAsync(source);
+    await pyodide.runPythonAsync(PPDOCS_PY);
     await pyodide.runPythonAsync(`
 import builtins
 builtins.show_plot = show_plot
@@ -234,6 +281,8 @@ for _name in ("show_plot", "load_tsv", "PhreeqPython", "np", "plt"):
     wrapped._ppdocs = true;
     window.loadPyodide = wrapped;
   }
+
+  wrapLoadPyodide();
 
   document.addEventListener(
     "load",

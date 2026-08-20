@@ -22,6 +22,7 @@ jobs:
           python-version: 3.x
       - run: pip install zensical mkdocstrings-python markdown-exec
       - run: zensical build --clean
+      - run: touch site/.nojekyll
       - uses: actions/upload-pages-artifact@v5
         with:
           path: site
