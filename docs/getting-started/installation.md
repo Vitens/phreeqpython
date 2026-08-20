@@ -102,3 +102,5 @@ print(pp.add_solution({'pH': 7}).pH)
 ```
 
 If the native library cannot be loaded on Windows, install the Visual C++ Redistributable linked above and retry.
+
+Next: [Running an analysis](running-an-analysis.md).

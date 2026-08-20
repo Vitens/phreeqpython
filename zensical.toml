@@ -18,9 +18,10 @@ nav = [
     ] },
     { "Getting started" = [
       { "Installation" = "getting-started/installation.md" },
-      { "Adding a solution" = "getting-started/adding-a-solution.md" },
-      { "Querying solution properties" = "getting-started/querying-solution-properties.md" },
-      { "Changing solutions" = "getting-started/changing-solutions.md" },
+      { "Running an analysis" = "getting-started/running-an-analysis.md" },
+    ] },
+    { "Guide" = [
+      { "Solutions" = "guide/solutions.md" },
     ] },
   ] },
   { "Examples" = [

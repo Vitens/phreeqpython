@@ -45,8 +45,9 @@ def prepare():
     """Import names used by every live example."""
     from phreeqpython import PhreeqPython
 
-    builtins.PhreeqPython = PhreeqPython
+    builtins.show_plot = show_plot
     builtins.load_tsv = load_tsv
+    builtins.PhreeqPython = PhreeqPython
     try:
         import numpy as np
         builtins.np = np

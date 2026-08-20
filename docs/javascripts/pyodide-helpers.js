@@ -170,17 +170,26 @@ builtins.load_tsv = load_tsv
 `);
 
     const orig = pyodide.runPythonAsync.bind(pyodide);
+    const bindHelpers = `
+import builtins
+g = globals()
+for _name in ("show_plot", "load_tsv", "PhreeqPython", "np", "plt"):
+    _val = getattr(builtins, _name, None)
+    if _val is not None:
+        g[_name] = _val
+`;
     let preparing = false;
     pyodide.runPythonAsync = async function (code, options) {
-      const isPrepare = code === "prepare()";
-      if (!isPrepare) {
+      const isHelper = code === "prepare()" || code === bindHelpers;
+      if (!isHelper) {
         inflight += 1;
       }
       try {
-        if (!preparing) {
+        if (!isHelper && !preparing) {
           preparing = true;
           try {
-            await orig("prepare()", options);
+            await orig("prepare()");
+            await orig(bindHelpers, options);
           } catch (err) {
             console.error("Failed to prepare example globals", err);
           } finally {
@@ -189,7 +198,7 @@ builtins.load_tsv = load_tsv
         }
         return await orig(code, options);
       } finally {
-        if (!isPrepare) {
+        if (!isHelper) {
           inflight = Math.max(0, inflight - 1);
           if (inflight === 0) {
             idleWaiters.splice(0).forEach((resolve) => resolve());
