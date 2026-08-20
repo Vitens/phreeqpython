@@ -135,3 +135,5 @@ options.summary = true					# summary of classes, ...
 options.show_root_heading = true			# show full path of root object
 options.heading_level = 1				# start level for headings <h1>
 options.show_symbol_type_heading = true   # show attribute, method, ... before member
+
+[project.plugins.markdown-exec]

@@ -19,3 +19,6 @@ testing.ipynb
 .coverage
 .vscode/*
 dump.gz
+
+.venv
+/site/

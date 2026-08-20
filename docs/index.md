@@ -32,6 +32,18 @@ print(solution3.total('K','mol'))     # 0.0005 mol
 ```
 For more examples, take a look at the `examples` folder.
 
+## Try it in the browser
+
+The editor below runs PhreeqPython in your browser (via [Pyodide](https://pyodide.org/)). The first run downloads the runtime and the [v1.6.2 Pyodide wheel](https://github.com/Vitens/phreeqpython/releases/download/v1.6.2/phreeqpython-1.6.2+pyodide-py3-none-any.whl), so it can take a few seconds. Click **Run** or press Ctrl+Enter.
+
+```pyodide install="wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
+from phreeqpython import PhreeqPython
+
+pp = PhreeqPython()
+solution = pp.add_solution_simple({'NaCl': 1.0})
+print(solution.sc)
+```
+
 ## Installation
 * ```pip install -U phreeqpython```
 
