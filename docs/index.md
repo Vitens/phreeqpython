@@ -1,76 +1,28 @@
-#
-![Phreeqpython Logo](resources/logo.png)
- 
-PhreeqPython is an object oriented wrapper around the ([VIPhreeqc](https://www.github.com/Vitens/VIPhreeqc)) extension of the Phreeqc chemical calculation engine ([Parkhurst&Appello](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)), written in Python.
+---
+icon: lucide/info
+title: About PhreeqPython
+hide:
+  - toc
+---
 
-## Features
-PhreeqPython greatly simplifies adding solutions and querying their properties:
+![PhreeqPython logo](resources/logo.png){ .logo-home }
 
-```python
-pp = PhreeqPython()
-# add a solution consisting of 1 mmol CaCl2 and 2 mmol NaHCO3
-solution = pp.add_solution_simple({'CaCl2':1.0,'NaHCO3':2.0})
-print(solution.pH)               # 8.12
-print(solution.sc)               # 427.32
-print(solution.si('Calcite'))    # 0.38
-print(solution.species['HCO3-']) # 0.0019
-print(solution.elements['Cl'])   # 0.002 mol
-```
-Allows for simple chemical and precipitation/dissolution reactions:
-```python
-solution.add('NaOH',0.5)
-print(solution.pH)              # 9.47
-solution.desaturate('Calcite')  # desaturate to SI 0
-print(solution.total('Ca'))     # 0.497 mmol
-```
-And even allows for addition, devision and multiplication of solutions to form new mixtures:
-```python
-solution2 = pp.add_solution_simple({'KCl':1.0})
-# create mixture of 50% solution and 50% solution2
-solution3 = solution * 0.5 + solution2 * 0.5
-print(solution3.total('K','mol'))     # 0.0005 mol
-```
-For more examples, take a look at the `examples` folder.
+## About PhreeqPython
 
-## Try it in the browser
+PhreeqPython is an object-oriented Python wrapper around [VIPhreeqc](https://github.com/Vitens/VIPhreeqc), Vitens' extension of the [PHREEQC](https://www.usgs.gov/software/phreeqc-version-3) geochemical calculation engine (Parkhurst & Appelo).
 
-The editor below runs PhreeqPython in your browser (via [Pyodide](https://pyodide.org/)). The first run downloads the runtime and the [v1.6.2 Pyodide wheel](https://github.com/Vitens/phreeqpython/releases/download/v1.6.2/phreeqpython-1.6.2+pyodide-py3-none-any.whl), so it can take a few seconds. Click **Run** or press Ctrl+Enter.
+Rather than writing a PHREEQC input script and running it as a single calculation, PhreeqPython keeps solutions, gases, and phases in memory as objects. You can change them stepwise, query properties such as pH, speciation, and saturation indices at any point, and mix or react them further without rebuilding the whole simulation.
 
-```pyodide install="wheels/phreeqpython-1.6.2+pyodide-py3-none-any.whl"
-from phreeqpython import PhreeqPython
+That makes it practical to run dynamic simulations and real-time models, and to use PHREEQC together with the rest of the Python ecosystem, like NumPy, pandas, Matplotlib, or web and control applications.
 
-pp = PhreeqPython()
-solution = pp.add_solution_simple({'NaCl': 1.0})
-print(solution.sc)
-```
-
-## Installation
-* ```pip install -U phreeqpython```
-
-## Requirements
-* 64 bit Python3
-* Windows, OSX or Linux
-  * Using PhreeqPython on Windows requires installing [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
-
-## Unit Tests
-| **Mac/Linux** and **Windows** | **Coverage** |
-|---|---|
-| [![Python package](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml/badge.svg)](https://github.com/DocMT/phreeqpython/actions/workflows/python-package.yml)| [![codecov](https://codecov.io/gh/Vitens/phreeqpython/branch/master/graph/badge.svg)](https://codecov.io/gh/Vitens/phreeqpython) |
+## Development
+PhreeqPython is developed at [Vitens](https://www.vitens.nl/), the largest drinking water company in the Netherlands, where it supports treatment and distribution modelling. It is partly derived from [PhreeqPy](http://www.phreeqpy.com/) (Mike Müller) and ships with bundled VIPhreeqc libraries for Windows, macOS, Linux, and WebAssembly (Pyodide).
 
 
 ## Acknowledgements
-This project makes use of the ([Phreeqc](http://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/)) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the ([PhreeqPy]([http://www.phreeqpy.com])) extension for IPhreeqc (Mike Müller)
+This project makes use of the (Phreeqc) (David Parkhurst & Tony Apello) calcution engine and is (partly) derived from the (PhreeqPy) extension for IPhreeqc (Mike Müller)
 
-## About Vitens
-
-Vitens is the largest drinking water company in The Netherlands. We deliver top quality drinking water to 5.6 million people and companies in the provinces Flevoland, Fryslân, Gelderland, Utrecht and Overijssel and some municipalities in Drenthe and Noord-Holland. Annually we deliver 350 million m³ water with 1,400 employees, 100 water treatment works and 49,000 kilometres of water mains.
-
-One of our main focus points is using advanced water quality, quantity and hydraulics models to further improve and optimize our treatment and distribution processes.
-
-## Licence
-
-Copyright 2021 Vitens
-
+## License
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0

@@ -1,0 +1,24 @@
+/* Zensical injects an H1 from the page title when the markdown has none.
+   Hide that auto heading so the homepage can start with the logo. */
+.md-typeset img.logo-home {
+  display: block;
+  margin-inline: auto;
+}
+
+.md-typeset h1#__skip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.md-typeset img.pyodide-plot {
+  display: block;
+  margin-block: 0.75rem;
+  max-width: 100%;
+}

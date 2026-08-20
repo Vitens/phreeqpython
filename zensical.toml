@@ -4,21 +4,59 @@ site_name = "PhreeqPython Docs"
 site_description = "Documentation for PhreeqPython"
 site_author = "Vitens"
 
-copyright = "Copyright 2021 Vitens"
+copyright = "Copyright 2026 Vitens"
 repo_url = "https://github.com/Vitens/phreeqpython"
 # repo_name = "user/repo"
 # edit_uri = "edit/main/docs/"
 
 nav = [
-  { "PhreeqPython" = "index.md" },
-  { "Tutorials" = "tutorials.md" },
-  { "How-To Guides" = "how-to-guides.md" },
-  { "API Reference" = "reference.md" },
-  { "Explanation" = "explanation.md" },
+  { "Documentation" = [
+    { "Introduction" = [
+      { "About PhreeqPython" = "index.md" },
+      { "How it works" = "introduction/how-it-works.md" },
+      { "Supported features" = "introduction/supported-features.md" },
+    ] },
+    { "Getting started" = [
+      { "Installation" = "getting-started/installation.md" },
+      { "Adding a solution" = "getting-started/adding-a-solution.md" },
+      { "Querying solution properties" = "getting-started/querying-solution-properties.md" },
+      { "Changing solutions" = "getting-started/changing-solutions.md" },
+    ] },
+  ] },
+  { "Examples" = [
+    { "Overview" = "examples/index.md" },
+    { "General" = [
+      { "Functionality overview" = "examples/functionality-overview.md" },
+      { "Carbonic acid equilibrium" = "examples/carbonic-acid.md" },
+    ] },
+    { "Equilibrium" = [
+      { "Ca–F and fluorite" = "examples/ca-f-fluorite.md" },
+      { "Calcite dissolution" = "examples/calcite-dissolution.md" },
+      { "Gibbsite solubility" = "examples/gibbsite-solubility.md" },
+      { "Aluminium drinking-water limit" = "examples/aluminium-limit.md" },
+      { "Gypsum on evaporation" = "examples/gypsum-evaporation.md" },
+    ] },
+    { "Kinetics" = [
+      { "Quartz dissolution" = "examples/quartz-kinetics.md" },
+      { "Monod kinetics" = "examples/monod-kinetics.md" },
+    ] },
+    { "Gas" = [
+      { "Solubilities" = "examples/gas-solubilities.md" },
+      { "Gas-phase calculations" = "examples/gas-phase.md" },
+    ] },
+  ] },
+  { "API Reference" = [
+    { "Overview" = "reference/index.md" },
+    { "PhreeqPython" = "reference/phreeqpython.md" },
+    { "Solution" = "reference/solution.md" },
+    { "Gas" = "reference/gas.md" },
+    { "EquilibriumPhase" = "reference/equilibriumphase.md" },
+    { "VIPhreeqc" = "reference/viphreeqc.md" },
+  ] },
 ]
 
-# extra_css = ["stylesheets/extra.css"]
-# extra_javascript = ["javascripts/extra.js"]
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = ["javascripts/pyodide-helpers.js"]
 
 [project.theme]
 # variant = "classic"
@@ -38,15 +76,15 @@ features = [
   # "header.autohide",
   # "navigation.expand",
   "navigation.footer",
-  "navigation.indexes",
+  # "navigation.indexes",
   "navigation.instant",
   "navigation.instant.prefetch",
   # "navigation.instant.progress",
   "navigation.path",
   # "navigation.prune",
   "navigation.sections",
-  # "navigation.tabs",
-  # "navigation.tabs.sticky",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
   "navigation.top",
   "navigation.tracking",
   # "search.highlight",
