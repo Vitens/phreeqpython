@@ -10,7 +10,7 @@ The relation between fluoride and calcium in water, after [Appelo's fluorite exa
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**.
 
-```pyodide session="caf" height="18-28" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="caf" height="18-28" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 import matplotlib.pyplot as plt
 
@@ -38,7 +38,7 @@ for i in range(16):
 print('points', len(x), 'final pH', round(yy[-1], 2))
 ```
 
-```pyodide session="caf" height="14-22" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="caf" height="14-22" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 fig = plt.figure(figsize=[10, 5])
 ax = plt.gca()
 ax2 = ax.twinx()

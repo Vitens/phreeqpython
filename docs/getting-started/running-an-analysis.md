@@ -10,7 +10,7 @@ After [installing](installation.md) PhreeqPython, an analysis is: create an engi
 
     Click **Run** (or Ctrl+Enter). The first run loads Pyodide and can take a few seconds.
 
-```pyodide session="analysis" height="14-22" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="analysis" height="14-22" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython()

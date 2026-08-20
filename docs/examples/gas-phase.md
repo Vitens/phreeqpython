@@ -10,7 +10,7 @@ Fixed-pressure vs fixed-volume gas after reaction of organic matter, after [PHRE
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. The reaction loop can take a few seconds.
 
-```pyodide session="gasphase" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gasphase" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ pp = PhreeqPython(database='phreeqc.dat')
 
 Add NH₄ / NH₃ species used in the original PHREEQC input:
 
-```pyodide session="gasphase" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gasphase" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 pp.ip.run_string("""
 SOLUTION_MASTER_SPECIES
 N(-3)    NH4+           0.0     N
@@ -44,7 +44,7 @@ NH3(g)
 print('NH3 species loaded')
 ```
 
-```pyodide session="gasphase" height="22-32" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gasphase" height="22-32" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 solution1 = pp.add_solution({})
 solution1.equalize(['Calcite', 'CO2(g)'], [0, -1.5])
 
@@ -91,7 +91,7 @@ print('steps', len(mmol))
 
 ## Total gas pressure and volume
 
-```pyodide session="gasphase" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gasphase" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 fig = plt.figure(figsize=[8, 5])
 ax1 = plt.gca()
 ax2 = ax1.twinx()
@@ -117,7 +117,7 @@ show_plot(fig)
 
 ## Gas composition
 
-```pyodide session="gasphase" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gasphase" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 fig = plt.figure(figsize=[12, 5])
 fig.add_subplot(1, 2, 1)
 pd.DataFrame(fp_frac, index=mmol).apply(np.log10)[2:].plot(style='-x', ax=plt.gca())

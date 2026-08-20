@@ -10,7 +10,7 @@ Methanogenic biodegradation of phenol, after [Appelo's phenol example](http://hy
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**.
 
-```pyodide session="monod" height="10-16" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="monod" height="10-16" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 from scipy.integrate import odeint
 import numpy as np
@@ -22,7 +22,7 @@ pp.add_species('Phenol = Phenol', 0)
 print('Phenol master species added')
 ```
 
-```pyodide session="monod" height="16-24" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="monod" height="16-24" install="matplotlib,numpy,scipy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 def rate_phenol(phenol, _, sol, k_max, k_half):
     S = phenol[0] * 1e-3
     if S < 1e-9:

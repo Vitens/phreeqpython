@@ -14,7 +14,7 @@ PhreeqPython wraps a subset of PHREEQC as Python objects. Those objects stay in 
 
 Solutions, gases, and equilibrium phases are objects. You create them on a `PhreeqPython` instance, call methods, and read properties. PhreeqPython generates the PHREEQC snippets and keeps the numbered entities in memory.
 
-```pyodide session="features" height="8-16" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="features" height="8-16" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython()
@@ -40,7 +40,7 @@ After each calculation you can read speciation and bulk properties without a `SE
 - element totals and aqueous species (moles, molalities, activities)
 - saturation indices and saturation ratios for mineral and gas phases
 
-```pyodide session="features" height="6-12" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="features" height="6-12" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 print(solution.pH)
 print(solution.sc)
 print(solution.species['HCO3-'])
@@ -60,7 +60,7 @@ Change a solution in place, or equilibrate it with one or more pure phases:
 
     `solution.add('NaOH', 0.5)` changes the solution **in place**. If you run this cell again, another 0.5 mmol of NaOH is added. To start over, rerun the first editor, which creates a new `solution`.
 
-```pyodide session="features" height="6-12" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="features" height="6-12" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 solution.add('NaOH', 0.5)
 print('pH', solution.pH)
 solution.desaturate('Calcite')
@@ -72,7 +72,7 @@ print('SI Calcite', solution.si('Calcite'))
 
 Gas phases are objects as well: fixed pressure or fixed volume, optional equilibration when created, then interaction with a solution.
 
-```pyodide session="features" height="8-16" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="features" height="8-16" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 air = pp.add_gas({'O2(g)': 0.2, 'N2(g)': 0.78, 'CO2(g)': 0.00042})
 solution.interact(air)
 

@@ -14,7 +14,7 @@ Calcite dissolution as a function of CO₂ pressure, after [Appelo's calcite exa
 
     The loop adds CO₂ to `solution0` in place. Run it once. To start over, rerun from the first editor.
 
-```pyodide session="calcite" height="16-24" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="calcite" height="16-24" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 import matplotlib.pyplot as plt
 
@@ -35,7 +35,7 @@ for i in range(30):
 print('points', len(x))
 ```
 
-```pyodide session="calcite" height="12-18" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="calcite" height="12-18" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 fig = plt.figure(figsize=[7, 7])
 plt.plot(x, y, 'rs-', label='equilibrium')
 plt.plot(

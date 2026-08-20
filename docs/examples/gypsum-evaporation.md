@@ -14,7 +14,7 @@ Gypsum precipitation as water is evaporated, after [Appelo's evaporation example
 
     Each step **removes water** from the same solutions. Run the cell once. To start over, rerun it after reloading the page, or wrap the setup and loop together and run once.
 
-```pyodide session="gypsum" height="22-32" install="matplotlib,numpy,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="gypsum" height="22-32" install="matplotlib,numpy,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 import matplotlib.pyplot as plt
 

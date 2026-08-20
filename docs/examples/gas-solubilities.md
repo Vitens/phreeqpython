@@ -12,7 +12,7 @@ The browser version uses fewer pressure steps than the original notebook so it f
 
     Click **Run** (or Ctrl+Enter), or **Run all** to execute every editor in order. Editors on this page **share a session**. Each gas is a separate cell; CO₂ is the slowest.
 
-```pyodide session="solubility" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="solubility" height="8-12" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,7 +23,7 @@ print('database', 'phreeqc.dat')
 
 ## Oxygen
 
-```pyodide session="solubility" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="solubility" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 pressure_range = np.linspace(0.01, 100, 25)
 o2 = []
 for p in pressure_range:
@@ -46,7 +46,7 @@ show_plot(fig)
 
 ## Nitrogen
 
-```pyodide session="solubility" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="solubility" height="14-22" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 pressure_range = np.linspace(0.01, 1000, 25)
 n2 = []
 for p in pressure_range:
@@ -69,7 +69,7 @@ show_plot(fig)
 
 ## Methane
 
-```pyodide session="solubility" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="solubility" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 fig = plt.figure(figsize=[8, 5])
 colors = ['C0', 'C1', 'C2']
 for temp in [25, 50, 100]:
@@ -97,7 +97,7 @@ show_plot(fig)
 
 Uses the Pitzer database.
 
-```pyodide session="solubility" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-pyodide.whl"
+```pyodide session="solubility" height="16-24" install="matplotlib,numpy,pandas,../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 pitzer = PhreeqPython(database='pitzer.dat')
 fig = plt.figure(figsize=[8, 5])
 colors = ['C0', 'C1', 'C2']

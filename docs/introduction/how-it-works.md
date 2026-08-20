@@ -155,7 +155,7 @@ pp.ip.debug = True
 
 The editor below runs the example in the browser. Click **Run** (or Ctrl+Enter); the output is the PHREEQC that PhreeqPython generated, then a few queried properties.
 
-```pyodide height="14-28" install="../../wheels/phreeqpython-pyodide.whl"
+```pyodide height="14-28" install="../../wheels/phreeqpython-1.6.2-py3-none-any.whl"
 from phreeqpython import PhreeqPython
 
 pp = PhreeqPython()
