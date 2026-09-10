@@ -60,7 +60,10 @@ nav = [
 ]
 
 extra_css = ["stylesheets/extra.css"]
-extra_javascript = ["javascripts/pyodide-helpers.js"]
+extra_javascript = [
+  "javascripts/pyodide-helpers.js",
+  "javascripts/feedback.js",
+]
 
 [project.theme]
 # variant = "classic"
@@ -179,3 +182,18 @@ options.heading_level = 1				# start level for headings <h1>
 options.show_symbol_type_heading = true   # show attribute, method, ... before member
 
 [project.plugins.markdown-exec]
+
+[project.extra.analytics.feedback]
+title = "Was this page helpful?"
+
+[[project.extra.analytics.feedback.ratings]]
+icon = "material/thumb-up-outline"
+name = "Yes"
+data = 1
+note = """Thanks. If you want to add something, <a href="https://github.com/Vitens/phreeqpython/issues/new?title=[Docs]+{title}&body=Page:+{url}" target="_blank" rel="noopener">open a GitHub issue</a>."""
+
+[[project.extra.analytics.feedback.ratings]]
+icon = "material/thumb-down-outline"
+name = "No"
+data = 0
+note = """Thanks. Tell us what to improve by <a href="https://github.com/Vitens/phreeqpython/issues/new?title=[Docs]+{title}&body=Page:+{url}" target="_blank" rel="noopener">opening a GitHub issue</a>."""
