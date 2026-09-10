@@ -10,9 +10,10 @@ repo_url = "https://github.com/Vitens/phreeqpython"
 # edit_uri = "edit/main/docs/"
 
 nav = [
+  { "Home" = "index.md" },
   { "Documentation" = [
     { "Introduction" = [
-      { "About PhreeqPython" = "index.md" },
+      { "About PhreeqPython" = "introduction/about.md" },
       { "How it works" = "introduction/how-it-works.md" },
       { "Supported features" = "introduction/supported-features.md" },
     ] },
